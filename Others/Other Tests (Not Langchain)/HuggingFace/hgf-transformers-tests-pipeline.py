@@ -3,6 +3,8 @@ import torch
 from torch import cuda, bfloat16
 import time
 
+# Importante instalar pytorch con CUDA para usar la GPU (Necesario para cuantizar): https://pytorch.org/get-started/locally/
+
 # Instalaciones
 # pip install transformers
 # pip install torch

@@ -3,6 +3,8 @@ import torch
 from torch import cuda, bfloat16
 import time
 
+# Importante instalar pytorch con CUDA para usar la GPU (Necesario para cuantizar): https://pytorch.org/get-started/locally/
+
 # MultiGPU Config. 4 GPU (Max alloc: 2.5GB per GPU (VRAM))
 max_memory_mapping = {0: "2.5GB", 1: "2.5GB", 2: "2.5GB", 3: "2.5GB"}
 
