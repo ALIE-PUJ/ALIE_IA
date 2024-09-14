@@ -12,7 +12,7 @@ from langchain.agents import tool
 from Library.DBsearchTests_Library import *
 
 # Set the maximum execution time for the main agent
-max_execution_time = 2
+max_execution_time = 10
 
 # Herramienta general
 @tool
