@@ -12,7 +12,7 @@ question4 = "Which are the available classes for the Estructuras de datos course
 question5 = "Which are the prerequisites for Estructuras de datos?"
 question6 = "Which are the prerequisites for the course with code 4196?"
 question7 = "Which are the available schedules for class 1557?"
-question8 = "Are there any teachers called Carlos? Who?"
+question8 = "Are there any teachers called Oscar? Who?"
 
 user_input = question8
 
