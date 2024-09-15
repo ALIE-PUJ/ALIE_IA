@@ -1,6 +1,13 @@
 import requests
 import json
-from Library.DBsearchTests_Library import *
+
+# Library import depending on the context (Being used as a library or being executed directly)
+if __name__ == "__main__":
+    # Direct execution, absolute import
+    from Library.DBsearchTests_Library import *
+else:
+    # Imported as part of a package, relative import
+    from .Library.DBsearchTests_Library import *
 
 # Set global parameters
 model = 'lmstudio-community/Meta-Llama-3-8B-Instruct-GGUF/Meta-Llama-3-8B-Instruct-Q4_K_M.gguf'
@@ -341,21 +348,24 @@ def process_user_query(user_input, api_url):
 
 # THIS CAN BE USED AS A LIBRARY FUNCTION, AND BE CALLED FROM ANOTHER FILE
 
-# Define constants and run the functions
-api_url = "http://127.0.0.1:1234/v1/chat/completions"
+if __name__ == "__main__":
+    '''
+    # Define constants and run the functions
+    api_url = "http://127.0.0.1:1234/v1/chat/completions"
 
-# Define the content of the user input as a modifiable string
-question1 = "Is there any student called Luis? Who?"
-question2 = "Which is the course code for the course named 'Estructuras de datos'?" # Hay que remover las tildes de las inserciones SQL.
-question3 = "Which are the available classes for the course with code 4196?"
-question4 = "Which are the available classes for the Estructuras de datos course? Give me their codes"
-question5 = "Which are the prerequisites for Estructuras de datos?"
-question6 = "Which are the prerequisites for the course with code 4196?"
-question7 = "Which are the available schedules for class 1557?"
-question8 = "Are there any teachers called Oscar? Who?"
+    # Define the content of the user input as a modifiable string
+    question1 = "Is there any student called Luis? Who?"
+    question2 = "Which is the course code for the course named 'Estructuras de datos'?" # Hay que remover las tildes de las inserciones SQL.
+    question3 = "Which are the available classes for the course with code 4196?"
+    question4 = "Which are the available classes for the Estructuras de datos course? Give me their codes"
+    question5 = "Which are the prerequisites for Estructuras de datos?"
+    question6 = "Which are the prerequisites for the course with code 4196?"
+    question7 = "Which are the available schedules for class 1557?"
+    question8 = "Are there any teachers called Oscar? Who?"
 
-user_input = question8
+    user_input = question8
 
-# Run the function call and generate the final response
-# Example usage:
-process_user_query(user_input, api_url)
+    # Run the function call and generate the final response
+    # Example usage:
+    process_user_query(user_input, api_url)
+    '''
