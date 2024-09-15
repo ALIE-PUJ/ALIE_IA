@@ -9,3 +9,5 @@ python llama.cpp\convert_hf_to_gguf.py "C:\Users\Luis Alejandro\Desktop\AI_ML\Mo
 
 Se puede dejar con --outtype f16 o --outtype f32 para preservar la calidad original del modelo y posteriormente utilizar quantize (También disponible en Llama.cpp) para cuantizarlo a 4 bits.
 El modelo debe contener un config.json, así como adaptadores si es necesario y todos sus respectivos pesos.
+
+También, se puede usar https://huggingface.co/spaces/ggml-org/gguf-my-repo para convertir un modelo compatible a .gguf (El repositorio debe contener la misma información que requiere llama.cpp)
