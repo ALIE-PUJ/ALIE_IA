@@ -4,6 +4,10 @@ import json
 import unicodedata
 from deep_translator import GoogleTranslator
 
+# General
+jsonl_output_file = 'training_data.jsonl'
+
+
 # Function to normalize text and remove accents
 def normalize_text(text):
     if isinstance(text, str):
@@ -65,10 +69,9 @@ def generate_combined_jsonl_file():
 
     # Prepare combined JSONL output
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    jsonl_output_file = 'combined_output.jsonl'
     jsonl_output_path = os.path.join(script_dir, jsonl_output_file)
 
-    with open(jsonl_output_path, 'w', encoding='utf-8') as jsonl_file:
+    with open(jsonl_output_path, 'a', encoding='utf-8') as jsonl_file:
         for doc in combined_documents:
             # Extract category
             category = normalize_text(doc.get('category') or doc.get('Category', ''))
@@ -108,6 +111,7 @@ def generate_combined_jsonl_file():
                                 jsonl_file.write(json.dumps(record, ensure_ascii=False) + '\n')
 
                         # Translate to English
+                        translated_topic = translate_to_english(cat_name)
                         translated_query = translate_to_english(query)
                         translated_answer = translate_to_english(answer)
                         
@@ -116,7 +120,7 @@ def generate_combined_jsonl_file():
                         
                         if translated_query and translated_answer:
                             translated_record = {
-                                "Topic": cat_name,
+                                "Topic": translated_topic,
                                 "Query": translated_query,
                                 "Answer": translated_answer,
                                 "Link": link,  # Add the link field here
@@ -128,7 +132,7 @@ def generate_combined_jsonl_file():
                             for subquestion in subquestions:
                                 translated_subquery = translate_to_english(subquestion)
                                 record = {
-                                    "Topic": cat_name,
+                                    "Topic": translated_topic,
                                     "Query": translated_subquery,
                                     "Answer": translated_answer,
                                     "Link": link,  # Add the link field here
@@ -138,5 +142,82 @@ def generate_combined_jsonl_file():
 
     print(f"Combined JSONL file generated at: {jsonl_output_path}")
 
+# Function to process ALIE_Data.json and write to a combined JSONL file
+def process_alie_data_json():
+    # Get the absolute path of the current directory
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    
+    # Append the filename to create an absolute path
+    input_file = os.path.join(current_dir, 'ALIE_Data.json')
+    output_file = os.path.join(current_dir, jsonl_output_file)
+
+    with open(input_file, 'r', encoding='utf-8') as f:
+        alie_data = json.load(f)
+
+    categories = alie_data.get('categories', [])
+
+    with open(output_file, 'a', encoding='utf-8') as jsonl_file:
+        for category in categories:
+            cat_name = normalize_text(category.get('category', ''))
+
+            questions = category.get('questions', [])
+            for question in questions:
+                query = normalize_text(question.get('question', ''))
+                answer = normalize_text(question.get('answer', ''))
+
+                # Process original record
+                if query and answer:
+                    record = {
+                        "Topic": cat_name,
+                        "Query": query,
+                        "Answer": answer,
+                        "Link": "",  # No link provided in ALIE_Data.json
+                        "Interaction": f"###Human:\n{query}\n\n###Assistant:\n{answer}"
+                    }
+                    jsonl_file.write(json.dumps(record, ensure_ascii=False) + '\n')
+
+                # Process subquestions if they exist
+                subquestions = question.get('subquestions', [])
+                for subquestion in subquestions:
+                    subquery = normalize_text(subquestion)
+                    record = {
+                        "Topic": cat_name,
+                        "Query": subquery,
+                        "Answer": answer,
+                        "Link": "",  # No link provided in ALIE_Data.json
+                        "Interaction": f"###Human:\n{subquery}\n\n###Assistant:\n{answer}"
+                    }
+                    jsonl_file.write(json.dumps(record, ensure_ascii=False) + '\n')
+
+                # Translate to English
+                translated_topic = translate_to_english(cat_name)
+                translated_query = translate_to_english(query)
+                translated_answer = translate_to_english(answer)
+
+                if translated_query and translated_answer:
+                    translated_record = {
+                        "Topic": translated_topic,
+                        "Query": translated_query,
+                        "Answer": translated_answer,
+                        "Link": "",  # No link provided in ALIE_Data.json
+                        "Interaction": f"###Human:\n{translated_query}\n\n###Assistant:\n{translated_answer}"
+                    }
+                    jsonl_file.write(json.dumps(translated_record, ensure_ascii=False) + '\n')
+
+                # Process translated subquestions if they exist
+                for subquestion in subquestions:
+                    translated_subquery = translate_to_english(subquestion)
+                    record = {
+                        "Topic": translated_topic,
+                        "Query": translated_subquery,
+                        "Answer": translated_answer,
+                        "Link": "",  # No link provided in ALIE_Data.json
+                        "Interaction": f"###Human:\n{translated_subquery}\n\n###Assistant:\n{translated_answer}"
+                    }
+                    jsonl_file.write(json.dumps(record, ensure_ascii=False) + '\n')
+
+    print(f"ALIE_Data.json processed and written to: {output_file}")
+
 if __name__ == "__main__":
+    process_alie_data_json()
     generate_combined_jsonl_file()
