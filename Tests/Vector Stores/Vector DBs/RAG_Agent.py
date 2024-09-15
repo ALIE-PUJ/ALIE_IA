@@ -353,7 +353,7 @@ specific_question4 = "Hablame sobre la materia de calculo diferencial. Que temas
 specific_question5 = "Hablame sobre la materia de estructuras de datos. Que temas abarca?"
 specific_question6 = "Donde puedo encontrar el plan de estudios de mi carrera?"
 
-selected_question = specific_question4
+selected_question = specific_question6
 
 print(f"\nProcessing question: {selected_question}")
 final_answer = execute_agent_until_success(selected_question)

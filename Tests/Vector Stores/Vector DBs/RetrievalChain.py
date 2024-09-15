@@ -438,7 +438,7 @@ result = query_vectordb("Cuales son los contenidos de estructuras de datos?", fi
 print(result)
 '''
 
-'''
+
 from langchain_groq import ChatGroq
 # Definir el modelo alternativo 1 (Groq)
 llm_primary = ChatGroq(
@@ -458,6 +458,7 @@ llm_primary = ChatOpenAI(
     base_url="http://localhost:1234/v1",
     api_key="lm-studio"
 )
+'''
 
 
 from langchain.memory import ConversationBufferMemory
@@ -481,7 +482,7 @@ specific_question4 = "Hablame sobre la materia de calculo diferencial. Que temas
 specific_question5 = "Hablame sobre la materia de estructuras de datos. Que temas abarca?"
 specific_question6 = "Donde puedo encontrar el plan de estudios de mi carrera?"
 
-selected_question = specific_question3
+selected_question = specific_question2
 
 result = qa({"question": selected_question + ". Responde lo más rápido posible, pero con mucha calidad y tanto detalle como sea necesario, como enlaces o fuentes si pueden ser útiles."})
 print("Answer = ", result['answer'])

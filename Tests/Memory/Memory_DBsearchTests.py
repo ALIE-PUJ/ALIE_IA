@@ -1,7 +1,7 @@
 from langchain_openai import ChatOpenAI
 from langchain.agents import initialize_agent
 from langchain.agents import AgentType
-from langchain.chat_models import ChatOpenAI
+# from langchain.chat_models import ChatOpenAI # eSTE IMPORT DA ERROR, ELIMINARLO DE TODO LADO SI ES POSIBLE.
 from langchain.agents import tool
 from datetime import date
 
