@@ -1,12 +1,13 @@
 from pymongo import MongoClient
 import os
+import csv
 import json
 import unicodedata
 from deep_translator import GoogleTranslator
 
 # General
 jsonl_output_file = 'training_data.jsonl'
-
+csv_output_file = 'training_data.csv'
 
 # Function to normalize text and remove accents
 def normalize_text(text):
@@ -218,6 +219,45 @@ def process_alie_data_json():
 
     print(f"ALIE_Data.json processed and written to: {output_file}")
 
+def jsonl_to_csv(jsonl_file, csv_file):
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+
+    # Append the filename to create an absolute path
+    input_file = os.path.join(current_dir, jsonl_file)
+    output_file = os.path.join(current_dir, csv_file)
+
+    csv_file = output_file
+
+    # Open the JSONL file and the CSV file
+    with open(input_file, 'r', encoding='utf-8-sig') as jsonl_f, open(csv_file, 'w', newline='', encoding='utf-8-sig') as csv_f:
+        # Define the CSV writer with the required column headers
+        writer = csv.DictWriter(csv_f, fieldnames=["Topic", "Query", "Answer", "Link", "Interaction"])
+        writer.writeheader()
+
+        # Read the JSONL file line by line
+        for line in jsonl_f:
+            if line.strip():  # Check if the line is not empty
+                data = json.loads(line)  # Parse JSON from the line
+
+                # Extracting necessary fields
+                topic = data.get("Topic", "")  
+                query = data.get("Query", "")
+                answer = data.get("Answer", "")
+                link = data.get("Link", "")
+                interaction = data.get("Interaction", "")
+
+                # Write a row to the CSV file, ensuring utf-8 characters are handled properly
+                writer.writerow({
+                    "Topic": topic,
+                    "Query": query,
+                    "Answer": answer,
+                    "Link": link,
+                    "Interaction": interaction
+                })
+
+    print(f"CSV file '{csv_file}' created successfully from '{jsonl_file}'.")
+
 if __name__ == "__main__":
     process_alie_data_json()
     generate_combined_jsonl_file()
+    jsonl_to_csv(jsonl_output_file, csv_output_file)
