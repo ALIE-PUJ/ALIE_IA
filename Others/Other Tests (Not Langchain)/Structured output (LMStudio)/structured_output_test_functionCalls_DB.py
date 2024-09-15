@@ -2,6 +2,14 @@ import requests
 import json
 from Library.DBsearchTests_Library import *  # Import all functions from the library
 
+# Set global parameters
+model = 'lmstudio-community/Meta-Llama-3-8B-Instruct-GGUF/Meta-Llama-3-8B-Instruct-Q4_K_M.gguf'
+temperature = 0.5
+max_tokens = 1000
+api_headers = {
+    "Content-Type": "application/json"
+}
+
 # Define the function registry dynamically
 FUNCTIONS = {
     "get_students_by_name": {
@@ -169,25 +177,155 @@ def generate_system_prompt(functions):
 
 def format_response_for_llm(user_input, function_name, result):
     """
-    Formatea la respuesta final basada en el input del usuario y el resultado de la función llamada.
+    Formats the final response based on the user's input and the result of the called function.
     
-    :param user_input: La pregunta o solicitud original del usuario.
-    :param function_name: El nombre de la función llamada por el agente.
-    :param result: El resultado de la función llamada.
-    :return: Un mensaje formateado para presentar al usuario.
+    :param user_input: The original question or request from the user.
+    :param function_name: The name of the function called by the agent.
+    :param result: The result of the function call.
+    :return: A formatted message to present to the user.
     """
-    # Asegúrate de que el resultado esté en un formato legible
     if isinstance(result, dict):
         result = json.dumps(result, indent=2)
     
-    # Crear un mensaje final
     final_message = (
-        f"**Pregunta del Usuario:**\n{user_input}\n\n"
-        f"**Resultado de la Función `{function_name}`:**\n{result}\n\n"
-        f"**Ahora, proporciona una respuesta adecuada para el usuario basado en la información anterior.**"
+        f"**User Query:**\n{user_input}\n\n"
+        f"**Function Result `{function_name}`:**\n{result}\n\n"
+        f"**Now, provide a suitable response to the user based on the above information. Please, make it a transparent and natural language response so he does not know this post-processing is occuring**"
     )
     
     return final_message
+
+def handle_function_call(user_input, url, headers, functions):
+    """
+    Handles the initial function call based on user input and processes the response.
+    
+    :param user_input: La pregunta o solicitud original del usuario.
+    :param url: La URL del endpoint de la API.
+    :param headers: Los headers para la solicitud.
+    :param functions: El diccionario de funciones disponibles.
+    :return: None
+    """
+
+    print("\n[INFO] ---> User Input:", user_input)
+
+    system_prompt = generate_system_prompt(functions)
+    # print(f"\n[DEBUG] ---> System Prompt:\n{system_prompt}")
+
+    # Define the request payload
+    data = {
+        "model": model,
+        "messages": [
+            {
+                "role": "system",
+                "content": system_prompt  # Use the dynamically generated system prompt
+            },
+            {
+                "role": "user",
+                "content": user_input  # Use the modifiable string `user_input`
+            }
+        ],
+        "response_format": {
+            "type": "json_schema",
+            "json_schema": {
+                "name": "function_call",
+                "strict": "true",
+                "schema": {
+                    "type": "object",
+                    "properties": {
+                        "function_name": {
+                            "type": "string"
+                        },
+                        "arguments": {
+                            "type": "object",
+                            "properties": {
+                                "argument": {
+                                    "type": "string"
+                                }
+                            },
+                            "required": ["argument"]
+                        }
+                    },
+                    "required": ["function_name", "arguments"]
+                }
+            }
+        },
+        "temperature": temperature,
+        "max_tokens": max_tokens,
+        "stream": False
+    }
+
+    # Send the POST request
+    response = requests.post(url, headers=headers, data=json.dumps(data))
+
+    # Parse the response
+    if response.status_code == 200:
+        result = response.json()["choices"][0]["message"]["content"]
+        print(f"\n[DEBUG] ---> Response from the model: {result}")
+
+        result_json = json.loads(result)
+
+        function_name = result_json["function_name"]
+        arguments = result_json["arguments"]
+
+        # Call the corresponding function based on the name returned by the model
+        if function_name in functions:
+            func = functions[function_name]["func"]
+            
+            func_args = {
+                key: arguments["argument"]
+                for key in functions[function_name]["args"]
+            }
+            
+            try:
+                function_result = func(**func_args)
+                print(f"\n[DEBUG] ---> Function executed: {function_name}, Result: {result}")
+
+                final_message = format_response_for_llm(user_input, function_name, function_result)
+
+                return function_name, final_message
+            except TypeError as e:
+                print(f"\n---> [ERROR]: {e}. Check the arguments passed to {function_name}.")
+        else:
+            print(f"\n[ERROR] ---> Function '{function_name}' not recognized.")
+    else:
+        print(f"[ERROR] ---> Request failed with status code {response.status_code}")
+
+def generate_final_response(final_message, url, headers):
+    """
+    Generates the final response based on the formatted message from the function call.
+    
+    :param final_message: El mensaje formateado para el modelo.
+    :param url: La URL del endpoint de la API.
+    :param headers: Los headers para la solicitud.
+    :return: None
+    """
+    final_payload = {
+        "model": model,
+        "messages": [
+            {
+                "role": "system",
+                "content": "Your task is to provide a final response to the user based on the provided details."
+            },
+            {
+                "role": "user",
+                "content": final_message
+            }
+        ],
+        "temperature": temperature,
+        "max_tokens": max_tokens,
+        "stream": False
+    }
+    
+    final_response = requests.post(url, headers=headers, data=json.dumps(final_payload))
+    
+    if final_response.status_code == 200:
+        final_result = final_response.json()["choices"][0]["message"]["content"]
+        print(f"\n[INFO] ---> Final Response to User:\n{final_result}")
+    else:
+        print(f"[ERROR] ---> Final response request failed with status code {final_response.status_code}")
+
+# Define constants and run the functions
+api_url = "http://127.0.0.1:1234/v1/chat/completions"
 
 # Define the content of the user input as a modifiable string
 question1 = "Is there any student called Luis? Who?"
@@ -201,127 +339,7 @@ question8 = "Are there any teachers called Oscar? Who?"
 
 user_input = question8
 
-# Define the API endpoint
-url = "http://127.0.0.1:1234/v1/chat/completions"
-
-# Define the headers for the request
-headers = {
-    "Content-Type": "application/json"
-}
-
-# Generate the system prompt with available functions
-system_prompt = generate_system_prompt(FUNCTIONS)
-
-# Define the request payload
-data = {
-    "model": "lmstudio-community/Meta-Llama-3-8B-Instruct-GGUF/Meta-Llama-3-8B-Instruct-Q4_K_M.gguf",
-    "messages": [
-        {
-            "role": "system",
-            "content": system_prompt  # Use the dynamically generated system prompt
-        },
-        {
-            "role": "user",
-            "content": user_input  # Use the modifiable string `user_input`
-        }
-    ],
-    "response_format": {
-        "type": "json_schema",
-        "json_schema": {
-            "name": "function_call",
-            "strict": "true",
-            "schema": {
-                "type": "object",
-                "properties": {
-                    "function_name": {
-                        "type": "string"
-                    },
-                    "arguments": {
-                        "type": "object",
-                        "properties": {
-                            "argument": {
-                                "type": "string"
-                            }
-                        },
-                        "required": ["argument"]
-                    }
-                },
-                "required": ["function_name", "arguments"]
-            }
-        }
-    },
-    "temperature": 0.5,
-    "max_tokens": 100,
-    "stream": False
-}
-
-
-# Send the POST request
-response = requests.post(url, headers=headers, data=json.dumps(data))
-
-# Parse the response
-if response.status_code == 200:
-    print("Response:", response.json())
-    
-    # Get the content of the message
-    result = response.json()["choices"][0]["message"]["content"]
-
-    # Convert the content to JSON if necessary
-    result_json = json.loads(result)
-
-    # Access the deserialized data
-    function_name = result_json["function_name"]
-    arguments = result_json["arguments"]
-
-    # Call the corresponding function based on the name returned by the model
-    if function_name in FUNCTIONS:
-        func = FUNCTIONS[function_name]["func"]
-        
-        # Prepare arguments for the function call
-        func_args = {
-            key: arguments["argument"]
-            for key in FUNCTIONS[function_name]["args"]
-        }
-        
-        # Call the function with the unpacked arguments
-        try:
-            function_result = func(**func_args)  # Call the function with the unpacked arguments
-            
-            # Prepare the final message
-            final_message = format_response_for_llm(user_input, function_name, function_result)
-            print(f"\n---> Function executed: {function_name}, Result: {result}")
- 
-
-            # Define the payload for the final response
-            final_payload = {
-                "model": "lmstudio-community/Meta-Llama-3-8B-Instruct-GGUF/Meta-Llama-3-8B-Instruct-Q4_K_M.gguf",
-                "messages": [
-                    {
-                        "role": "system",
-                        "content": "Your task is to provide a final response to the user based on the provided details."
-                    },
-                    {
-                        "role": "user",
-                        "content": final_message  # Send the formatted message to the model
-                    }
-                ],
-                "temperature": 0.5,
-                "max_tokens": 150,
-                "stream": False
-            }
-            
-            # Send the POST request to get the final response
-            final_response = requests.post(url, headers=headers, data=json.dumps(final_payload))
-            
-            if final_response.status_code == 200:
-                final_result = final_response.json()["choices"][0]["message"]["content"]
-                print(f"\n---> Final Response to User:\n{final_result}")
-            else:
-                print(f"[ERROR] ---> Final response request failed with status code {final_response.status_code}")
-        
-        except TypeError as e:
-            print(f"\n---> Error: {e}. Check the arguments passed to {function_name}.")
-    else:
-        print(f"\n---> Function '{function_name}' not recognized.")
-else:
-    print(f"[ERROR] ---> Request failed with status code {response.status_code}")
+# Run the function call and generate the final response
+function_name, final_message = handle_function_call(user_input, api_url, api_headers, FUNCTIONS)
+if final_message:
+    generate_final_response(final_message, api_url, api_headers)
