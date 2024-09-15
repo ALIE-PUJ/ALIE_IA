@@ -219,6 +219,23 @@ def process_alie_data_json():
 
     print(f"ALIE_Data.json processed and written to: {output_file}")
 
+def extend_jsonl_file(filename, times=10):
+    # Obtener la ruta absoluta de donde se encuentra el script .py
+    script_dir = os.path.dirname(os.path.abspath(__file__))  # Ruta absoluta del script .py
+    jsonl_file = os.path.join(script_dir, filename)  # Crear la ruta absoluta del archivo
+
+    # Leer todas las líneas actuales del archivo JSONL
+    with open(jsonl_file, 'r', encoding='utf-8') as f:
+        lines = f.readlines()
+
+    # Escribir de nuevo las mismas líneas "times" veces
+    with open(jsonl_file, 'a', encoding='utf-8') as f:  # Modo 'a' para añadir sin sobrescribir
+        for _ in range(times):
+            for line in lines:
+                f.write(line)
+
+    print(f"Archivo '{jsonl_file}' extendido {times} veces.")
+
 def jsonl_to_csv(jsonl_file, csv_file):
     current_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -257,25 +274,32 @@ def jsonl_to_csv(jsonl_file, csv_file):
 
     print(f"CSV file '{csv_file}' created successfully from '{jsonl_file}'.")
 
-def extend_jsonl_file(filename, times=10):
-    # Obtener la ruta absoluta de donde se encuentra el script .py
-    script_dir = os.path.dirname(os.path.abspath(__file__))  # Ruta absoluta del script .py
-    jsonl_file = os.path.join(script_dir, filename)  # Crear la ruta absoluta del archivo
+def jsonl_to_json(jsonl_file, json_file):
+    current_dir = os.path.dirname(os.path.abspath(__file__))
 
-    # Leer todas las líneas actuales del archivo JSONL
-    with open(jsonl_file, 'r', encoding='utf-8') as f:
-        lines = f.readlines()
+    # Crea una ruta absoluta para los archivos de entrada y salida
+    input_file = os.path.join(current_dir, jsonl_file)
+    output_file = os.path.join(current_dir, json_file)
 
-    # Escribir de nuevo las mismas líneas "times" veces
-    with open(jsonl_file, 'a', encoding='utf-8') as f:  # Modo 'a' para añadir sin sobrescribir
-        for _ in range(times):
-            for line in lines:
-                f.write(line)
+    # Lista para almacenar los objetos JSON
+    json_data = []
 
-    print(f"Archivo '{jsonl_file}' extendido {times} veces.")
+    # Lee el archivo JSONL y agrega cada línea (que es un objeto JSON) a la lista
+    with open(input_file, 'r', encoding='utf-8-sig') as jsonl_f:
+        for line in jsonl_f:
+            if line.strip():  # Verifica si la línea no está vacía
+                data = json.loads(line)  # Convierte la línea en un diccionario
+                json_data.append(data)  # Añade el diccionario a la lista
+
+    # Escribe la lista de diccionarios en un archivo JSON
+    with open(output_file, 'w', encoding='utf-8-sig') as json_f:
+        json.dump(json_data, json_f, ensure_ascii=False, indent=4)
+
+    print(f"JSON file '{output_file}' created successfully from '{jsonl_file}'.")
 
 if __name__ == "__main__":
     process_alie_data_json() # Crear la informacion general de ALIE (Tambien traducido al inglés)
     generate_combined_jsonl_file() # Crear la informacion de las colecciones de MongoDB Q&A (Tambien traducido al inglés)
     extend_jsonl_file(jsonl_output_file) # Extender el archivo JSONL por 10 veces su tamaño original
     jsonl_to_csv(jsonl_output_file, csv_output_file) # Convertir el archivo JSONL a CSV
+    jsonl_to_json(jsonl_output_file, 'training_data.json') # Convertir el archivo JSONL a JSON
