@@ -9,7 +9,7 @@ import time
 from TaggingToolsLibrary import *
 
 # Set the maximum execution time for the main agent
-max_execution_time = 5
+max_execution_time = 10
 
 # Definir los modelos y agentes
 def create_agents():

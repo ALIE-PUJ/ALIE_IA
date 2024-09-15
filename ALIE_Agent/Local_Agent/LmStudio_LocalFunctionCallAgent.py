@@ -210,13 +210,13 @@ def handle_function_call(user_input, url, headers, functions):
     :param url: La URL del endpoint de la API.
     :param headers: Los headers para la solicitud.
     :param functions: El diccionario de funciones disponibles.
-    :return: None
+    :return: The name of the function called and the formatted message for the final response., or None if the request fails.
     """
 
-    print("\n[INFO] ---> User Input:", user_input)
+    print("[INFO] ---> User Input:", user_input)
 
     system_prompt = generate_system_prompt(functions)
-    # print(f"\n[DEBUG] ---> System Prompt:\n{system_prompt}")
+    # print(f"[DEBUG] ---> System Prompt: {system_prompt}")
 
     # Define the request payload
     data = {
@@ -267,7 +267,7 @@ def handle_function_call(user_input, url, headers, functions):
     # Parse the response
     if response.status_code == 200:
         result = response.json()["choices"][0]["message"]["content"]
-        print(f"\n[DEBUG] ---> Response from the model: {result}")
+        print(f"[DEBUG] ---> Response from the model: {result}")
 
         result_json = json.loads(result)
 
@@ -285,17 +285,20 @@ def handle_function_call(user_input, url, headers, functions):
             
             try:
                 function_result = func(**func_args)
-                print(f"\n[DEBUG] ---> Function executed: {function_name}, Result: {result}")
+                print(f"[DEBUG] ---> Function executed: {function_name}, Result: {result}")
 
                 final_message = format_response_for_llm(user_input, function_name, function_result)
 
                 return function_name, final_message
             except TypeError as e:
-                print(f"\n---> [ERROR]: {e}. Check the arguments passed to {function_name}.")
+                print(f"---> [ERROR]: {e}. Check the arguments passed to {function_name}.")
+                return None, None
         else:
-            print(f"\n[ERROR] ---> Function '{function_name}' not recognized.")
+            print(f"[ERROR] ---> Function '{function_name}' not recognized.")
+            return None, None
     else:
         print(f"[ERROR] ---> Request failed with status code {response.status_code}")
+        return None, None
 
 def generate_final_response(final_message, url, headers):
     """
@@ -304,7 +307,7 @@ def generate_final_response(final_message, url, headers):
     :param final_message: El mensaje formateado para el modelo.
     :param url: La URL del endpoint de la API.
     :param headers: Los headers para la solicitud.
-    :return: None
+    :return: The final response to the user., or None if the request fails.
     """
     final_payload = {
         "model": model,
@@ -327,9 +330,11 @@ def generate_final_response(final_message, url, headers):
     
     if final_response.status_code == 200:
         final_result = final_response.json()["choices"][0]["message"]["content"]
-        print(f"\n[INFO] ---> Final Response to User:\n{final_result}")
+        print(f"[INFO] ---> Final Response to User: {final_result}")
+        return final_result
     else:
         print(f"[ERROR] ---> Final response request failed with status code {final_response.status_code}")
+        return None
 
 def process_user_query(user_input, api_url):
     """
@@ -338,17 +343,22 @@ def process_user_query(user_input, api_url):
     :param user_input: The input query from the user.
     :param api_url: The URL of the API to send requests to.
     """
+    print("[ALIE LANGCHAIN DEBUG: START]")
     try:
         # Run the function call and generate the final response
         function_name, final_message = handle_function_call(user_input, api_url, api_headers, FUNCTIONS)
         if final_message:
-            generate_final_response(final_message, api_url, api_headers)
+            print("[ALIE LANGCHAIN DEBUG: END]")
+            return generate_final_response(final_message, api_url, api_headers)
     except Exception as e:
         print(f"An error occurred during processing: {e}")
+        print("[ALIE LANGCHAIN DEBUG END]")
+
 
 # THIS CAN BE USED AS A LIBRARY FUNCTION, AND BE CALLED FROM ANOTHER FILE
 
 if __name__ == "__main__":
+
     '''
     # Define constants and run the functions
     api_url = "http://127.0.0.1:1234/v1/chat/completions"
@@ -367,5 +377,6 @@ if __name__ == "__main__":
 
     # Run the function call and generate the final response
     # Example usage:
-    process_user_query(user_input, api_url)
+    answer = process_user_query(user_input, api_url)
+    print("Answer = ", answer)
     '''

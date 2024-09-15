@@ -12,9 +12,9 @@ def create_connection():
     """
     return psycopg2.connect(
         host='localhost', 
-        port=26257,
+        port=5432,
         user=os.getenv('USER', 'root'),
-        password=os.getenv('PASS', ''),
+        password=os.getenv('PASS', 'pass'),
         database='alie_db'
     )
 
