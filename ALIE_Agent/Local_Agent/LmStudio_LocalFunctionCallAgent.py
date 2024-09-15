@@ -1,6 +1,6 @@
 import requests
 import json
-from Library.DBsearchTests_Library import *  # Import all functions from the library
+from Library.DBsearchTests_Library import *
 
 # Set global parameters
 model = 'lmstudio-community/Meta-Llama-3-8B-Instruct-GGUF/Meta-Llama-3-8B-Instruct-Q4_K_M.gguf'
@@ -357,4 +357,5 @@ question8 = "Are there any teachers called Oscar? Who?"
 user_input = question8
 
 # Run the function call and generate the final response
+# Example usage:
 process_user_query(user_input, api_url)
