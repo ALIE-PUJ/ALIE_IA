@@ -10,7 +10,7 @@ else:
     from .Library.DBsearchTests_Library import *
 
 # Set global parameters
-model = 'lmstudio-community/Meta-Llama-3-8B-Instruct-GGUF/Meta-Llama-3-8B-Instruct-Q4_K_M.gguf'
+model = 'llama3-8b-8192'
 temperature = 0
 max_tokens = 1000
 
@@ -199,7 +199,7 @@ def format_response_for_llm(user_input, function_name, result):
     
     return final_message
 
-def handle_function_call(user_input, url, headers, functions):
+def handle_function_call(user_input, url, headers, functions, support_structured_output):
     """
     Handles the initial function call based on user input and processes the response.
     
@@ -207,6 +207,7 @@ def handle_function_call(user_input, url, headers, functions):
     :param url: La URL del endpoint de la API.
     :param headers: Los headers para la solicitud.
     :param functions: El diccionario de funciones disponibles.
+    :param support_structured_output: Un booleano que indica si el modelo o la API admiten salida estructurada.
     :return: The name of the function called and the formatted message for the final response., or None if the request fails.
     """
 
@@ -215,8 +216,8 @@ def handle_function_call(user_input, url, headers, functions):
     system_prompt = generate_system_prompt(functions)
     # print(f"[DEBUG] ---> System Prompt: {system_prompt}")
 
-    # Define the request payload
-    data = {
+    # Define the request payload with structured output
+    data_structured_output = {
         "model": model,
         "messages": [
             {
@@ -258,14 +259,57 @@ def handle_function_call(user_input, url, headers, functions):
         "stream": False
     }
 
+    # Define the request payload without structured output
+    data_not_structured_output = {
+        "model": model,
+        "messages": [
+            {
+                "role": "system",
+                "content": system_prompt  # Use the dynamically generated system prompt
+            },
+            {
+                "role": "user",
+                "content": user_input  # Use the modifiable string `user_input`
+            }
+        ],
+        "temperature": temperature,
+        "max_tokens": max_tokens,
+        "stream": False
+    }
+
+    if support_structured_output:
+        data = data_structured_output
+        print("[DEBUG] Using structured output.")
+    else:
+        data = data_not_structured_output
+        print("[DEBUG] Using non-structured output.")
+
     # Send the POST request
     response = requests.post(url, headers=headers, data=json.dumps(data))
 
     # Parse the response
     if response.status_code == 200:
         result = response.json()["choices"][0]["message"]["content"]
-        print(f"[DEBUG] ---> Response from the model: {result}")
+        print(f"[DEBUG] ---> Response from the model (Structured Output): {result}")
 
+        # Postprocess if structured output is not supported
+        if not support_structured_output:
+            try:
+                # Encontrar el índice del primer '{' y el último '}'
+                json_start = result.find("{")
+                json_end = result.rfind("}")
+
+                if json_start != -1 and json_end != -1:
+                    # Extraer solo el bloque de JSON desde el primer '{' hasta el último '}'
+                    result = result[json_start:json_end+1]
+                else:
+                    print("[ERROR] ---> No valid JSON found in the response.")
+                    return None, None
+            except Exception as e:
+                print(f"[ERROR] ---> Postprocessing failed: {e}")
+                return None, None
+
+        # Skip postprocessing if structured output is supported
         result_json = json.loads(result)
 
         function_name = result_json["function_name"]
@@ -296,6 +340,7 @@ def handle_function_call(user_input, url, headers, functions):
     else:
         print(f"[ERROR] ---> Request failed with status code {response.status_code}")
         return None, None
+    
 
 def generate_final_response(final_message, url, headers):
     """
@@ -333,18 +378,19 @@ def generate_final_response(final_message, url, headers):
         print(f"[ERROR] ---> Final response request failed with status code {final_response.status_code}")
         return None
 
-def process_user_query(user_input, api_url, api_headers):
+def process_user_query(user_input, api_url, api_headers, support_structured_output):
     """
     Processes a user query by handling the function call and generating the final response.
     
     :param user_input: The input query from the user.
     :param api_url: The URL of the API to send requests to.
     :param api_headers: The headers to include in the API request.
+    :param support_structured_output: A boolean indicating whether the model or API supports structured output.
     """
     print("[ALIE LANGCHAIN DEBUG: START]")
     try:
         # Run the function call and generate the final response
-        function_name, final_message = handle_function_call(user_input, api_url, api_headers, FUNCTIONS)
+        function_name, final_message = handle_function_call(user_input, api_url, api_headers, FUNCTIONS, support_structured_output)
         if final_message:
             final_response = generate_final_response(final_message, api_url, api_headers)
             print("[ALIE LANGCHAIN DEBUG: END]")
@@ -358,10 +404,21 @@ def process_user_query(user_input, api_url, api_headers):
 
 if __name__ == "__main__":
 
-    '''
-    # Define constants and run the functions
+    # Model data
+
+    # LmStudio
     api_url_lmstudio = "http://127.0.0.1:1234/v1/chat/completions"
+    model_lmstudio = 'lmstudio-community/Meta-Llama-3-8B-Instruct-GGUF'
     api_headers_lmstudio = {
+        "Content-Type": "application/json"
+    }
+
+    # Groq
+    groq_api_key = os.getenv("GROQ_API_KEY", "NotFound")
+    model_groq = 'llama3-8b-8192'
+    api_url_groq = "https://api.groq.com/openai/v1/chat/completions"
+    api_headers_groq = {
+        "Authorization": f"Bearer {groq_api_key}",
         "Content-Type": "application/json"
     }
 
@@ -378,7 +435,12 @@ if __name__ == "__main__":
     user_input = question8
 
     # Run the function call and generate the final response
-    # Example usage:
-    answer = process_user_query(user_input, api_url_lmstudio, api_headers_lmstudio)
+    # Example usage for LmStudio:
+    print("\nProcessing user query using LmStudio...")
+    answer = process_user_query(user_input, api_url_lmstudio, api_headers_lmstudio, support_structured_output=True)
     print("Answer = ", answer)
-    '''
+
+    # Example usage for Groq:
+    print("\nProcessing user query using Groq...")
+    answer = process_user_query(user_input, api_url_groq, api_headers_groq, support_structured_output=False)
+    print("Answer = ", answer)

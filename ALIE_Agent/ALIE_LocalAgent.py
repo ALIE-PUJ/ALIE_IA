@@ -4,13 +4,16 @@ import time
 from Local_Agent.Local_FunctionCallerAgent import *
 from Others.Translation.DeepTranslator_Translate import *
 
-def process_user_query_and_translate(user_input, api_url, api_headers):
+def process_user_query_and_translate(user_input, api_url, api_headers, support_structured_output):
     """
     Process the user's query and translate it to English if it is not already in English.
     Also, return it in the original language if the query is not in English.
     
     :param user_input: The input query from the user.
     :param api_url: The URL of the API to send requests to.
+    :param api_headers: The headers for the API request.
+    :param support_structured_output: Whether the model supports structured output.
+
     :return: The result of the query processing or None if the query is not in English.
     """
     # Detect language of the query
@@ -22,21 +25,24 @@ def process_user_query_and_translate(user_input, api_url, api_headers):
         print(f"[POSTPROCESS - INFO] User input not in English. Translating to English...")
         user_input = translate(user_input, "en") # translate to English
 
-    answer = process_user_query(user_input, api_url, api_headers) # process the query
+    answer = process_user_query(user_input, api_url, api_headers, support_structured_output) # process the query
 
     if answer is not None and user_language != "en":
         print(f"[POSTPROCESS - INFO] Translating answer back to original language...")
         answer = translate(answer, user_language) # translate back to original user language
     return answer
 
-def call_process_user_query_with_retries(user_input, api_url, api_headers, max_retries=3, delay=1):
+def call_process_user_query_with_retries(user_input, api_url, api_headers, support_structured_output, max_retries=3, delay=1):
     """
     Calls process_user_query and retries if the result is None.
     
     :param user_input: The input query from the user.
     :param api_url: The URL of the API to send requests to.
+    :param api_headers: The headers for the API request.
+    :param support_structured_output: Whether the model supports structured output.
     :param max_retries: Maximum number of retries if the result is None (default 3).
     :param delay: Delay between retries in seconds (default 1).
+
     :return: The result of process_user_query or None if all retries fail.
     """
     retries = 0
@@ -46,8 +52,10 @@ def call_process_user_query_with_retries(user_input, api_url, api_headers, max_r
     print("[LLM INFO] Posting to ", api_url)
 
     while retries < max_retries:
-        answer = process_user_query_and_translate(user_input, api_url, api_headers)
-        
+
+        answer = process_user_query_and_translate(user_input, api_url, api_headers, support_structured_output) # Call With Translation
+        # answer = process_user_query(user_input, api_url, api_headers, support_structured_output) # Call Without Translation
+
         if answer is not None:
 
 
@@ -66,13 +74,30 @@ def call_process_user_query_with_retries(user_input, api_url, api_headers, max_r
     print(f"Max retries reached. Total execution time: {elapsed_time:.2f} seconds.")
     return None  # Return None if all retries fail
 
-# Define constants and run the functions
+
+
+# Model data
+
+# LmStudio
 api_url_lmstudio = "http://127.0.0.1:1234/v1/chat/completions"
+model_lmstudio = 'lmstudio-community/Meta-Llama-3-8B-Instruct-GGUF'
 api_headers_lmstudio = {
     "Content-Type": "application/json"
 }
+support_structured_output_lmstudio = True
 
-# Define the content of the user input as a modifiable string
+# Groq
+groq_api_key = os.getenv("GROQ_API_KEY", "NotFound")
+model_groq = 'llama3-8b-8192'
+api_url_groq = "https://api.groq.com/openai/v1/chat/completions"
+api_headers_groq = {
+    "Authorization": f"Bearer {groq_api_key}",
+    "Content-Type": "application/json"
+}
+support_structured_output_groq = False
+
+
+# Questions
 question1 = "Is there any student called Luis? Who?"
 question2 = "Which is the course code for the course named 'Estructuras de datos'?" # Hay que remover las tildes de las inserciones SQL.
 question3 = "Which are the available classes for the course with code 4196?"
@@ -90,8 +115,11 @@ question14 = "Cuales son los prerrequisitos para la materia con codigo 4196?"
 question15 = "Cuales son los horarios disponibles para la clase 1557?"
 question16 = "Hay algun profesor llamado Oscar? Quien?"
 
-user_input = question16
+user_input = question14
+
+
 
 # Run the function call and generate the final response
-answer = call_process_user_query_with_retries(user_input = user_input, api_url = api_url_lmstudio, api_headers = api_headers_lmstudio) # Llamada a LmStudio
+answer = call_process_user_query_with_retries(user_input, api_url_lmstudio, api_headers_lmstudio, support_structured_output_lmstudio) # Llamada a LmStudio
+# answer = call_process_user_query_with_retries(user_input, api_url_groq, api_headers_groq, support_structured_output_groq) # Llamada a Groq
 print("\n[Response] ---> Answer = ", answer)
