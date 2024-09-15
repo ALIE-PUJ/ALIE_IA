@@ -4,7 +4,7 @@ from Library.DBsearchTests_Library import *  # Import all functions from the lib
 
 # Set global parameters
 model = 'lmstudio-community/Meta-Llama-3-8B-Instruct-GGUF/Meta-Llama-3-8B-Instruct-Q4_K_M.gguf'
-temperature = 0.5
+temperature = 0
 max_tokens = 1000
 api_headers = {
     "Content-Type": "application/json"
@@ -324,6 +324,23 @@ def generate_final_response(final_message, url, headers):
     else:
         print(f"[ERROR] ---> Final response request failed with status code {final_response.status_code}")
 
+def process_user_query(user_input, api_url):
+    """
+    Processes a user query by handling the function call and generating the final response.
+    
+    :param user_input: The input query from the user.
+    :param api_url: The URL of the API to send requests to.
+    """
+    try:
+        # Run the function call and generate the final response
+        function_name, final_message = handle_function_call(user_input, api_url, api_headers, FUNCTIONS)
+        if final_message:
+            generate_final_response(final_message, api_url, api_headers)
+    except Exception as e:
+        print(f"An error occurred during processing: {e}")
+
+# THIS CAN BE USED AS A LIBRARY FUNCTION, AND BE CALLED FROM ANOTHER FILE
+
 # Define constants and run the functions
 api_url = "http://127.0.0.1:1234/v1/chat/completions"
 
@@ -340,6 +357,4 @@ question8 = "Are there any teachers called Oscar? Who?"
 user_input = question8
 
 # Run the function call and generate the final response
-function_name, final_message = handle_function_call(user_input, api_url, api_headers, FUNCTIONS)
-if final_message:
-    generate_final_response(final_message, api_url, api_headers)
+process_user_query(user_input, api_url)
