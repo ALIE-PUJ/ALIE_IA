@@ -9,6 +9,15 @@ FUNCTIONS = {
         "description": "Searches for students by their name.",
         "args": {
             "argument": "The name of the student to search for."
+        },
+        "example": {
+            "query": "Is there any student called Luis? Who?",
+            "expected": {
+                "function_name": "get_students_by_name",
+                "arguments": {
+                    "argument": "Luis"
+                }
+            }
         }
     },
     "get_course_by_name": {
@@ -16,6 +25,15 @@ FUNCTIONS = {
         "description": "Searches a course by its name. It provides info about the course, like its code and description.",
         "args": {
             "argument": "The name of the course to search for."
+        },
+        "example": {
+            "query": "Which is the course code for the course named 'Estructuras de datos'?",
+            "expected": {
+                "function_name": "get_course_by_name",
+                "arguments": {
+                    "argument": "Estructuras de datos"
+                }
+            }
         }
     },
     "get_classes_by_course_code": {
@@ -23,6 +41,15 @@ FUNCTIONS = {
         "description": "Searches for classes by course code.",
         "args": {
             "argument": "The code of the course to search for."
+        },
+        "example": {
+            "query": "Which are the available classes for the course with code 4196?",
+            "expected": {
+                "function_name": "get_classes_by_course_code",
+                "arguments": {
+                    "argument": "4196"
+                }
+            }
         }
     },
     "get_classes_by_course_name": {
@@ -30,6 +57,15 @@ FUNCTIONS = {
         "description": "Searches for classes by course name.",
         "args": {
             "argument": "The name of the course to search for."
+        },
+        "example": {
+            "query": "Which are the available classes for the Estructuras de datos course? Give me their codes",
+            "expected": {
+                "function_name": "get_classes_by_course_name",
+                "arguments": {
+                    "argument": "Estructuras de datos"
+                }
+            }
         }
     },
     "get_class_by_code": {
@@ -37,6 +73,15 @@ FUNCTIONS = {
         "description": "Searches for a class by its code.",
         "args": {
             "argument": "The code of the class to search for."
+        },
+        "example": {
+            "query": "Which are the prerequisites for Estructuras de datos?",
+            "expected": {
+                "function_name": "get_class_by_code",
+                "arguments": {
+                    "argument": "Estructuras de datos"
+                }
+            }
         }
     },
     "get_prerequisites_by_course_name": {
@@ -44,6 +89,15 @@ FUNCTIONS = {
         "description": "Searches for prerequisites of a course by course name.",
         "args": {
             "argument": "The name of the course to search for prerequisites."
+        },
+        "example": {
+            "query": "Which are the prerequisites for Estructuras de datos?",
+            "expected": {
+                "function_name": "get_prerequisites_by_course_name",
+                "arguments": {
+                    "argument": "Estructuras de datos"
+                }
+            }
         }
     },
     "get_prerequisites_by_course_code": {
@@ -51,6 +105,15 @@ FUNCTIONS = {
         "description": "Searches for prerequisites of a course by course code.",
         "args": {
             "argument": "The code of the course to search for prerequisites."
+        },
+        "example": {
+            "query": "Which are the prerequisites for the course with code 4196?",
+            "expected": {
+                "function_name": "get_prerequisites_by_course_code",
+                "arguments": {
+                    "argument": "4196"
+                }
+            }
         }
     },
     "get_class_schedule": {
@@ -58,6 +121,15 @@ FUNCTIONS = {
         "description": "Searches for the schedule(s) of a class by its class ID.",
         "args": {
             "argument": "A single class ID to search for its schedule(s)."
+        },
+        "example": {
+            "query": "Which are the available schedules for class 1557?",
+            "expected": {
+                "function_name": "get_class_schedule",
+                "arguments": {
+                    "argument": "1557"
+                }
+            }
         }
     },
     "get_teacher_by_name": {
@@ -65,6 +137,15 @@ FUNCTIONS = {
         "description": "Searches for professors by their name.",
         "args": {
             "argument": "The name of the professor to search for."
+        },
+        "example": {
+            "query": "Are there any teachers called Oscar? Who?",
+            "expected": {
+                "function_name": "get_teacher_by_name",
+                "arguments": {
+                    "argument": "Oscar"
+                }
+            }
         }
     }
 }
@@ -74,11 +155,16 @@ def generate_system_prompt(functions):
         "You can execute the following functions:\n"
         "For each function, ensure to provide the 'argument' in the 'arguments' field.\n"
         "Also, please do not modify the user's input when passing an argument, no matter the language. Do not try to make it shorter.\n"
+        "Here are some example queries and their corresponding function calls:\n"
     )
     for func_name, func_info in functions.items():
         description = func_info["description"]
         arg_desc = ", ".join([f"{arg_name}: {arg_desc}" for arg_name, arg_desc in func_info["args"].items()])
-        function_descriptions += f"- {func_name}: {description}\n  Arguments: {arg_desc}\n"
+        example_query = func_info["example"]["query"]
+        example_expected = json.dumps(func_info["example"]["expected"], indent=2)
+        function_descriptions += (f"- {func_name}: {description}\n  Arguments: {arg_desc}\n"
+                                  f"  Example Query: {example_query}\n"
+                                  f"  Example Expected Response: {example_expected}\n")
     return function_descriptions
 
 # Define the content of the user input as a modifiable string
@@ -91,8 +177,7 @@ question6 = "Which are the prerequisites for the course with code 4196?"
 question7 = "Which are the available schedules for class 1557?"
 question8 = "Are there any teachers called Oscar? Who?"
 
-user_input = question2
-
+user_input = question8
 
 # Define the API endpoint
 url = "http://127.0.0.1:1234/v1/chat/completions"
@@ -111,7 +196,7 @@ data = {
     "messages": [
         {
             "role": "system",
-            "content": system_prompt # Use the dynamically generated system prompt
+            "content": system_prompt  # Use the dynamically generated system prompt
         },
         {
             "role": "user",
