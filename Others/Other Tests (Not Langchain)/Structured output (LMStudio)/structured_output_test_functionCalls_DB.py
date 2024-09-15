@@ -167,6 +167,28 @@ def generate_system_prompt(functions):
                                   f"  Example Expected Response: {example_expected}\n")
     return function_descriptions
 
+def format_response_for_llm(user_input, function_name, result):
+    """
+    Formatea la respuesta final basada en el input del usuario y el resultado de la función llamada.
+    
+    :param user_input: La pregunta o solicitud original del usuario.
+    :param function_name: El nombre de la función llamada por el agente.
+    :param result: El resultado de la función llamada.
+    :return: Un mensaje formateado para presentar al usuario.
+    """
+    # Asegúrate de que el resultado esté en un formato legible
+    if isinstance(result, dict):
+        result = json.dumps(result, indent=2)
+    
+    # Crear un mensaje final
+    final_message = (
+        f"**Pregunta del Usuario:**\n{user_input}\n\n"
+        f"**Resultado de la Función `{function_name}`:**\n{result}\n\n"
+        f"**Ahora, proporciona una respuesta adecuada para el usuario basado en la información anterior.**"
+    )
+    
+    return final_message
+
 # Define the content of the user input as a modifiable string
 question1 = "Is there any student called Luis? Who?"
 question2 = "Which is the course code for the course named 'Estructuras de datos'?" # Hay que remover las tildes de las inserciones SQL.
@@ -233,6 +255,7 @@ data = {
     "stream": False
 }
 
+
 # Send the POST request
 response = requests.post(url, headers=headers, data=json.dumps(data))
 
@@ -262,8 +285,40 @@ if response.status_code == 200:
         
         # Call the function with the unpacked arguments
         try:
-            result = func(**func_args)  # Call the function with the unpacked arguments
+            function_result = func(**func_args)  # Call the function with the unpacked arguments
+            
+            # Prepare the final message
+            final_message = format_response_for_llm(user_input, function_name, function_result)
             print(f"\n---> Function executed: {function_name}, Result: {result}")
+ 
+
+            # Define the payload for the final response
+            final_payload = {
+                "model": "lmstudio-community/Meta-Llama-3-8B-Instruct-GGUF/Meta-Llama-3-8B-Instruct-Q4_K_M.gguf",
+                "messages": [
+                    {
+                        "role": "system",
+                        "content": "Your task is to provide a final response to the user based on the provided details."
+                    },
+                    {
+                        "role": "user",
+                        "content": final_message  # Send the formatted message to the model
+                    }
+                ],
+                "temperature": 0.5,
+                "max_tokens": 150,
+                "stream": False
+            }
+            
+            # Send the POST request to get the final response
+            final_response = requests.post(url, headers=headers, data=json.dumps(final_payload))
+            
+            if final_response.status_code == 200:
+                final_result = final_response.json()["choices"][0]["message"]["content"]
+                print(f"\n---> Final Response to User:\n{final_result}")
+            else:
+                print(f"[ERROR] ---> Final response request failed with status code {final_response.status_code}")
+        
         except TypeError as e:
             print(f"\n---> Error: {e}. Check the arguments passed to {function_name}.")
     else:
