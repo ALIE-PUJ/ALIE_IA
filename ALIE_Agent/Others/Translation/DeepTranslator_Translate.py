@@ -36,6 +36,7 @@ def detect_language(query: str) -> str:
 
 # Test the translation function and language detection
 if __name__ == "__main__":
+    '''
     query = "Hello, how are you?"
     target_language = 'es'  # Specify the target language code here
     
@@ -47,3 +48,4 @@ if __name__ == "__main__":
     translated_query = translate(query, target_language)
     print(f"Original: {query}")
     print(f"Translated: {translated_query}")
+    '''

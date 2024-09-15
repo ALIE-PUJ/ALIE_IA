@@ -13,9 +13,6 @@ else:
 model = 'lmstudio-community/Meta-Llama-3-8B-Instruct-GGUF/Meta-Llama-3-8B-Instruct-Q4_K_M.gguf'
 temperature = 0
 max_tokens = 1000
-api_headers = {
-    "Content-Type": "application/json"
-}
 
 # Define the function registry dynamically
 FUNCTIONS = {
@@ -330,26 +327,28 @@ def generate_final_response(final_message, url, headers):
     
     if final_response.status_code == 200:
         final_result = final_response.json()["choices"][0]["message"]["content"]
-        print(f"[INFO] ---> Final Response to User: {final_result}")
+        print(f"[INFO] ---> Final Response by model: {final_result}")
         return final_result
     else:
         print(f"[ERROR] ---> Final response request failed with status code {final_response.status_code}")
         return None
 
-def process_user_query(user_input, api_url):
+def process_user_query(user_input, api_url, api_headers):
     """
     Processes a user query by handling the function call and generating the final response.
     
     :param user_input: The input query from the user.
     :param api_url: The URL of the API to send requests to.
+    :param api_headers: The headers to include in the API request.
     """
     print("[ALIE LANGCHAIN DEBUG: START]")
     try:
         # Run the function call and generate the final response
         function_name, final_message = handle_function_call(user_input, api_url, api_headers, FUNCTIONS)
         if final_message:
+            final_response = generate_final_response(final_message, api_url, api_headers)
             print("[ALIE LANGCHAIN DEBUG: END]")
-            return generate_final_response(final_message, api_url, api_headers)
+            return final_response
     except Exception as e:
         print(f"An error occurred during processing: {e}")
         print("[ALIE LANGCHAIN DEBUG END]")
@@ -361,7 +360,10 @@ if __name__ == "__main__":
 
     '''
     # Define constants and run the functions
-    api_url = "http://127.0.0.1:1234/v1/chat/completions"
+    api_url_lmstudio = "http://127.0.0.1:1234/v1/chat/completions"
+    api_headers_lmstudio = {
+        "Content-Type": "application/json"
+    }
 
     # Define the content of the user input as a modifiable string
     question1 = "Is there any student called Luis? Who?"
@@ -377,6 +379,6 @@ if __name__ == "__main__":
 
     # Run the function call and generate the final response
     # Example usage:
-    answer = process_user_query(user_input, api_url)
+    answer = process_user_query(user_input, api_url_lmstudio, api_headers_lmstudio)
     print("Answer = ", answer)
     '''
