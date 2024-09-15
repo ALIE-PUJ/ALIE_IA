@@ -257,7 +257,25 @@ def jsonl_to_csv(jsonl_file, csv_file):
 
     print(f"CSV file '{csv_file}' created successfully from '{jsonl_file}'.")
 
+def extend_jsonl_file(filename, times=10):
+    # Obtener la ruta absoluta de donde se encuentra el script .py
+    script_dir = os.path.dirname(os.path.abspath(__file__))  # Ruta absoluta del script .py
+    jsonl_file = os.path.join(script_dir, filename)  # Crear la ruta absoluta del archivo
+
+    # Leer todas las líneas actuales del archivo JSONL
+    with open(jsonl_file, 'r', encoding='utf-8') as f:
+        lines = f.readlines()
+
+    # Escribir de nuevo las mismas líneas "times" veces
+    with open(jsonl_file, 'a', encoding='utf-8') as f:  # Modo 'a' para añadir sin sobrescribir
+        for _ in range(times):
+            for line in lines:
+                f.write(line)
+
+    print(f"Archivo '{jsonl_file}' extendido {times} veces.")
+
 if __name__ == "__main__":
-    process_alie_data_json()
-    generate_combined_jsonl_file()
-    jsonl_to_csv(jsonl_output_file, csv_output_file)
+    process_alie_data_json() # Crear la informacion general de ALIE (Tambien traducido al inglés)
+    generate_combined_jsonl_file() # Crear la informacion de las colecciones de MongoDB Q&A (Tambien traducido al inglés)
+    extend_jsonl_file(jsonl_output_file) # Extender el archivo JSONL por 10 veces su tamaño original
+    jsonl_to_csv(jsonl_output_file, csv_output_file) # Convertir el archivo JSONL a CSV
