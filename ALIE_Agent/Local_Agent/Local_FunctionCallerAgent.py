@@ -279,10 +279,10 @@ def handle_function_call(user_input, url, headers, functions, support_structured
 
     if support_structured_output:
         data = data_structured_output
-        print("[DEBUG] Using structured output.")
+        print("[LLM INFO] Using structured output.")
     else:
         data = data_not_structured_output
-        print("[DEBUG] Using non-structured output.")
+        print("[LLM INFO] Using non-structured output.")
 
     # Send the POST request
     response = requests.post(url, headers=headers, data=json.dumps(data))
