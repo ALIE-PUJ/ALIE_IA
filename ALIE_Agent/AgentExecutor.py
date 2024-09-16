@@ -172,8 +172,13 @@ question17 = "What are the expected learning outcomes of estructuras de datos?"
 question18 = "Cuales son los resultados de aprendizaje esperados de estructuras de datos?"
 question19 = "What scholarships are available for students?"
 question20 = "Cuales becas estan disponibles para los estudiantes?"
+question21 = "Which are the carrer emphasis for systems engineering?"
+question22 = "Cuales son las enfasis de carrera para ingenieria de sistemas?"
+question23 = "Which are the available student groups?"
+question24 = "Cuales son los semilleros disponibles?"
+question25 = "What is ALIE?"
 
-user_input = question16
+user_input = question25
 
 
 # THIS CAN BE USED AS A LIBRARY FUNCTION, AND BE CALLED FROM ANOTHER FILE

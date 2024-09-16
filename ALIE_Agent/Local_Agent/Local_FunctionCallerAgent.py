@@ -193,7 +193,7 @@ def format_response_for_llm(user_input, function_name, result):
     final_message = (
         f"**User Query:**\n{user_input}\n\n"
         f"**Function Result `{function_name}`:**\n{result}\n\n"
-        f"**Now, provide a suitable response to the user based on the above information. Please, make it a transparent and natural language response so he does not know this post-processing is occuring**"
+        f"**Now, provide a suitable response to the user based on the above information. Please, make it a natural language response so he does not know this post-processing is occuring**"
     )
     
     return final_message
@@ -355,7 +355,7 @@ def generate_final_response(final_message, url, headers, model):
         "messages": [
             {
                 "role": "system",
-                "content": "Your task is to craft a thoughtful and comprehensive final response for the user, incorporating all the details provided. Please aim to be as clear and helpful as possible, ensuring that the information is both accurate and easy to understand. Your goal is to make the user feel well-informed and satisfied with the response they receive. Be friendly and professional, but also talk to the user as a friend, not as a machine. Remember, the user is looking for a human-like interaction, so make sure your response is engaging and relatable. Also, if you don't find an answer, please let the user know that you couldn't find the information they were looking for. Thank you for your hard work!"
+                "content": "Your task is to craft a thoughtful and comprehensive final response for the user, incorporating all the details provided by the function result. Please aim to be as clear and helpful as possible, ensuring that the information is both accurate and easy to understand. Be friendly, engaging and relatable. Be sure to provide consistent information with what the result of the function says."
             },
             {
                 "role": "user",
@@ -389,9 +389,13 @@ def process_user_query(user_input, api_url, api_headers, model, support_structur
     """
     print("[ALIE LANGCHAIN DEBUG: START]")
     try:
+        # Set temperature to 0 for function call
+        temperature = 0
         # Run the function call and generate the final response
         function_name, final_message = handle_function_call(user_input, api_url, api_headers, FUNCTIONS, model, support_structured_output)
         if final_message:
+            # Set temperature to 1 for final response
+            temperature = 1
             final_response = generate_final_response(final_message, api_url, api_headers, model)
             print("[ALIE LANGCHAIN DEBUG: END]")
             return final_response
