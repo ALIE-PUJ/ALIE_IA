@@ -174,7 +174,7 @@ question19 = "What scholarships are available for students?"
 question20 = "Cuales becas estan disponibles para los estudiantes?"
 question21 = "Which are the carrer emphasis for systems engineering?"
 question22 = "Cuales son las enfasis de carrera para ingenieria de sistemas?"
-question23 = "Which are the available student groups?"
+question23 = "Which are the available student seedbeds?"
 question24 = "Cuales son los semilleros disponibles?"
 question25 = "What is ALIE?"
 
