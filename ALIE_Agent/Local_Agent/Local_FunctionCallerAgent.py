@@ -4,10 +4,10 @@ import json
 # Library import depending on the context (Being used as a library or being executed directly)
 if __name__ == "__main__":
     # Direct execution, absolute import
-    from Library.DBsearchTests_Library import *
+    from RelationalDB.DBsearchTests_Library import *
 else:
     # Imported as part of a package, relative import
-    from .Library.DBsearchTests_Library import *
+    from .RelationalDB.DBsearchTests_Library import *
 
 # Set global parameters
 model = 'llama3-8b-8192'
@@ -356,7 +356,7 @@ def generate_final_response(final_message, url, headers):
         "messages": [
             {
                 "role": "system",
-                "content": "Your task is to provide a final response to the user based on the provided details."
+                "content": "Your task is to craft a thoughtful and comprehensive final response for the user, incorporating all the details provided. Please aim to be as clear and helpful as possible, ensuring that the information is both accurate and easy to understand. Your goal is to make the user feel well-informed and satisfied with the response they receive. Be friendly and professional, but also talk to the user as a friend, not as a machine. Remember, the user is looking for a human-like interaction, so make sure your response is engaging and relatable."
             },
             {
                 "role": "user",
@@ -404,6 +404,7 @@ def process_user_query(user_input, api_url, api_headers, support_structured_outp
 
 if __name__ == "__main__":
 
+    '''
     # Model data
 
     # LmStudio
@@ -444,3 +445,4 @@ if __name__ == "__main__":
     print("\nProcessing user query using Groq...")
     answer = process_user_query(user_input, api_url_groq, api_headers_groq, support_structured_output=False)
     print("Answer = ", answer)
+    '''
