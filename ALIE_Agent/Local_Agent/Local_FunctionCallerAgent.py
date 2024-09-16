@@ -13,7 +13,7 @@ else:
 
 # Set global parameters
 temperature = 0
-max_tokens = 100000
+max_tokens = 1000
 
 # Define the function registry dynamically
 FUNCTIONS = {
@@ -437,9 +437,9 @@ if __name__ == "__main__":
 
     # Run the function call and generate the final response
     # Example usage for LmStudio:
-    print("\nProcessing user query using LmStudio...")
-    answer = process_user_query(user_input, api_url_lmstudio, api_headers_lmstudio, model_lmstudio, support_structured_output=True)
-    print("Answer = ", answer)
+    #print("\nProcessing user query using LmStudio...")
+    #answer = process_user_query(user_input, api_url_lmstudio, api_headers_lmstudio, model_lmstudio, support_structured_output=True)
+    #print("Answer = ", answer)
 
     # Example usage for Groq:
     print("\nProcessing user query using Groq...")

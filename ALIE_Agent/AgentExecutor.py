@@ -6,7 +6,7 @@ from Local_Agent.Local_FunctionCallerAgent import *
 from Others.Translation.DeepTranslator_Translate import *
 
 # Global timeout
-global_timeout = 30
+global_timeout = 60  # 60 segundos
 
 # Función genérica que ejecuta una función con timeout sobre un hilo
 def ejecutar_con_timeout(func, args=(), kwargs=None, timeout=5):
@@ -111,7 +111,7 @@ support_structured_output_lmstudio = True
 
 # Groq
 groq_api_key = os.getenv("GROQ_API_KEY", "NotFound")
-model_groq = 'llama3-8b-8192'
+model_groq = 'llama-3.1-70b-versatile'
 api_url_groq = "https://api.groq.com/openai/v1/chat/completions"
 api_headers_groq = {
     "Authorization": f"Bearer {groq_api_key}",
@@ -180,7 +180,7 @@ user_input = question16
 
 if __name__ == "__main__":
 
-    '''
+    
     agent_answer = get_answer(user_input)
     print("\n[Response from agent executor (AgentExecutor)] ---> Answer = ", agent_answer)    
-    '''
+    
