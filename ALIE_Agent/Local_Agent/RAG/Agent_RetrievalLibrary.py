@@ -17,23 +17,36 @@ else:
 from deep_translator import GoogleTranslator
 from langdetect import detect
 
-def translate(query: str, target_language: str) -> str:
+def translate(query: str, target_language: str, chunk_size: int = 4999) -> str:
     """
-    Translate a given query to the specified target language, regardless of the original language.
+    Translate a given query to the specified target language, handling long texts by splitting them into chunks.
 
     This function uses the deep_translator library to convert the input query into the target language.
-    It ensures that the query is translated properly to facilitate consistent processing.
+    It splits long queries into smaller chunks to ensure compatibility with translation service limits.
 
     Parameters:
     query (str): The input query that needs to be translated.
     target_language (str): The language code for the target language (e.g., 'es' for Spanish, 'fr' for French).
+    chunk_size (int): The maximum length of each chunk to be translated separately.
 
     Returns:
     str: The translated query in the target language.
     """
-    translator = GoogleTranslator(source='auto', target=target_language)
-    translated = translator.translate(query)
-    return translated
+    def chunk_text(text, size):
+        """Splits text into chunks of specified size."""
+        return [text[i:i + size] for i in range(0, len(text), size)]
+
+    # If the query is too long, split it into chunks
+    if len(query) > chunk_size:
+        print(f"[Translation] Query is too long ({len(query)} characters). Splitting into chunks of {chunk_size} characters.")
+        chunks = chunk_text(query, chunk_size)
+        translated_chunks = [GoogleTranslator(source='auto', target=target_language).translate(chunk) for chunk in chunks]
+        translated_query = ''.join(translated_chunks)
+    else:
+        # Translate the entire query if it's within the size limit
+        translated_query = GoogleTranslator(source='auto', target=target_language).translate(query)
+
+    return translated_query
 
 def detect_language(query: str) -> str:
     """
@@ -153,6 +166,7 @@ def search_course_information_vectorStore(user_input: str, timeout=10):
         if user_language != "es":
             print(f"Idioma detectado: {user_language}. Traduciendo a español...")
             user_input = translate(user_input, "es")
+            print(f"Texto traducido: {user_input}")
 
         # Ejecutar la consulta con un timeout
         result = ejecutar_con_timeout(query_courses, timeout)
@@ -244,10 +258,10 @@ if __name__ == "__main__":
     specific_question4 = "What can you tell me about the data structures course?"
 
     # General retrieval
-    answer = general_retrieval(specific_question2)
-    print("Answer = ", answer)
+    #answer = general_retrieval(specific_question2)
+    #print("Answer = ", answer)
 
     # Course retrieval
-    answer = course_retrieval(specific_question3)
+    answer = course_retrieval(specific_question4)
     print("Answer = ", answer)
     '''
