@@ -13,7 +13,7 @@ else:
 
 # Set global parameters
 temperature = 0
-max_tokens = 1000
+max_tokens = 100000
 
 # Define the function registry dynamically
 FUNCTIONS = {

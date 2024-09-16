@@ -4,7 +4,13 @@ import os
 import time
 
 # Importar librería propia
-from TaggingToolsLibrary import *
+# Library import depending on the context (Being used as a library or being executed directly)
+if __name__ == "__main__":
+    # Direct execution, absolute import
+    from TaggingToolsLibrary import *
+else:
+    # Imported as part of a package, relative import
+    from .TaggingToolsLibrary import *
 
 # Set the maximum execution time for the main agent
 max_execution_time = 10
@@ -15,25 +21,33 @@ def create_llms():
     # Definir el modelo principal (Groq)
     llm_primary = ChatGroq(
         model="llama3-8b-8192",
-        temperature=0.9,
+        temperature=0,
         max_tokens=None,
         timeout=None,
     )
 
-    # Definir el modelo alternativo (Llama)
-    llm_alternative_1 = ChatOpenAI(
+    # Definir el modelo alternativo
+    llm_alternative_1 = ChatGroq(
+        model="llama-3.1-70b-versatile", # Modelo mas inteligente, por si el primario falla
+        temperature=0,
+        max_tokens=None,
+        timeout=None,
+    )
+
+    # Definir el modelo alternativo 2 (otro modelo, por ejemplo)
+    llm_alternative_2 = ChatOpenAI(
         model="lmstudio-community/Meta-Llama-3-8B-Instruct-GGUF",
-        temperature=0.9,
+        temperature=0,
         max_tokens=None,
         timeout=None,
         base_url="http://localhost:1234/v1",
         api_key="lm-studio"
     )
 
-    # Definir el modelo alternativo 2 (otro modelo, por ejemplo)
-    llm_alternative_2 = ChatOpenAI(
+    # Definir el modelo alternativo 3 (otro modelo, por ejemplo)
+    llm_alternative_3 = ChatOpenAI(
         model="openai/gpt-3.5-turbo",
-        temperature=0.9,
+        temperature=0,
         max_tokens=None,
         timeout=None,
         base_url="https://api.openai.com/v1",

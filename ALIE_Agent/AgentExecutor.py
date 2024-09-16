@@ -176,7 +176,11 @@ question20 = "Cuales becas estan disponibles para los estudiantes?"
 user_input = question16
 
 
-# Run the function call and generate the final response
+# THIS CAN BE USED AS A LIBRARY FUNCTION, AND BE CALLED FROM ANOTHER FILE
 
-agent_answer = get_answer(user_input)
-print("\n[Response] ---> Answer = ", agent_answer)
+if __name__ == "__main__":
+
+    '''
+    agent_answer = get_answer(user_input)
+    print("\n[Response from agent executor (AgentExecutor)] ---> Answer = ", agent_answer)    
+    '''

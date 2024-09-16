@@ -2,7 +2,13 @@
 from langchain.agents import tool
 
 # Importar libreria de Tagging a mongoDB
-from Tagging import save_tag_to_mongo
+# Library import depending on the context (Being used as a library or being executed directly)
+if __name__ == "__main__":
+    # Direct execution, absolute import
+    from Tagging import *
+else:
+    # Imported as part of a package, relative import
+    from .Tagging import *
 
 # Tools
 @tool("multiple_input_tag_interaction", return_direct=True)
