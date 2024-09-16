@@ -112,11 +112,11 @@ def tag_interaction_until_ok(user_prompts, agent_responses):
                 ))
 
                 # Imprimir el resultado
-                print("Answer: ", output)
+                print("\033[33mAnswer: ", output, "\033[0m")
 
                 # Verificar si el resultado comienza con "Tag:Done"
                 if output.startswith("Tag:Done"):  # Tag:Done. Significa que se realizó el llamado a la función correctamente
-                    print("Tagging complete and successful.")
+                    print("\033[33mTagging complete and successful.\033[0m")
                     stop_timer(start_time)  # Detener el contador de tiempo y mostrar la duración
                     return output  # Devolver el resultado exitoso
                 

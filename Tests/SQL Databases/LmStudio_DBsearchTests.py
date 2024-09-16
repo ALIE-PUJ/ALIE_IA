@@ -42,15 +42,32 @@ agent= initialize_agent(
 
 # Q&A
 question1 = "Is there any student called Luis? Who?"
-question2 = "Which is the course code for Estructuras de datos?" # Hay que remover las tildes de las inserciones SQL.
+question2 = "Which is the course code for the course named 'Estructuras de datos'?" # Hay que remover las tildes de las inserciones SQL.
 question3 = "Which are the available classes for the course with code 4196?"
 question4 = "Which are the available classes for the Estructuras de datos course? Give me their codes"
 question5 = "Which are the prerequisites for Estructuras de datos?"
 question6 = "Which are the prerequisites for the course with code 4196?"
 question7 = "Which are the available schedules for class 1557?"
 question8 = "Are there any teachers called Oscar? Who?"
+question9 = "Hay algun estudiante llamado Luis? Quien?"
+question10 = "Cual es el codigo de la materia llamada 'Estructuras de datos'?"
+question11 = "Cuales son las clases disponibles para la materia con codigo 4196?"
+question12 = "Cuales son las clases disponibles para la materia Estructuras de datos? Dame sus codigos"
+question13 = "Cuales son los prerrequisitos para Estructuras de datos?"
+question14 = "Cuales son los prerrequisitos para la materia con codigo 4196?"
+question15 = "Cuales son los horarios disponibles para la clase 1557?"
+question16 = "Hay algun profesor llamado Oscar? Quien?"
+question17 = "What are the expected learning outcomes of estructuras de datos?"
+question18 = "Cuales son los resultados de aprendizaje esperados de estructuras de datos?"
+question19 = "What scholarships are available for students?"
+question20 = "Cuales becas estan disponibles para los estudiantes?"
+question21 = "Which are the carrer emphasis for systems engineering?"
+question22 = "Cuales son las enfasis de carrera para ingenieria de sistemas?"
+question23 = "Which are the available student seedbeds?"
+question24 = "Cuales son los semilleros disponibles?"
+question25 = "What is ALIE?"
 
-result = agent(question8) 
+result = agent(question16) 
 print("Answer: ", result)
 
 # Si se queda en un bucle de "Pensamiento" hay que hacer manejo de errores

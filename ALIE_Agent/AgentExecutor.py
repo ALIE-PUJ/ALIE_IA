@@ -122,13 +122,21 @@ support_structured_output_groq = False
 
 
 # Thread flow
-def get_answer(user_input):
-    # Intentar con LmStudio primero
-    respuesta = ejecutar_con_timeout(
-        call_process_user_query_with_retries,
-        args=(user_input, api_url_lmstudio, api_headers_lmstudio, model_lmstudio, support_structured_output_lmstudio),
-        timeout=global_timeout
-    )
+def get_answer(user_input, priority):
+
+    respuesta = None
+
+    if priority == False:
+        print("[INFO] Low priority. Trying LmStudio.")
+        # Intentar con LmStudio primero
+        respuesta = ejecutar_con_timeout(
+            call_process_user_query_with_retries,
+            args=(user_input, api_url_lmstudio, api_headers_lmstudio, model_lmstudio, support_structured_output_lmstudio),
+            timeout=global_timeout
+        )
+
+    # Si es un retry (priority alto), intentar con Groq
+    print("[INFO] High priority. Trying Groq.")
 
     # Si no se obtuvo respuesta, intentar con Groq
     if respuesta is None:
@@ -185,7 +193,7 @@ user_input = question24
 
 if __name__ == "__main__":
 
-    
-    agent_answer = get_answer(user_input)
+    priority = False # Low priority
+    agent_answer = get_answer(user_input, priority)
     print("\n[Response from agent executor (AgentExecutor)] ---> Answer = ", agent_answer)    
     

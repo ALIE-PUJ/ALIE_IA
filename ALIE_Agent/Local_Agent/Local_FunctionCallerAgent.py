@@ -208,7 +208,8 @@ def handle_function_call(user_input, url, headers, functions, model, support_str
     :param functions: El diccionario de funciones disponibles.
     :param model: El nombre o ID del modelo para usar en las solicitudes de la API.
     :param support_structured_output: Un booleano que indica si el modelo o la API admiten salida estructurada.
-    :return: The name of the function called and the formatted message for the final response., or None if the request fails.
+    
+    :return: El nombre de la función llamada, el mensaje final formateado o None si la solicitud falla.
     """
 
     print("[INFO] ---> User Input:", user_input)
@@ -298,10 +299,10 @@ def handle_function_call(user_input, url, headers, functions, model, support_str
                     result = result[json_start:json_end+1]
                 else:
                     print("[ERROR] ---> No valid JSON found in the response.")
-                    return None, None
+                    return None, None, None
             except Exception as e:
                 print(f"[ERROR] ---> Postprocessing failed: {e}")
-                return None, None
+                return None, None, None
 
         # Skip postprocessing if structured output is supported
         result_json = json.loads(result)
@@ -325,16 +326,16 @@ def handle_function_call(user_input, url, headers, functions, model, support_str
 
                 final_message = format_response_for_llm(user_input, function_name, function_result)
 
-                return function_name, final_message
+                return function_name, final_message, function_result
             except TypeError as e:
                 print(f"---> [ERROR]: {e}. Check the arguments passed to {function_name}.")
-                return None, None
+                return None, None, None
         else:
             print(f"[ERROR] ---> Function '{function_name}' not recognized.")
-            return None, None
+            return None, None, None
     else:
         print(f"[ERROR] ---> Request failed with status code {response.status_code}")
-        return None, None
+        return None, None, None
     
 
 def generate_final_response(final_message, url, headers, model):
@@ -392,18 +393,19 @@ def process_user_query(user_input, api_url, api_headers, model, support_structur
         # Set temperature to 0 for function call
         temperature = 0
         # Run the function call and generate the final response
-        function_name, final_message = handle_function_call(user_input, api_url, api_headers, FUNCTIONS, model, support_structured_output)
+        function_name, final_message, function_result = handle_function_call(user_input, api_url, api_headers, FUNCTIONS, model, support_structured_output)
         if final_message:
 
             # DIRECT RETURNS LIST
-            direct_return_function_names = ["course_retrieval", "general_retrieval"]
+            direct_return_function_names = ["course_retrieval", "general_retrieval"] # List of functions that return the final message directly
             if function_name in direct_return_function_names:
-                print("[ALIE LANGCHAIN DEBUG: Found direct return function. Returning final message.]")
-                return final_message
+                print("[ALIE LANGCHAIN DEBUG: Found direct return function. Returning function_result.]")
+                return function_result
 
             # If not in direct return list, continue with final response generation
             # Set temperature to 1 for final response
             temperature = 1
+            print("[ALIE LANGCHAIN DEBUG: Function output requires post-processing. Returning final_response]")
             final_response = generate_final_response(final_message, api_url, api_headers, model)
             print("[ALIE LANGCHAIN DEBUG: END]")
             return final_response

@@ -9,8 +9,9 @@ import time
 from langchain.agents import tool
 
 # Importar librería propia
-from ChromaDB.MongoDB.MongoDB_SearchLibrary import * # ChromaDB
+from Libraries.MongoDB_SearchLibrary import * # ChromaDB
 # from Milvus.MongoDB.MongoDB_SearchLibrary import * # Milvus
+from Libraries.Library.DBsearchTests_Library import * # Relational DB
 
 # Set the maximum execution time for the main agent
 max_execution_time = 30
@@ -228,7 +229,16 @@ def create_agents():
 
     # Inicializar los agentes
     agent_primary = initialize_agent(
-        [search_course_information_vectorStore, general_query_chain], 
+        [search_course_information_vectorStore, general_query_chain,
+         get_students_by_name,
+     get_course_by_name,
+     get_classes_by_course_code,
+     get_classes_by_course_name,
+     get_class_by_code,
+     get_prerequisites_by_course_code,
+     get_prerequisites_by_course_name,
+     get_class_schedule,
+     get_teacher_by_name], 
         llm_primary,
         memory=ConversationBufferMemory(memory_key="chat_history"),
         agent=AgentType.CHAT_ZERO_SHOT_REACT_DESCRIPTION, 
@@ -238,7 +248,16 @@ def create_agents():
     )
 
     agent_alternative_1 = initialize_agent(
-        [search_course_information_vectorStore, general_query_chain], 
+        [search_course_information_vectorStore, general_query_chain,
+         get_students_by_name,
+     get_course_by_name,
+     get_classes_by_course_code,
+     get_classes_by_course_name,
+     get_class_by_code,
+     get_prerequisites_by_course_code,
+     get_prerequisites_by_course_name,
+     get_class_schedule,
+     get_teacher_by_name], 
         llm_alternative_1,
         memory=ConversationBufferMemory(memory_key="chat_history"),
         agent=AgentType.CHAT_ZERO_SHOT_REACT_DESCRIPTION,
@@ -248,7 +267,16 @@ def create_agents():
     )
 
     agent_alternative_2 = initialize_agent(
-        [search_course_information_vectorStore, general_query_chain], 
+        [search_course_information_vectorStore, general_query_chain,
+         get_students_by_name,
+     get_course_by_name,
+     get_classes_by_course_code,
+     get_classes_by_course_name,
+     get_class_by_code,
+     get_prerequisites_by_course_code,
+     get_prerequisites_by_course_name,
+     get_class_schedule,
+     get_teacher_by_name], 
         llm_alternative_2,
         memory=ConversationBufferMemory(memory_key="chat_history"),
         agent=AgentType.CHAT_ZERO_SHOT_REACT_DESCRIPTION,
