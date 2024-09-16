@@ -394,6 +394,14 @@ def process_user_query(user_input, api_url, api_headers, model, support_structur
         # Run the function call and generate the final response
         function_name, final_message = handle_function_call(user_input, api_url, api_headers, FUNCTIONS, model, support_structured_output)
         if final_message:
+
+            # DIRECT RETURNS LIST
+            direct_return_function_names = ["course_retrieval", "general_retrieval"]
+            if function_name in direct_return_function_names:
+                print("[ALIE LANGCHAIN DEBUG: Found direct return function. Returning final message.]")
+                return final_message
+
+            # If not in direct return list, continue with final response generation
             # Set temperature to 1 for final response
             temperature = 1
             final_response = generate_final_response(final_message, api_url, api_headers, model)

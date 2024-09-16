@@ -178,7 +178,7 @@ question23 = "Which are the available student groups?"
 question24 = "Cuales son los semilleros disponibles?"
 question25 = "What is ALIE?"
 
-user_input = question25
+user_input = question24
 
 
 # THIS CAN BE USED AS A LIBRARY FUNCTION, AND BE CALLED FROM ANOTHER FILE
