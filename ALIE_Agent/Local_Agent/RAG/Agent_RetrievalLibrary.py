@@ -8,6 +8,45 @@ from langchain.chains import ConversationalRetrievalChain
 # Importe de librerias propias
 from MongoDB_VectorSearchLibrary import *
 
+# Traduccion
+from deep_translator import GoogleTranslator
+from langdetect import detect
+
+def translate(query: str, target_language: str) -> str:
+    """
+    Translate a given query to the specified target language, regardless of the original language.
+
+    This function uses the deep_translator library to convert the input query into the target language.
+    It ensures that the query is translated properly to facilitate consistent processing.
+
+    Parameters:
+    query (str): The input query that needs to be translated.
+    target_language (str): The language code for the target language (e.g., 'es' for Spanish, 'fr' for French).
+
+    Returns:
+    str: The translated query in the target language.
+    """
+    translator = GoogleTranslator(source='auto', target=target_language)
+    translated = translator.translate(query)
+    return translated
+
+def detect_language(query: str) -> str:
+    """
+    Detect the language of the given query.
+
+    This function uses the langdetect library to detect the language of the input query.
+
+    Parameters:
+    query (str): The input query whose language needs to be detected.
+
+    Returns:
+    str: The detected language code (e.g., 'en' for English, 'es' for Spanish).
+    """
+    detected_language = detect(query)
+    return detected_language
+
+
+
 # Modelos
 llm_primary = ChatGroq(
     model="llama3-8b-8192",
@@ -84,6 +123,12 @@ def general_retrieval(user_input):
     alternate_model_timeout = 10  # Tiempo en segundos para el modelo alternativo
 
     try:
+        # Traducir.
+        user_language = detect_language(user_input)
+        if user_language != "es":
+            print(f"El idioma detectado es {user_language}. Traduciendo a español para mejorar la búsqueda vectorial...")
+            user_input = translate(user_input, "es")
+
         answer = retrieve_general_info(user_input, llm_primary, timeout=primary_model_timeout)
         if not answer:
             print("El modelo principal no respondió a tiempo o retornó None. Intentando con el modelo alternativo.")
@@ -95,16 +140,20 @@ def general_retrieval(user_input):
     if not answer:
         print("No se pudo obtener una respuesta válida de ningún modelo.")
     
+    if user_language != "es":
+        print(f"Traduciendo la respuesta al idioma original ({user_language})...")
+        answer = translate(answer, user_language)
+
     return answer
 
 
 
 
 
-
 # Some example questions
-specific_question3 = "Dame informacion sobre las becas de la universidad. Cuales ofrece?"
+specific_question1 = "Dame informacion sobre las becas de la universidad. Cuales ofrece?"
+specific_question2 = "Which scholarships are available at the university?"
 
 # Get answer
-answer = general_retrieval(specific_question3)
+answer = general_retrieval(specific_question1)
 print("Answer = ", answer)

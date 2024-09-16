@@ -1,6 +1,6 @@
 import time
 
-# Local Agent imports (Library)
+# Local imports (Library)
 from Local_Agent.Local_FunctionCallerAgent import *
 from Others.Translation.DeepTranslator_Translate import *
 
