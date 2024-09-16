@@ -68,6 +68,7 @@ llm_alternate = ChatOpenAI(
 
 # Funciones auxiliares
 
+# Informacion general
 def retrieve_general_info(user_input, llm, timeout=10): 
     memory = ConversationBufferMemory(
         memory_key="chat_history",
@@ -113,11 +114,67 @@ def retrieve_general_info(user_input, llm, timeout=10):
         print(f"Error en retrieve_general_info: {e}")
         return None
 
+# Cursos
+def search_course_information_vectorStore(user_input: str, timeout=10):
+    # Función que realiza la consulta
+    def query_courses():
+        try:
+            filter_source = {"source": "Syllabus"}
+            query = user_input
+            result = query_vectordb(query, filter_source=filter_source, search_type="Multiple")
+            return result
+        except Exception as e:
+            print(f"Error durante la consulta: {e}")
+            return None
+
+    # Función para ejecutar con límite de tiempo
+    def ejecutar_con_timeout(func, timeout=10):
+        resultado = [None]  # Lista para almacenar el resultado de la función
+        def wrapper():
+            resultado[0] = func()
+
+        hilo_funcion = threading.Thread(target=wrapper)
+        hilo_funcion.start()
+        hilo_funcion.join(timeout)
+
+        if hilo_funcion.is_alive():
+            print(f"La función no ha terminado después de {timeout} segundos, se cancelará.")
+            return None
+        return resultado[0]
+
+    try:
+        # Detectar idioma del input del usuario
+        user_language = detect_language(user_input)
+        if user_language != "es":
+            print(f"Idioma detectado: {user_language}. Traduciendo a español...")
+            user_input = translate(user_input, "es")
+
+        # Ejecutar la consulta con un timeout
+        result = ejecutar_con_timeout(query_courses, timeout)
+
+        # Si no hay resultados válidos o la consulta falló
+        if result is None:
+            print("No se obtuvo una respuesta válida.")
+            return "No se encontraron cursos que coincidan con tu búsqueda."
+
+        # Si la entrada original no estaba en español, traducir el resultado de vuelta al idioma original
+        if user_language != "es":
+            print(f"Traduciendo la respuesta al idioma original ({user_language})...")
+            result = translate(result, user_language)
+
+        return result
+
+    except Exception as e:
+        print(f"Error en search_course_information_vectorStore: {e}")
+        return "Hubo un error al realizar la búsqueda. Intenta nuevamente más tarde."
+
+    
+
 
 
 # Herramientas de agente
 
-# Función principal para manejar la lógica de cambio de modelo
+# Función principal para manejar la lógica de cambio de modelo con manejo de fallos. Consultas generales
 def general_retrieval(user_input):
     primary_model_timeout = 10  # Tiempo en segundos para el modelo principal
     alternate_model_timeout = 10  # Tiempo en segundos para el modelo alternativo
@@ -146,6 +203,24 @@ def general_retrieval(user_input):
 
     return answer
 
+# Función principal para manejar la lógica de cambio de modelo con manejo de fallos. Consultas de cursos
+def course_retrieval_system(user_input):
+    primary_timeout = 10  # Tiempo de espera para el primer intento
+    alternate_timeout = 20  # Tiempo de espera para el modelo alternativo
+
+    try:
+        # Intentar buscar con la primera opción (primaria)
+        result = search_course_information_vectorStore(user_input, timeout=primary_timeout)
+        if not result or "No se encontraron cursos" in result:
+            print("La búsqueda principal no dio resultados. Intentando con un modelo alternativo...")
+            # Intentar una búsqueda alternativa si la principal falla
+            result = search_course_information_vectorStore(user_input, timeout=alternate_timeout)
+    except Exception as e:
+        print(f"Error al obtener los cursos: {e}")
+        result = "No se pudo obtener información sobre los cursos."
+
+    return result
+
 
 
 
@@ -153,7 +228,13 @@ def general_retrieval(user_input):
 # Some example questions
 specific_question1 = "Dame informacion sobre las becas de la universidad. Cuales ofrece?"
 specific_question2 = "Which scholarships are available at the university?"
+specific_question3 = "Que me puedes decir sobre el curso de estructuras de datos?"
+specific_question4 = "What can you tell me about the data structures course?"
 
-# Get answer
-answer = general_retrieval(specific_question1)
+# General retrieval
+#answer = general_retrieval(specific_question1)
+#print("Answer = ", answer)
+
+# Course retrieval
+answer = course_retrieval_system(specific_question3)
 print("Answer = ", answer)
