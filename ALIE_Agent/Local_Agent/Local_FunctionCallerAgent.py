@@ -5,9 +5,11 @@ import json
 if __name__ == "__main__":
     # Direct execution, absolute import
     from RelationalDB.DBsearchTests_Library import *
+    from RAG.Agent_RetrievalLibrary import *
 else:
     # Imported as part of a package, relative import
     from .RelationalDB.DBsearchTests_Library import *
+    from .RAG.Agent_RetrievalLibrary import *
 
 # Set global parameters
 model = 'llama3-8b-8192'

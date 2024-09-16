@@ -5,8 +5,13 @@ from langchain_openai import ChatOpenAI
 from langchain.memory import ConversationBufferMemory
 from langchain.chains import ConversationalRetrievalChain
 
-# Importe de librerias propias
-from MongoDB_VectorSearchLibrary import *
+# Library import depending on the context (Being used as a library or being executed directly)
+if __name__ == "__main__":
+    # Direct execution, absolute import
+    from MongoDB_VectorSearchLibrary import *
+else:
+    # Imported as part of a package, relative import
+    from .MongoDB_VectorSearchLibrary import *
 
 # Traduccion
 from deep_translator import GoogleTranslator
@@ -223,18 +228,22 @@ def course_retrieval_system(user_input):
 
 
 
+# THIS CAN BE USED AS A LIBRARY FUNCTION, AND BE CALLED FROM ANOTHER FILE
 
+if __name__ == "__main__":
 
-# Some example questions
-specific_question1 = "Dame informacion sobre las becas de la universidad. Cuales ofrece?"
-specific_question2 = "Which scholarships are available at the university?"
-specific_question3 = "Que me puedes decir sobre el curso de estructuras de datos?"
-specific_question4 = "What can you tell me about the data structures course?"
+    '''
+    # Some example questions
+    specific_question1 = "Dame informacion sobre las becas de la universidad. Cuales ofrece?"
+    specific_question2 = "Which scholarships are available at the university?"
+    specific_question3 = "Que me puedes decir sobre el curso de estructuras de datos?"
+    specific_question4 = "What can you tell me about the data structures course?"
 
-# General retrieval
-#answer = general_retrieval(specific_question1)
-#print("Answer = ", answer)
+    # General retrieval
+    #answer = general_retrieval(specific_question1)
+    #print("Answer = ", answer)
 
-# Course retrieval
-answer = course_retrieval_system(specific_question3)
-print("Answer = ", answer)
+    # Course retrieval
+    answer = course_retrieval_system(specific_question3)
+    print("Answer = ", answer)
+    '''
