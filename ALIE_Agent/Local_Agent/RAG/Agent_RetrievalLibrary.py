@@ -209,7 +209,7 @@ def general_retrieval(user_input):
     return answer
 
 # Función principal para manejar la lógica de cambio de modelo con manejo de fallos. Consultas de cursos
-def course_retrieval_system(user_input):
+def course_retrieval(user_input):
     primary_timeout = 10  # Tiempo de espera para el primer intento
     alternate_timeout = 20  # Tiempo de espera para el modelo alternativo
 
@@ -234,16 +234,16 @@ if __name__ == "__main__":
 
     '''
     # Some example questions
-    specific_question1 = "Dame informacion sobre las becas de la universidad. Cuales ofrece?"
+    specific_question1 = "Dame informacion sobre las becas de la universidad. Cuales ofrece? Dame Links"
     specific_question2 = "Which scholarships are available at the university?"
     specific_question3 = "Que me puedes decir sobre el curso de estructuras de datos?"
     specific_question4 = "What can you tell me about the data structures course?"
 
     # General retrieval
-    #answer = general_retrieval(specific_question1)
-    #print("Answer = ", answer)
+    answer = general_retrieval(specific_question2)
+    print("Answer = ", answer)
 
     # Course retrieval
-    answer = course_retrieval_system(specific_question3)
+    answer = course_retrieval(specific_question3)
     print("Answer = ", answer)
     '''

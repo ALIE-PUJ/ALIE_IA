@@ -396,6 +396,12 @@ def get_prerequisites_by_course_name(argument: str) -> str:
     Example call:
     get_prerequisites_by_course_name("Mathematics")
     """
+
+    # If the received args contain a number and not only letters
+    if argument.isdigit():
+        print("[DBSearch] received a number, redirecting to get_prerequisites_by_course_code_fetch")
+        return get_prerequisites_by_course_code(argument)
+
     # Busca prerrequisitos de un curso por nombre del curso.
     # La entrada es el nombre del curso, y la función devuelve
     # una lista de prerrequisitos para ese curso.
@@ -421,6 +427,12 @@ def get_prerequisites_by_course_code(argument: str) -> str:
     Example call:
     get_prerequisites_by_course_code("1511")
     """
+
+    # If the received args contain a letters and not only numbers
+    if not argument.isdigit():
+        print("[DBSearch] Received argument is not a number. Redirecting to get_prerequisites_by_course_name.")
+        return get_prerequisites_by_course_name(argument)
+
     # Busca prerrequisitos de un curso por código del curso.
     # La entrada es el código del curso, y la función devuelve
     # una lista de prerrequisitos para ese curso.

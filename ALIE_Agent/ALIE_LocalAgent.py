@@ -4,7 +4,7 @@ import time
 from Local_Agent.Local_FunctionCallerAgent import *
 from Others.Translation.DeepTranslator_Translate import *
 
-def process_user_query_and_translate(user_input, api_url, api_headers, support_structured_output):
+def process_user_query_and_translate(user_input, api_url, api_headers, model, support_structured_output):
     """
     Process the user's query and translate it to English if it is not already in English.
     Also, return it in the original language if the query is not in English.
@@ -12,6 +12,7 @@ def process_user_query_and_translate(user_input, api_url, api_headers, support_s
     :param user_input: The input query from the user.
     :param api_url: The URL of the API to send requests to.
     :param api_headers: The headers for the API request.
+    :param model: The model to use for processing the query.
     :param support_structured_output: Whether the model supports structured output.
 
     :return: The result of the query processing or None if the query is not in English.
@@ -25,20 +26,21 @@ def process_user_query_and_translate(user_input, api_url, api_headers, support_s
         print(f"[POSTPROCESS - INFO] User input not in English. Translating to English...")
         user_input = translate(user_input, "en") # translate to English
 
-    answer = process_user_query(user_input, api_url, api_headers, support_structured_output) # process the query
+    answer = process_user_query(user_input, api_url, api_headers, model, support_structured_output) # process the query
 
     if answer is not None and user_language != "en":
         print(f"[POSTPROCESS - INFO] Translating answer back to original language...")
         answer = translate(answer, user_language) # translate back to original user language
     return answer
 
-def call_process_user_query_with_retries(user_input, api_url, api_headers, support_structured_output, max_retries=3, delay=1):
+def call_process_user_query_with_retries(user_input, api_url, api_headers, model, support_structured_output, max_retries=3, delay=1):
     """
     Calls process_user_query and retries if the result is None.
     
     :param user_input: The input query from the user.
     :param api_url: The URL of the API to send requests to.
     :param api_headers: The headers for the API request.
+    :param model: The model to use for processing the query.
     :param support_structured_output: Whether the model supports structured output.
     :param max_retries: Maximum number of retries if the result is None (default 3).
     :param delay: Delay between retries in seconds (default 1).
@@ -53,7 +55,7 @@ def call_process_user_query_with_retries(user_input, api_url, api_headers, suppo
 
     while retries < max_retries:
 
-        answer = process_user_query_and_translate(user_input, api_url, api_headers, support_structured_output) # Call With Translation
+        answer = process_user_query_and_translate(user_input, api_url, api_headers, model, support_structured_output) # Call With Translation
         # answer = process_user_query(user_input, api_url, api_headers, support_structured_output) # Call Without Translation
 
         if answer is not None:
@@ -115,11 +117,11 @@ question14 = "Cuales son los prerrequisitos para la materia con codigo 4196?"
 question15 = "Cuales son los horarios disponibles para la clase 1557?"
 question16 = "Hay algun profesor llamado Oscar? Quien?"
 
-user_input = question14
+user_input = question16
 
 
 
 # Run the function call and generate the final response
-answer = call_process_user_query_with_retries(user_input, api_url_lmstudio, api_headers_lmstudio, support_structured_output_lmstudio) # Llamada a LmStudio
-# answer = call_process_user_query_with_retries(user_input, api_url_groq, api_headers_groq, support_structured_output_groq) # Llamada a Groq
+answer = call_process_user_query_with_retries(user_input, api_url_lmstudio, api_headers_lmstudio, model_lmstudio, support_structured_output_lmstudio) # Llamada a LmStudio
+#answer = call_process_user_query_with_retries(user_input, api_url_groq, api_headers_groq, model_groq, support_structured_output_groq) # Llamada a Groq
 print("\n[Response] ---> Answer = ", answer)

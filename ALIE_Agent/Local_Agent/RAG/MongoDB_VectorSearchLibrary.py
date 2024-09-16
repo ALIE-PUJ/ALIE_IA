@@ -1,5 +1,5 @@
 # Imports
-from langchain_milvus.vectorstores import Milvus
+from langchain_chroma import Chroma
 from langchain_community.document_loaders import JSONLoader
 from langchain_community.embeddings.sentence_transformer import (
     SentenceTransformerEmbeddings,
@@ -25,10 +25,10 @@ document_id_map = {}  # Dictionary to map document IDs to document objects
 # URI
 # Obtener la URI de conexión desde variables de entorno
 mongo_uri = None
-MILVUS_URI = None
 selected_db_name = None # Nombre de la base de datos
 
-is_initialized = False # Flag to check if the database has been initialized
+is_initialized = False  # Flag to track initialization
+
 
 # Functions
 
@@ -105,22 +105,18 @@ def unload_documents_from_mongodb(collection_name):
     else:
         print(f"\nUnloading documents from collection '{collection_name}'...")
     
-    # Get document IDs to remove
+    # Obtener los IDs de documentos a eliminar
     ids_to_remove = [doc_id for doc_id, doc in document_id_map.items() if doc.metadata.get('source') == collection_name]
     
-    # Convert IDs to integers if the collection uses Int64 for IDs
-    ids_to_remove_int = [int(doc_id) for doc_id in ids_to_remove]
-
-    # Remove documents from the vector store
-    if ids_to_remove_int:
-        try:
-            vector_store.delete(ids=ids_to_remove_int)
-            print("Successfully deleted document IDs:", ids_to_remove_int)
-            # Remove IDs from the ID map
-            for doc_id in ids_to_remove:
-                del document_id_map[doc_id]
-        except ValueError as e:
-            print(f"Error while deleting document IDs from vector store: {e}")
+    # Eliminar documentos de la base de datos de vectores
+    if ids_to_remove:
+        for doc_id in ids_to_remove:
+            try:
+                vector_store.delete(ids=[doc_id])
+                print(f"Successfully deleted document ID: {doc_id}")
+                del document_id_map[doc_id]  # Eliminar del mapa de IDs
+            except ValueError as e:
+                print(f"Error while deleting document ID {doc_id} from vector store: {e}")
     
     print(f"\nDocuments from collection '{collection_name}' have been unloaded.")
 
@@ -133,16 +129,15 @@ def split_documents(documents, chunk_size, chunk_overlap):
 
 def create_vector_store(docs, embedding_model):
     """
-    Create a Milvus vector database using the specified embedding model, assigning IDs to documents.
+    Create a Chroma vector database using the specified embedding model, assigning IDs to documents.
     """
     embedding_function = SentenceTransformerEmbeddings(model_name=embedding_model)
-
+    
     # Extract IDs from document metadata
     ids = [doc.metadata["doc_id"] for doc in docs]
-    print("Document IDs:", ids)
     
     # Create the Chroma vector store with IDs
-    return Milvus.from_documents(docs, embedding=embedding_function, connection_args={"uri": MILVUS_URI}) # ids=ids no funciona con Milvus
+    return Chroma.from_documents(docs, embedding_function, ids=ids)
 
 def get_best_result(query, filter_source):
     """
@@ -361,14 +356,11 @@ def query_vectordb(query, filter_source=None, search_type="Single"):
     Realiza una consulta en la base de datos de vectores, aplica el filtro según la fuente,
     y devuelve los resultados basados en el tipo de búsqueda especificado.
     """
-    global mongo_uri, MILVUS_URI, selected_db_name, is_initialized
+    global mongo_uri, selected_db_name, is_initialized
     
     # Initialize database connection and load documents if not already done
     if not is_initialized:
         print("\n<----- Initialization ----->")
-
-        MILVUS_URI = os.getenv('MILVUS_URI', 'http://localhost:19530')  # Si no se encuentra la variable de entorno, se asigna 'http://localhost:19530'
-
         mongo_uri = os.getenv('MONGO_URI')  
         selected_db_name = "ALIE_DB"  
         if not mongo_uri:
@@ -411,22 +403,11 @@ def get_retriever():
     """
     Inicializa la base de datos y devuelve un objeto retriever para consultas.
     """
-    global mongo_uri, MILVUS_URI, selected_db_name, is_initialized
+    global mongo_uri, selected_db_name, is_initialized
     
-    is_initialized = os.getenv('milvus_init', "False")
-
-    if is_initialized == "True":
-        is_initialized = True
-    else:
-        is_initialized = False
-
     # Initialize database connection and load documents if not already done
     if not is_initialized:
-        print(f"[VECTOR STORE INFO] milvus_init is set to: {is_initialized}. Initializing database...")
         print("\n<----- Initialization ----->")
-
-        MILVUS_URI = os.getenv('MILVUS_URI', 'http://localhost:19530')  # Si no se encuentra la variable de entorno, se asigna 'http://localhost:19530'
-
         mongo_uri = os.getenv('MONGO_URI')  
         selected_db_name = "ALIE_DB"  
         if not mongo_uri:
@@ -440,13 +421,9 @@ def get_retriever():
                             "InformacionPublica_General", 
                             "InformacionPublica_QA"]
         load_documents_from_mongodb(collection_names)
-
         is_initialized = True
-        # Asignar true a la variable de entorno milvus_init para no reinicializar la base de datos vectorial
-        os.environ['milvus_init'] = "True"
-
     else:
-        print("[VECTOR STORE INFO] milvus_init is set to: true. Database already initialized. Skipping initialization and returning retriever.")
+        print("Database already initialized. Skipping initialization.")
 
     return vector_store.as_retriever()
 
@@ -458,3 +435,5 @@ print(result)
 result = query_vectordb("Cuales son los contenidos de estructuras de datos?", filter_source={"source": "Syllabus"}, search_type="Multiple")
 print(result)
 '''
+
+# Note: Chroma is non-persistent. So its always better to load the documents from MongoDB before querying the database or It will be empty.

@@ -12,7 +12,6 @@ else:
     from .RAG.Agent_RetrievalLibrary import *
 
 # Set global parameters
-model = 'llama3-8b-8192'
 temperature = 0
 max_tokens = 1000
 
@@ -100,7 +99,7 @@ FUNCTIONS = {
     },
     "get_prerequisites_by_course_name": {
         "func": get_prerequisites_by_course_name,
-        "description": "Searches for prerequisites of a course by course name.",
+        "description": "Searches for prerequisites of a course by course name. Not code. For that, use get_prerequisites_by_course_code",
         "args": {
             "argument": "The name of the course to search for prerequisites."
         },
@@ -116,7 +115,7 @@ FUNCTIONS = {
     },
     "get_prerequisites_by_course_code": {
         "func": get_prerequisites_by_course_code,
-        "description": "Searches for prerequisites of a course by course code.",
+        "description": "Searches for prerequisites of a course by course code. Not name. For that, use get_prerequisites_by_course_name",
         "args": {
             "argument": "The code of the course to search for prerequisites."
         },
@@ -201,7 +200,7 @@ def format_response_for_llm(user_input, function_name, result):
     
     return final_message
 
-def handle_function_call(user_input, url, headers, functions, support_structured_output):
+def handle_function_call(user_input, url, headers, functions, model, support_structured_output):
     """
     Handles the initial function call based on user input and processes the response.
     
@@ -209,6 +208,7 @@ def handle_function_call(user_input, url, headers, functions, support_structured
     :param url: La URL del endpoint de la API.
     :param headers: Los headers para la solicitud.
     :param functions: El diccionario de funciones disponibles.
+    :param model: El nombre o ID del modelo para usar en las solicitudes de la API.
     :param support_structured_output: Un booleano que indica si el modelo o la API admiten salida estructurada.
     :return: The name of the function called and the formatted message for the final response., or None if the request fails.
     """
@@ -328,7 +328,7 @@ def handle_function_call(user_input, url, headers, functions, support_structured
             
             try:
                 function_result = func(**func_args)
-                print(f"[DEBUG] ---> Function executed: {function_name}, Result: {result}")
+                print(f"[DEBUG] ---> Function executed: {function_name}, Result: {function_result}")
 
                 final_message = format_response_for_llm(user_input, function_name, function_result)
 
@@ -344,15 +344,19 @@ def handle_function_call(user_input, url, headers, functions, support_structured
         return None, None
     
 
-def generate_final_response(final_message, url, headers):
+def generate_final_response(final_message, url, headers, model):
     """
     Generates the final response based on the formatted message from the function call.
     
     :param final_message: El mensaje formateado para el modelo.
     :param url: La URL del endpoint de la API.
     :param headers: Los headers para la solicitud.
+    :param model: El nombre o ID del modelo para usar en las solicitudes de la API.
     :return: The final response to the user., or None if the request fails.
     """
+
+    # print("Final message: ", final_message)
+
     final_payload = {
         "model": model,
         "messages": [
@@ -380,21 +384,22 @@ def generate_final_response(final_message, url, headers):
         print(f"[ERROR] ---> Final response request failed with status code {final_response.status_code}")
         return None
 
-def process_user_query(user_input, api_url, api_headers, support_structured_output):
+def process_user_query(user_input, api_url, api_headers, model, support_structured_output):
     """
     Processes a user query by handling the function call and generating the final response.
     
     :param user_input: The input query from the user.
     :param api_url: The URL of the API to send requests to.
     :param api_headers: The headers to include in the API request.
+    :param model: The model name or ID to use for the API requests.
     :param support_structured_output: A boolean indicating whether the model or API supports structured output.
     """
     print("[ALIE LANGCHAIN DEBUG: START]")
     try:
         # Run the function call and generate the final response
-        function_name, final_message = handle_function_call(user_input, api_url, api_headers, FUNCTIONS, support_structured_output)
+        function_name, final_message = handle_function_call(user_input, api_url, api_headers, FUNCTIONS, model, support_structured_output)
         if final_message:
-            final_response = generate_final_response(final_message, api_url, api_headers)
+            final_response = generate_final_response(final_message, api_url, api_headers, model)
             print("[ALIE LANGCHAIN DEBUG: END]")
             return final_response
     except Exception as e:
@@ -407,6 +412,7 @@ def process_user_query(user_input, api_url, api_headers, support_structured_outp
 if __name__ == "__main__":
 
     '''
+
     # Model data
 
     # LmStudio
@@ -440,11 +446,12 @@ if __name__ == "__main__":
     # Run the function call and generate the final response
     # Example usage for LmStudio:
     print("\nProcessing user query using LmStudio...")
-    answer = process_user_query(user_input, api_url_lmstudio, api_headers_lmstudio, support_structured_output=True)
+    answer = process_user_query(user_input, api_url_lmstudio, api_headers_lmstudio, model_lmstudio, support_structured_output=True)
     print("Answer = ", answer)
 
     # Example usage for Groq:
     print("\nProcessing user query using Groq...")
-    answer = process_user_query(user_input, api_url_groq, api_headers_groq, support_structured_output=False)
+    answer = process_user_query(user_input, api_url_groq, api_headers_groq, model_groq, support_structured_output=False)
     print("Answer = ", answer)
     '''
+    
