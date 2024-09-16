@@ -442,7 +442,7 @@ print(result)
 from langchain_groq import ChatGroq
 # Definir el modelo alternativo 1 (Groq)
 llm_primary = ChatGroq(
-    model="mixtral-8x7b-32768",
+    model="llama3-8b-8192",
     temperature=0,
     max_tokens=None,
     timeout=None,
@@ -479,10 +479,10 @@ specific_question1 = "Which is the course code for Estructuras de datos?"
 specific_question2 = "Dame informacion sobre la beca ingresa. Cual es el maximo porcentaje que otorga la misma?"
 specific_question3 = "Dame informacion sobre las becas de la universidad. Cuales ofrece?"
 specific_question4 = "Hablame sobre la materia de calculo diferencial. Que temas abarca?"
-specific_question5 = "Hablame sobre la materia de estructuras de datos. Que temas abarca?"
+specific_question5 = "Hablame sobre la materia de estructuras de datos. Que temas abarca? Que codigo tiene?"
 specific_question6 = "Donde puedo encontrar el plan de estudios de mi carrera?"
 
-selected_question = specific_question3
+selected_question = specific_question5
 
 result = qa({"question": selected_question + ". Responde lo más rápido posible, pero con mucha calidad y tanto detalle como sea necesario, como enlaces o fuentes si pueden ser útiles."})
 print("Answer = ", result['answer'])

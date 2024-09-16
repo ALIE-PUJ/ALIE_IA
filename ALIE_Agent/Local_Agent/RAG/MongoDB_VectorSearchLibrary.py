@@ -427,13 +427,18 @@ def get_retriever():
 
     return vector_store.as_retriever()
 
-# Ejemplo de uso
-'''
-result = query_vectordb("Cuales son los contenidos de programacion avanzada?", filter_source={"source": "Syllabus"}, search_type="Single")
-print(result)
 
-result = query_vectordb("Cuales son los contenidos de estructuras de datos?", filter_source={"source": "Syllabus"}, search_type="Multiple")
-print(result)
-'''
+# THIS CAN BE USED AS A LIBRARY FUNCTION, AND BE CALLED FROM ANOTHER FILE
 
-# Note: Chroma is non-persistent. So its always better to load the documents from MongoDB before querying the database or It will be empty.
+if __name__ == "__main__":
+
+    # Ejemplo de uso
+    '''
+    result = query_vectordb("Cuales son los contenidos de programacion avanzada?", filter_source={"source": "Syllabus"}, search_type="Single")
+    print(result)
+
+    result = query_vectordb("Cuales son los contenidos de estructuras de datos?", filter_source={"source": "Syllabus"}, search_type="Multiple")
+    print(result)
+    '''
+
+    # Note: Chroma is non-persistent. So its always better to load the documents from MongoDB before querying the database or It will be empty.

@@ -1,8 +1,29 @@
 import time
+import threading
 
 # Local imports (Library)
 from Local_Agent.Local_FunctionCallerAgent import *
 from Others.Translation.DeepTranslator_Translate import *
+
+# Global timeout
+global_timeout = 30
+
+# Función genérica que ejecuta una función con timeout sobre un hilo
+def ejecutar_con_timeout(func, args=(), kwargs=None, timeout=5):
+    kwargs = kwargs if kwargs else {}
+    resultado = [None]  # Lista para almacenar el resultado de la función
+
+    def wrapper():
+        resultado[0] = func(*args, **kwargs)
+
+    hilo_funcion = threading.Thread(target=wrapper)
+    hilo_funcion.start()
+    hilo_funcion.join(timeout)
+
+    if hilo_funcion.is_alive():
+        print(f"La función no ha terminado después de {timeout} segundos, se cancelará.")
+        return None
+    return resultado[0]
 
 def process_user_query_and_translate(user_input, api_url, api_headers, model, support_structured_output):
     """
@@ -60,7 +81,6 @@ def call_process_user_query_with_retries(user_input, api_url, api_headers, model
 
         if answer is not None:
 
-
             end_time = time.time()  # End the timer
             elapsed_time = end_time - start_time
             print(f"[POSTPROCESS - INFO] Successful on attempt {retries + 1}. Execution time: {elapsed_time:.2f} seconds.")
@@ -75,6 +95,7 @@ def call_process_user_query_with_retries(user_input, api_url, api_headers, model
     elapsed_time = end_time - start_time
     print(f"Max retries reached. Total execution time: {elapsed_time:.2f} seconds.")
     return None  # Return None if all retries fail
+
 
 
 
@@ -99,6 +120,37 @@ api_headers_groq = {
 support_structured_output_groq = False
 
 
+
+# Thread flow
+def get_answer(user_input):
+    # Intentar con LmStudio primero
+    respuesta = ejecutar_con_timeout(
+        call_process_user_query_with_retries,
+        args=(user_input, api_url_lmstudio, api_headers_lmstudio, model_lmstudio, support_structured_output_lmstudio),
+        timeout=global_timeout
+    )
+
+    # Si no se obtuvo respuesta, intentar con Groq
+    if respuesta is None:
+        print("[INFO] LmStudio did not respond after 3 tries. Trying with Groq...")
+        respuesta = ejecutar_con_timeout(
+            call_process_user_query_with_retries,
+            args=(user_input, api_url_groq, api_headers_groq, model_groq, support_structured_output_groq),
+            timeout=global_timeout
+        )
+
+    # Si ninguno responde, devolver mensaje de error
+    if respuesta is None:
+        return "Both agents timed out before generating an answer. Try again later."
+
+    return respuesta
+
+# Traditional call structure (No threads)
+# agent_answer = call_process_user_query_with_retries(user_input, api_url_lmstudio, api_headers_lmstudio, model_lmstudio, support_structured_output_lmstudio) # Llamada a LmStudio
+# agent_answer = call_process_user_query_with_retries(user_input, api_url_groq, api_headers_groq, model_groq, support_structured_output_groq) # Llamada a Groq# 
+
+
+
 # Questions
 question1 = "Is there any student called Luis? Who?"
 question2 = "Which is the course code for the course named 'Estructuras de datos'?" # Hay que remover las tildes de las inserciones SQL.
@@ -121,10 +173,10 @@ question18 = "Cuales son los resultados de aprendizaje esperados de estructuras 
 question19 = "What scholarships are available for students?"
 question20 = "Cuales becas estan disponibles para los estudiantes?"
 
-user_input = question20
+user_input = question16
 
 
 # Run the function call and generate the final response
-agent_answer = call_process_user_query_with_retries(user_input, api_url_lmstudio, api_headers_lmstudio, model_lmstudio, support_structured_output_lmstudio) # Llamada a LmStudio
-#agent_answer = call_process_user_query_with_retries(user_input, api_url_groq, api_headers_groq, model_groq, support_structured_output_groq) # Llamada a Groq
+
+agent_answer = get_answer(user_input)
 print("\n[Response] ---> Answer = ", agent_answer)

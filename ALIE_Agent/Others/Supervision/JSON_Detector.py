@@ -27,7 +27,7 @@ def contains_json(text):
 
     return False
 
-# Tests
+# THIS CAN BE USED AS A LIBRARY FUNCTION, AND BE CALLED FROM ANOTHER FILE
 
 if __name__ == "__main__":
 

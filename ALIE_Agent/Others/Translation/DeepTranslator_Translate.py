@@ -34,7 +34,10 @@ def detect_language(query: str) -> str:
     detected_language = detect(query)
     return detected_language
 
-# Test the translation function and language detection
+
+
+# THIS CAN BE USED AS A LIBRARY FUNCTION, AND BE CALLED FROM ANOTHER FILE
+
 if __name__ == "__main__":
     '''
     query = "Hello, how are you?"
