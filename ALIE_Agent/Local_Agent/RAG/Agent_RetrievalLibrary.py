@@ -180,7 +180,9 @@ def search_course_information_vectorStore(user_input: str, timeout=10):
 # Herramientas de agente
 
 # Función principal para manejar la lógica de cambio de modelo con manejo de fallos. Consultas generales
-def general_retrieval(user_input):
+def general_retrieval(argument):
+    user_input = argument
+
     primary_model_timeout = 10  # Tiempo en segundos para el modelo principal
     alternate_model_timeout = 10  # Tiempo en segundos para el modelo alternativo
 
@@ -209,7 +211,9 @@ def general_retrieval(user_input):
     return answer
 
 # Función principal para manejar la lógica de cambio de modelo con manejo de fallos. Consultas de cursos
-def course_retrieval(user_input):
+def course_retrieval(argument):
+    user_input = argument
+
     primary_timeout = 10  # Tiempo de espera para el primer intento
     alternate_timeout = 20  # Tiempo de espera para el modelo alternativo
 

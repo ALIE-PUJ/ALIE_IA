@@ -121,7 +121,7 @@ question18 = "Cuales son los resultados de aprendizaje esperados de estructuras 
 question19 = "What scholarships are available for students?"
 question20 = "Cuales becas estan disponibles para los estudiantes?"
 
-user_input = question20
+user_input = question17
 
 
 # Run the function call and generate the final response

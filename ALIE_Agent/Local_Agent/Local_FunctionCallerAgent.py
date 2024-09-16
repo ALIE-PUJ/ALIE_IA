@@ -18,178 +18,136 @@ max_tokens = 1000
 # Define the function registry dynamically
 FUNCTIONS = {
     "get_students_by_name": {
-        "func": get_students_by_name,
+        "function_name": get_students_by_name,
         "description": "Searches for students by their name.",
-        "args": {
-            "argument": "The name of the student to search for."
-        },
+        "argument": "The name of the student to search for.",
         "example": {
             "query": "Is there any student called Luis? Who?",
             "expected": {
                 "function_name": "get_students_by_name",
-                "arguments": {
-                    "argument": "Luis"
-                }
+                "argument": "Luis"
             }
         }
     },
     "get_course_by_name": {
-        "func": get_course_by_name,
+        "function_name": get_course_by_name,
         "description": "Searches a course basic information by its name. It provides the course code and description. For more detailed information like contents, expected learning outcomes, etc. Use course_retrieval.",
-        "args": {
-            "argument": "The name of the course to search for."
-        },
+        "argument": "The name of the course to search for.",
         "example": {
             "query": "Which is the course code for the course named 'Estructuras de datos'?",
             "expected": {
                 "function_name": "get_course_by_name",
-                "arguments": {
-                    "argument": "Estructuras de datos"
-                }
+                "argument": "Estructuras de datos"
             }
         }
     },
     "get_classes_by_course_code": {
-        "func": get_classes_by_course_code,
+        "function_name": get_classes_by_course_code,
         "description": "Searches for classes by course code.",
-        "args": {
-            "argument": "The code of the course to search for."
-        },
+        "argument": "The code of the course to search for.",
         "example": {
             "query": "Which are the available classes for the course with code 4196?",
             "expected": {
                 "function_name": "get_classes_by_course_code",
-                "arguments": {
-                    "argument": "4196"
-                }
+                "argument": "4196"
             }
         }
     },
     "get_classes_by_course_name": {
-        "func": get_classes_by_course_name,
+        "function_name": get_classes_by_course_name,
         "description": "Searches for classes by course name.",
-        "args": {
-            "argument": "The name of the course to search for."
-        },
+        "argument": "The name of the course to search for.",
         "example": {
             "query": "Which are the available classes for the Estructuras de datos course? Give me their codes",
             "expected": {
                 "function_name": "get_classes_by_course_name",
-                "arguments": {
-                    "argument": "Estructuras de datos"
-                }
+                "argument": "Estructuras de datos"
             }
         }
     },
     "get_class_by_code": {
-        "func": get_class_by_code,
+        "function_name": get_class_by_code,
         "description": "Searches for a class by its code.",
-        "args": {
-            "argument": "The code of the class to search for."
-        },
+        "argument": "The code of the class to search for.",
         "example": {
             "query": "What can you tell me about class 1557?",
             "expected": {
                 "function_name": "get_class_by_code",
-                "arguments": {
-                    "argument": "1557"
-                }
+                "argument": "1557"
             }
         }
     },
     "get_prerequisites_by_course_name": {
-        "func": get_prerequisites_by_course_name,
+        "function_name": get_prerequisites_by_course_name,
         "description": "Searches for prerequisites of a course by course name. Not code. For that, use get_prerequisites_by_course_code",
-        "args": {
-            "argument": "The name of the course to search for prerequisites."
-        },
+        "argument": "The name of the course to search for prerequisites.",
         "example": {
             "query": "Which are the prerequisites for Estructuras de datos?",
             "expected": {
                 "function_name": "get_prerequisites_by_course_name",
-                "arguments": {
-                    "argument": "Estructuras de datos"
-                }
+                "argument": "Estructuras de datos"
             }
         }
     },
     "get_prerequisites_by_course_code": {
-        "func": get_prerequisites_by_course_code,
+        "function_name": get_prerequisites_by_course_code,
         "description": "Searches for prerequisites of a course by course code. Not name. For that, use get_prerequisites_by_course_name",
-        "args": {
-            "argument": "The code of the course to search for prerequisites."
-        },
+        "argument": "The code of the course to search for prerequisites.",
         "example": {
             "query": "Which are the prerequisites for the course with code 4196?",
             "expected": {
                 "function_name": "get_prerequisites_by_course_code",
-                "arguments": {
-                    "argument": "4196"
-                }
+                "argument": "4196"
             }
         }
     },
     "get_class_schedule": {
-        "func": get_class_schedule,
+        "function_name": get_class_schedule,
         "description": "Searches for the schedule(s) of a class by its class ID.",
-        "args": {
-            "argument": "A single class ID to search for its schedule(s)."
-        },
+        "argument": "A single class ID to search for its schedule(s).",
         "example": {
             "query": "Which are the available schedules for class 1557?",
             "expected": {
                 "function_name": "get_class_schedule",
-                "arguments": {
-                    "argument": "1557"
-                }
+                "argument": "1557"
             }
         }
     },
     "get_teacher_by_name": {
-        "func": get_teacher_by_name,
+        "function_name": get_teacher_by_name,
         "description": "Searches for professors by their name.",
-        "args": {
-            "argument": "The name of the professor to search for."
-        },
+        "argument": "The name of the professor to search for.",
         "example": {
             "query": "Are there any teachers called Oscar? Who?",
             "expected": {
                 "function_name": "get_teacher_by_name",
-                "arguments": {
-                    "argument": "Oscar"
-                }
+                "argument": "Oscar"
             }
         }
     },
     "general_retrieval": {
-        "func": general_retrieval,
+        "function_name": general_retrieval,
         "description": "Retrieves general information from the university vector store to search information to solve a query.",
-        "args": {
-            "user_input": "The user's input query that needs to be processed."
-        },
+        "user_input": "The user's input query that needs to be processed.",
+        "argument": "The user's input query that needs to be processed.",
         "example": {
             "query": "What scholarships are available in the university?",
             "expected": {
                 "function_name": "general_retrieval",
-                "arguments": {
-                    "user_input": "What scholarships are available in the university?"
-                }
+                "argument": "What scholarships are available in the university?"
             }
         }
     },
     "course_retrieval": {
-        "func": course_retrieval,
+        "function_name": course_retrieval,
         "description": "Searches for very detailed information about a course, like its contents, expected learning outcomes, etc. It is a more detailed search than get_course_by_name but is slower. It should only be used when asked for very detailed information.",
-        "args": {
-            "user_input": "The query from the user to search for course-related information."
-        },
+        "argument": "The query from the user to search for course-related information.",
+        "user_input": "The query from the user to search for course-related information.",
         "example": {
             "query": "What are the contents of Estructuras de datos?",
             "expected": {
                 "function_name": "course_retrieval_system",
-                "arguments": {
-                    "user_input": "What are the contents of Estructuras de datos?"
-                }
+                "argument": "What are the contents of Estructuras de datos?"
             }
         }
     }
@@ -198,18 +156,26 @@ FUNCTIONS = {
 def generate_system_prompt(functions):
     function_descriptions = (
         "You can execute the following functions:\n"
-        "For each function, ensure to provide the 'argument' in the 'arguments' field.\n"
+        "For each function, ensure to provide the 'argument' in the 'argument' field.\n"
         "Also, please do not modify the user's input when passing an argument, no matter the language. Do not try to make it shorter.\n"
         "Here are some example queries and their corresponding function calls:\n"
     )
+    
     for func_name, func_info in functions.items():
         description = func_info["description"]
-        arg_desc = ", ".join([f"{arg_name}: {arg_desc}" for arg_name, arg_desc in func_info["args"].items()])
+        argument_desc = func_info["argument"]  # Adjusted for the single 'argument' field
         example_query = func_info["example"]["query"]
         example_expected = json.dumps(func_info["example"]["expected"], indent=2)
-        function_descriptions += (f"- {func_name}: {description}\n  Arguments: {arg_desc}\n"
-                                  f"  Example Query: {example_query}\n"
-                                  f"  Example Expected Response: {example_expected}\n")
+        
+        function_descriptions += (
+            f"- {func_name}: {description}\n"
+            f"  Argument: {argument_desc}\n"
+            f"  Example Query: {example_query}\n"
+            f"  Example Expected Response: {example_expected}\n"
+        )
+    
+    # print("System prompt generado")
+    
     return function_descriptions
 
 def format_response_for_llm(user_input, function_name, result):
@@ -274,17 +240,11 @@ def handle_function_call(user_input, url, headers, functions, model, support_str
                         "function_name": {
                             "type": "string"
                         },
-                        "arguments": {
-                            "type": "object",
-                            "properties": {
-                                "argument": {
-                                    "type": "string"
-                                }
-                            },
-                            "required": ["argument"]
+                        "argument": { 
+                            "type": "string"
                         }
                     },
-                    "required": ["function_name", "arguments"]
+                    "required": ["function_name", "argument"]
                 }
             }
         },
@@ -347,16 +307,17 @@ def handle_function_call(user_input, url, headers, functions, model, support_str
         result_json = json.loads(result)
 
         function_name = result_json["function_name"]
-        arguments = result_json["arguments"]
+        argument = result_json["argument"]
 
         # Call the corresponding function based on the name returned by the model
         if function_name in functions:
-            func = functions[function_name]["func"]
+            func = functions[function_name]["function_name"]
             
             func_args = {
-                key: arguments["argument"]
-                for key in functions[function_name]["args"]
+                "argument": argument
             }
+
+            print("[DEBUG] ---> Function name: ", function_name, ". Function args: ", func_args)
             
             try:
                 function_result = func(**func_args)
@@ -444,7 +405,6 @@ def process_user_query(user_input, api_url, api_headers, model, support_structur
 if __name__ == "__main__":
 
     '''
-
     # Model data
 
     # LmStudio
