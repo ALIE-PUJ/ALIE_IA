@@ -116,12 +116,15 @@ question13 = "Cuales son los prerrequisitos para Estructuras de datos?"
 question14 = "Cuales son los prerrequisitos para la materia con codigo 4196?"
 question15 = "Cuales son los horarios disponibles para la clase 1557?"
 question16 = "Hay algun profesor llamado Oscar? Quien?"
+question17 = "What are the expected learning outcomes of estructuras de datos?"
+question18 = "Cuales son los resultados de aprendizaje esperados de estructuras de datos?"
+question19 = "What scholarships are available for students?"
+question20 = "Cuales becas estan disponibles para los estudiantes?"
 
-user_input = question16
-
+user_input = question20
 
 
 # Run the function call and generate the final response
-answer = call_process_user_query_with_retries(user_input, api_url_lmstudio, api_headers_lmstudio, model_lmstudio, support_structured_output_lmstudio) # Llamada a LmStudio
-#answer = call_process_user_query_with_retries(user_input, api_url_groq, api_headers_groq, model_groq, support_structured_output_groq) # Llamada a Groq
-print("\n[Response] ---> Answer = ", answer)
+agent_answer = call_process_user_query_with_retries(user_input, api_url_lmstudio, api_headers_lmstudio, model_lmstudio, support_structured_output_lmstudio) # Llamada a LmStudio
+#agent_answer = call_process_user_query_with_retries(user_input, api_url_groq, api_headers_groq, model_groq, support_structured_output_groq) # Llamada a Groq
+print("\n[Response] ---> Answer = ", agent_answer)

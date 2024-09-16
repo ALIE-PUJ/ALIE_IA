@@ -35,7 +35,7 @@ FUNCTIONS = {
     },
     "get_course_by_name": {
         "func": get_course_by_name,
-        "description": "Searches a course by its name. It provides info about the course, like its code and description.",
+        "description": "Searches a course basic information by its name. It provides the course code and description. For more detailed information like contents, expected learning outcomes, etc. Use course_retrieval.",
         "args": {
             "argument": "The name of the course to search for."
         },
@@ -88,11 +88,11 @@ FUNCTIONS = {
             "argument": "The code of the class to search for."
         },
         "example": {
-            "query": "Which are the prerequisites for Estructuras de datos?",
+            "query": "What can you tell me about class 1557?",
             "expected": {
                 "function_name": "get_class_by_code",
                 "arguments": {
-                    "argument": "Estructuras de datos"
+                    "argument": "1557"
                 }
             }
         }
@@ -157,6 +157,38 @@ FUNCTIONS = {
                 "function_name": "get_teacher_by_name",
                 "arguments": {
                     "argument": "Oscar"
+                }
+            }
+        }
+    },
+    "general_retrieval": {
+        "func": general_retrieval,
+        "description": "Retrieves general information from the university vector store to search information to solve a query.",
+        "args": {
+            "user_input": "The user's input query that needs to be processed."
+        },
+        "example": {
+            "query": "What scholarships are available in the university?",
+            "expected": {
+                "function_name": "general_retrieval",
+                "arguments": {
+                    "user_input": "What scholarships are available in the university?"
+                }
+            }
+        }
+    },
+    "course_retrieval": {
+        "func": course_retrieval,
+        "description": "Searches for very detailed information about a course, like its contents, expected learning outcomes, etc. It is a more detailed search than get_course_by_name but is slower. It should only be used when asked for very detailed information.",
+        "args": {
+            "user_input": "The query from the user to search for course-related information."
+        },
+        "example": {
+            "query": "What are the contents of Estructuras de datos?",
+            "expected": {
+                "function_name": "course_retrieval_system",
+                "arguments": {
+                    "user_input": "What are the contents of Estructuras de datos?"
                 }
             }
         }
