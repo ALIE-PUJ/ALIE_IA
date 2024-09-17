@@ -44,7 +44,7 @@ def list_files_in_pinecone():
     response = requests.get(base_url, headers={"Api-Key": api_key})
     
     if response.status_code == 200:
-        files = response.json()
+        files = response.json().get('files', [])
         print(f"Respuesta completa de la API: {files}")
         return files
     else:
@@ -99,6 +99,7 @@ if isinstance(existing_files, list):  # Asegúrate de que es una lista
         if file_id:
             print(f"Eliminando archivo con ID: {file_id}")
             delete_file_from_pinecone(file_id)
+            time.sleep(2)  # Esperar entre solicitudes para evitar sobrecargar la API
 else:
     print("La respuesta de la API no es una lista de IDs de archivos.")
 
