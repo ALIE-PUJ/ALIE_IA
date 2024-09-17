@@ -39,6 +39,7 @@ def save_tag_to_mongo(user_prompt, agent_response, sentiment_tag, language):
     
     # Insertar el documento en la colección de MongoDB
     result = collection.insert_one(document)
+    print("Documento insertado en MongoDB: ", result.inserted_id)
 
     # print("Documento insertado en MongoDB: ", document)
     
