@@ -141,8 +141,15 @@ def create_vector_store(docs, embedding_model):
     ids = [doc.metadata["doc_id"] for doc in docs]
     print("Document IDs:", ids)
     
+    # For not-reinit
+    if is_initialized:
+        print("[Info] NOT initialazing the Milvus vector store...")
+        return Milvus(embedding_function=embedding_function, connection_args={"uri": MILVUS_URI})
+
+    # If not initialized, create a new Milvus vector store
     # Create the Chroma vector store with IDs
-    return Milvus.from_documents(docs, embedding=embedding_function, connection_args={"uri": MILVUS_URI}) # ids=ids no funciona con Milvus
+    print("[Info] initialazing the Milvus vector store...")
+    return Milvus.from_documents(docs, embedding=embedding_function, connection_args={"uri": MILVUS_URI}) # ids=ids no funciona con Milvus 
 
 def get_best_result(query, filter_source):
     """
@@ -361,13 +368,13 @@ def query_vectordb(query, filter_source=None, search_type="Single"):
     Realiza una consulta en la base de datos de vectores, aplica el filtro según la fuente,
     y devuelve los resultados basados en el tipo de búsqueda especificado.
     """
-    global mongo_uri, MILVUS_URI, selected_db_name, is_initialized
+    global mongo_uri, MILVUS_URI, selected_db_name, is_initialized, vector_store
     
+    MILVUS_URI = os.getenv('MILVUS_URI', 'http://localhost:19530')  # Si no se encuentra la variable de entorno, se asigna 'http://localhost:19530'
+
     # Initialize database connection and load documents if not already done
     if not is_initialized:
         print("\n<----- Initialization ----->")
-
-        MILVUS_URI = os.getenv('MILVUS_URI', 'http://localhost:19530')  # Si no se encuentra la variable de entorno, se asigna 'http://localhost:19530'
 
         mongo_uri = os.getenv('MONGO_URI')  
         selected_db_name = "ALIE_DB"  
@@ -385,6 +392,7 @@ def query_vectordb(query, filter_source=None, search_type="Single"):
         is_initialized = True
     else:
         print("Database already initialized. Skipping initialization.")
+        vector_store = create_vector_store([], embedding_model=selected_embedding_model)
 
     print("\n<----- Pre-Processing ----->")
     print(f"Original Query: {query}")
@@ -411,13 +419,13 @@ def get_retriever():
     """
     Inicializa la base de datos y devuelve un objeto retriever para consultas.
     """
-    global mongo_uri, MILVUS_URI, selected_db_name, is_initialized
+    global mongo_uri, MILVUS_URI, selected_db_name, is_initialized, vector_store
     
+    MILVUS_URI = os.getenv('MILVUS_URI', 'http://localhost:19530')  # Si no se encuentra la variable de entorno, se asigna 'http://localhost:19530'
+
     # Initialize database connection and load documents if not already done
     if not is_initialized:
         print("\n<----- Initialization ----->")
-
-        MILVUS_URI = os.getenv('MILVUS_URI', 'http://localhost:19530')  # Si no se encuentra la variable de entorno, se asigna 'http://localhost:19530'
 
         mongo_uri = os.getenv('MONGO_URI')  
         selected_db_name = "ALIE_DB"  
@@ -435,6 +443,7 @@ def get_retriever():
         is_initialized = True
     else:
         print("Database already initialized. Skipping initialization.")
+        vector_store = create_vector_store([], embedding_model=selected_embedding_model)
 
     return vector_store.as_retriever()
 
@@ -442,6 +451,8 @@ def get_retriever():
 '''
 result = query_vectordb("Cuales son los contenidos de programacion avanzada?", filter_source={"source": "Syllabus"}, search_type="Single")
 print(result)
+
+is_initialized = False # Flag to check if the database has been initialized
 
 result = query_vectordb("Cuales son los contenidos de estructuras de datos?", filter_source={"source": "Syllabus"}, search_type="Multiple")
 print(result)
