@@ -5,11 +5,11 @@ import json
 if __name__ == "__main__":
     # Direct execution, absolute import
     from RelationalDB.DBsearchTests_Library import *
-    from RAG.Agent_RetrievalLibrary import *
+    from RAG.Pinecone_Chat import *
 else:
     # Imported as part of a package, relative import
     from .RelationalDB.DBsearchTests_Library import *
-    from .RAG.Agent_RetrievalLibrary import *
+    from .RAG.Pinecone_Chat import *
 
 # Set global parameters
 temperature = 0

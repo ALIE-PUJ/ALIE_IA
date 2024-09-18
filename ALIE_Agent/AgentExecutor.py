@@ -193,7 +193,8 @@ user_input = question24
 
 if __name__ == "__main__":
 
+    '''
     priority = False # Low priority
     agent_answer = get_answer(user_input, priority)
     print("\n[Response from agent executor (AgentExecutor)] ---> Answer = ", agent_answer)    
-    
+    '''

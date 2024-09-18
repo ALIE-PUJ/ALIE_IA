@@ -36,7 +36,7 @@ def background_tagging(user_question, agent_answer):
     print("Tagging completed.")
 
 # Flask route for ALIE
-@app.route('/ask', methods=['POST'])
+@app.route('/alie', methods=['POST'])
 def ALIE():
     # Extract the user question from the POST request
     data = request.json
@@ -71,4 +71,4 @@ def ALIE():
 
 # Entry point for the program
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=5001)
