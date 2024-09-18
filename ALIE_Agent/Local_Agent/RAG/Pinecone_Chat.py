@@ -75,7 +75,15 @@ def general_retrieval(argument):
     chat_context = [Message(content=query + " Provee links si los hay")]
     
     # Get the response from the assistant
-    response = assistant.chat_completions(messages=chat_context)
+    if assistant is not None:
+        try:
+            response = assistant.chat_completions(messages=chat_context)
+        except Exception as e:
+            print(f"Error during chat completion: {e}")
+            return "No se encontró información relacionada con la consulta."
+    else:
+        print("Assistant not found.")
+        return "No se encontró información relacionada con la consulta."
     
     # Extract and return the response content
     content = response['choices'][0]['message']['content']
@@ -109,7 +117,15 @@ def course_retrieval(argument):
     chat_context = [Message(content=query + " Provee links si los hay. Prioriza la informacion referente a Syllabus")]
     
     # Get the response from the assistant
-    response = assistant.chat_completions(messages=chat_context)
+    if assistant is not None:
+        try:
+            response = assistant.chat_completions(messages=chat_context)
+        except Exception as e:
+            print(f"Error during chat completion: {e}")
+            return "No se encontró información relacionada con la consulta."
+    else:
+        print("Assistant not found.")
+        return "No se encontró información relacionada con la consulta."
     
     # Extract and return the response content
     content = response['choices'][0]['message']['content']
