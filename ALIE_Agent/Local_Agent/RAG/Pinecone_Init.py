@@ -5,124 +5,181 @@ import requests
 from pymongo import MongoClient
 import time
 
-# Paso 1: Conectar a MongoDB
-mongo_uri = os.getenv('MONGO_URI')
+def get_mongo_uri():
+    mongo_uri = os.getenv('MONGO_URI')
+    if not mongo_uri:
+        print("URI de conexión no encontrada. Construyendo URI de conexión...")
+        user = os.getenv('MONGO_USER', 'admin')
+        password = os.getenv('MONGO_PASS', 'admin123')
+        host = os.getenv('MONGO_HOST', 'localhost')
+        mongo_uri = f"mongodb://{user}:{password}@{host}:27017"
+    return mongo_uri
 
-if not mongo_uri:
-    print("URI de conexión no encontrada. Construyendo URI de conexión...")
-    user = os.getenv('MONGO_USER', 'admin')
-    password = os.getenv('MONGO_PASS', 'admin123')
-    host = os.getenv('MONGO_HOST', 'localhost')
-    mongo_uri = f"mongodb://{user}:{password}@{host}:27017"
+def connect_to_mongo(mongo_uri):
+    return MongoClient(mongo_uri)
 
-# Inicializa el cliente MongoDB
-client = MongoClient(mongo_uri)
+def setup_data_directory():
+    current_dir = os.path.dirname(os.path.realpath(__file__))
+    data_dir = os.path.join(current_dir, 'data')
+    if not os.path.exists(data_dir):
+        os.makedirs(data_dir)
+    return data_dir
 
-# Bases de datos y colecciones a consultar
-db = client['ALIE_DB']
-collection_names = ["Syllabus", 
-                    "InformacionPrivada_General", 
-                    "InformacionPrivada_QA", 
-                    "InformacionPublica_General", 
-                    "InformacionPublica_QA"]
+def list_assistants(api_key):
+    assistants_url = "https://api.pinecone.io/assistant/assistants"
+    response = requests.get(assistants_url, headers={"Api-Key": api_key})
+    if response.status_code == 200:
+        assistants = response.json().get('assistants', [])
+        print(f"[GET LIST] Asistentes existentes: {assistants}")
+        return assistants
+    else:
+        print(f"Error al listar asistentes. Código de estado: {response.status_code}, Respuesta: {response.text}")
+        return []
 
-# Paso 2: Configurar las variables de Pinecone
-api_key = os.getenv("PINECONE_API_KEY")  # Clave API de Pinecone desde las variables de entorno
-assistant_name = os.getenv("ASSISTANT_NAME", "alie")  # Nombre del asistente
-base_url = f"https://prod-1-data.ke.pinecone.io/assistant/files/{assistant_name}"
+def create_assistant_if_not_exists(api_key, assistant_name):
+    assistants_url = "https://api.pinecone.io/assistant/assistants"
+    assistants = list_assistants(api_key)
+    for assistant in assistants:
+        if assistant.get("name") == assistant_name:
+            print(f"[CREATE] El asistente '{assistant_name}' ya existe.")
+            return assistant
 
-# Paso 3: Obtener el directorio del script actual y crear la carpeta "data" en ese lugar
-current_dir = os.path.dirname(os.path.realpath(__file__))  # Obtiene la ruta del script actual
-data_dir = os.path.join(current_dir, 'data')  # Crea la ruta hacia la carpeta "data"
+    print(f"[CREATE] '{assistant_name}' no existe. Creando asistente '{assistant_name}'...")
+    create_assistant_url = assistants_url
+    payload = {"name": assistant_name, "metadata": {}}
+    response = requests.post(create_assistant_url, headers={"Api-Key": api_key, "Content-Type": "application/json"}, json=payload)
+    if response.status_code == 200:
+        new_assistant = response.json()
+        print(f"[CREATE] Asistente '{assistant_name}' creado exitosamente: {new_assistant}")
+        print("Esperando 30 segundos para que el asistente se active...")
+        time.sleep(30)
+        return new_assistant
+    else:
+        print(f"Error al crear el asistente '{assistant_name}'. Código de estado: {response.status_code}, Respuesta: {response.text}")
+        return None
 
-# Crear la carpeta "data" si no existe
-if not os.path.exists(data_dir):
-    os.makedirs(data_dir)
-
-# Función para listar archivos en Pinecone
-def list_files_in_pinecone():
+def list_files_in_pinecone(api_key, base_url):
     response = requests.get(base_url, headers={"Api-Key": api_key})
-    
     if response.status_code == 200:
         files = response.json().get('files', [])
-        print(f"Respuesta completa de la API: {files}")
+        print(f"[FILE FETCH] Respuesta completa de la API: {files}")
         return files
     else:
         print(f"Error al listar archivos. Código de estado: {response.status_code}, Respuesta: {response.text}")
         return []
 
-# Función para eliminar archivos en Pinecone
-def delete_file_from_pinecone(file_id):
+def delete_file_from_pinecone(api_key, base_url, file_id):
     delete_url = f"{base_url}/{file_id}"
     response = requests.delete(delete_url, headers={"Api-Key": api_key})
-    
     if response.status_code == 200:
-        print(f"Archivo {file_id} eliminado exitosamente.")
+        print(f"[DELETE FILE] Archivo {file_id} eliminado exitosamente.")
     else:
         print(f"Error al eliminar archivo {file_id}. Código de estado: {response.status_code}, Respuesta: {response.text}")
 
-# Paso 4: Función para subir un archivo compilado de una colección a Pinecone
-def upload_compiled_doc_to_pinecone(filepath, collection_name):
-    # Leer el archivo para subirlo
+def delete_file_by_name_from_pinecone(api_key, base_url, file_name):
+    files = list_files_in_pinecone(api_key, base_url)
+    for file_info in files:
+        if isinstance(file_info, dict) and file_info.get('name') == file_name:
+            file_id = file_info.get('id')
+            if file_id:
+                print(f"Eliminando archivo con nombre: {file_name} y ID: {file_id}")
+                delete_file_from_pinecone(api_key, base_url, file_id)
+                return
+    print(f"No se encontró el archivo con nombre: {file_name}")
+
+def upload_compiled_doc_to_pinecone(api_key, base_url, filepath, collection_name):
     with open(filepath, 'r', encoding='utf-8') as file:
         temp_file = io.StringIO(file.read())
-        temp_file.seek(0)  # Regresar el cursor al inicio del archivo en memoria
+        temp_file.seek(0)
     
-    # Subir el archivo compilado a Pinecone
-    response = requests.post(
-        base_url,
-        headers={"Api-Key": api_key},
-        files={"file": (f"{collection_name}_compiled.txt", temp_file)}
-    )
-    
-    # Verificar la respuesta
+    response = requests.post(base_url, headers={"Api-Key": api_key}, files={"file": (f"{collection_name}_compiled.txt", temp_file)})
     if response.status_code == 200:
-        print(f"Archivo '{collection_name}_compiled.txt' subido exitosamente. Response: {response.text}")
+        print(f"[UPLOAD FILE] Archivo '{collection_name}_compiled.txt' subido exitosamente. Response: {response.text}")
     else:
         print(f"Error al subir archivo '{collection_name}_compiled.txt'. Código de estado: {response.status_code}, Respuesta: {response.text}")
     
-    # Cerrar el archivo temporal en memoria
     temp_file.close()
 
-# Paso 5: Eliminar todos los archivos en Pinecone antes de subir los nuevos
-print("Listando archivos existentes en Pinecone para eliminarlos...")
-existing_files = list_files_in_pinecone()
-
-if isinstance(existing_files, list):  # Asegúrate de que es una lista
-    for file_info in existing_files:
-        # Dependiendo de la estructura de file_info, usa 'file_info' o 'file_info.get('id')'
-        if isinstance(file_info, dict):
-            file_id = file_info.get('id')
-        else:
-            file_id = file_info
-        
-        if file_id:
-            print(f"Eliminando archivo con ID: {file_id}")
-            delete_file_from_pinecone(file_id)
-            time.sleep(2)  # Esperar entre solicitudes para evitar sobrecargar la API
-else:
-    print("La respuesta de la API no es una lista de IDs de archivos.")
-
-# Paso 6: Procesar cada colección y compilar los documentos en un archivo
-for collection_name in collection_names:
+def upload_collection_to_pinecone(db, collection_name, api_key, base_url, data_dir):
     collection = db[collection_name]
     documents = collection.find()
     
-    # Nombre del archivo compilado
     compiled_filepath = os.path.join(data_dir, f"{collection_name}_compiled.txt")
-    
-    # Abrir el archivo compilado para escribir todos los documentos
     with open(compiled_filepath, 'w', encoding='utf-8') as compiled_file:
         for document in documents:
-            # Escribir cada documento en el archivo
             compiled_file.write(json.dumps(document, ensure_ascii=False, default=str) + "\n")
     
-    # Subir el archivo compilado a Pinecone
-    upload_compiled_doc_to_pinecone(compiled_filepath, collection_name)
-    time.sleep(2)  # Esperar entre solicitudes para evitar sobrecargar la API
+    upload_compiled_doc_to_pinecone(api_key, base_url, compiled_filepath, collection_name)
+    print(f"Datos de la colección '{collection_name}' subidos a Pinecone.")
+    time.sleep(2)
 
-print("Compilación, eliminación de archivos antiguos y subida de nuevos documentos completada.")
+def process_collections(db, collection_names, data_dir, api_key, base_url):
+    for collection_name in collection_names:
+        upload_collection_to_pinecone(db, collection_name, api_key, base_url, data_dir)
 
+def reinit_collection(collection_name):
+    # Paso 1: Obtener la URI de conexión a MongoDB y conectar a la base de datos
+    mongo_uri = get_mongo_uri()
+    client = connect_to_mongo(mongo_uri)
+    db = client['ALIE_DB']
+    collection_names = ["Syllabus", "InformacionPrivada_General", "InformacionPrivada_QA", "InformacionPublica_General", "InformacionPublica_QA"]
+
+    # Paso 2: Configurar las variables de Pinecone
+    api_key = os.getenv("PINECONE_API_KEY")
+    assistant_name = os.getenv("ASSISTANT_NAME", "alie")
+    base_url = f"https://prod-1-data.ke.pinecone.io/assistant/files/{assistant_name}"
+    data_dir = setup_data_directory()
+
+    # Paso 3: Crear el asistente en Pinecone si no existe
+    create_assistant_if_not_exists(api_key, assistant_name)
+    
+    # Para eliminar un archivo por nombre:
+    delete_file_by_name_from_pinecone(api_key, base_url, f"{collection_name}_compiled.txt")
+
+    # Para procesar una sola colección:
+    upload_collection_to_pinecone(db, collection_name, api_key, base_url, data_dir)
+
+    # Finalización
+    print("Compilación, eliminación de archivos antiguos y subida de nuevos documentos completada, Para la coleccion ", collection_name)
+
+def main():
+    # Paso 1: Obtener la URI de conexión a MongoDB y conectar a la base de datos
+    mongo_uri = get_mongo_uri()
+    client = connect_to_mongo(mongo_uri)
+    db = client['ALIE_DB']
+    collection_names = ["Syllabus", "InformacionPrivada_General", "InformacionPrivada_QA", "InformacionPublica_General", "InformacionPublica_QA"]
+
+    # Paso 2: Configurar las variables de Pinecone
+    api_key = os.getenv("PINECONE_API_KEY")
+    assistant_name = os.getenv("ASSISTANT_NAME", "alie")
+    base_url = f"https://prod-1-data.ke.pinecone.io/assistant/files/{assistant_name}"
+    data_dir = setup_data_directory()
+
+    # Paso 3: Crear el asistente en Pinecone si no existe
+    create_assistant_if_not_exists(api_key, assistant_name)
+    
+    # Paso 4: Listar y eliminar archivos existentes en Pinecone
+    print("Listando archivos existentes en Pinecone para eliminarlos...")
+    existing_files = list_files_in_pinecone(api_key, base_url)
+    if isinstance(existing_files, list):
+        for file_info in existing_files:
+            file_id = file_info.get('id') if isinstance(file_info, dict) else file_info
+            if file_id:
+                print(f"Eliminando archivo con ID: {file_id}")
+                delete_file_from_pinecone(api_key, base_url, file_id)
+                time.sleep(2)
+    else:
+        print("La respuesta de la API no es una lista de IDs de archivos.")
+    
+    # Paso 5: Procesar todas las colecciones y subir los documentos a Pinecone
+    process_collections(db, collection_names, data_dir, api_key, base_url)
+
+    # Finalización
+    print("Compilación, eliminación de archivos antiguos y subida de nuevos documentos completada.")
+
+if __name__ == "__main__":
+    main() # Re inicializacion de la base de datos vectorial
+    #reinit_collection("Syllabus") # Para borrar y re subir la coleccion X a Pinecone con nuevos archivos. Se usara para los archivos cargados
 
 # Nota: Este programa debe ejecutarse SOLO si se quiere reiniciar TODA la base de datos vectorial. 
 # El reinicio tomará unos 30 segundos y no podrá realizar consultas a la base de datos vectorial durante ese tiempo.
