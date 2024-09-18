@@ -48,10 +48,14 @@ def process_user_query_and_translate(user_input, api_url, api_headers, model, su
         user_input = translate(user_input, "en") # translate to English
 
     answer = process_user_query(user_input, api_url, api_headers, model, support_structured_output) # process the query
+    anwser_language = detect_language(answer)
 
-    if answer is not None and user_language != "en":
-        print(f"[POSTPROCESS - INFO] Translating answer back to original language...")
+    if answer is not None and anwser_language != user_language: # If the answer is not None and the language is different from the user language
+        print(f"[POSTPROCESS - INFO] The answer is not in the user's original language. Translating answer back to original language...")
         answer = translate(answer, user_language) # translate back to original user language
+    else:
+        print(f"[POSTPROCESS - INFO] The answer is in the user's original language. Returning answer...")
+
     return answer
 
 def call_process_user_query_with_retries(user_input, api_url, api_headers, model, support_structured_output, max_retries=3, delay=1):
@@ -135,11 +139,11 @@ def get_answer(user_input, priority):
             timeout=global_timeout
         )
 
-    # Si es un retry (priority alto), intentar con Groq
-    print("[INFO] High priority. Trying Groq.")
-
     # Si no se obtuvo respuesta, intentar con Groq
     if respuesta is None:
+        # Si es un retry (priority alto), intentar con Groq
+        print("[INFO] High priority. Trying Groq.")
+
         print("[INFO] LmStudio did not respond after 3 tries. Trying with Groq...")
         respuesta = ejecutar_con_timeout(
             call_process_user_query_with_retries,
