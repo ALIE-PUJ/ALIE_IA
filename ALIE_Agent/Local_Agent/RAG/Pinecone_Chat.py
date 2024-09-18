@@ -55,86 +55,74 @@ def general_retrieval(argument):
     query = argument
     """
     Chat with the assistant and get a response based on the provided query.
+
+    Args:
+        query (str): The query to send to the assistant.
+
+    Returns:
+        str: The response content from the assistant.
     """
-    if not assistant:
-        return "Assistant not found. Please check the assistant name or create it if necessary."
 
-    try:
-        print("[PINECONE RAG] Sent query to Pinecone RAG:", query)
-        # Detect the language of the query and translate it to Spanish if needed.
-        query_language = detect_language(query)
-        if query_language != "es":
-            print("[PINECONE RAG] Original language is not Spanish, translating to Spanish...")
-            query = translate(query, "es")
-        print("[PINECONE RAG] Sent query to Pinecone RAG:", query)
+    print("[PINECONE RAG] Sent query to Pinecone RAG:", query)
+    # Detect the language of the query and translate it to Spanish if needed. (The DB is in Spanish)
+    query_language = detect_language(query)
+    if query_language != "es":
+        print("[PINECONE RAG] original language is not Spanish, translating to Spanish...")
+        query = translate(query, "es")
+    print("[PINECONE RAG] Sent query to Pinecone RAG:", query)
 
-        # Prepare the chat context with the query
-        chat_context = [Message(content=query + " Provee links si los hay")]
-        
-        # Get the response from the assistant
-        response = assistant.chat_completions(messages=chat_context)
-        
-        # Check if the response status code is 200
-        if response.status_code == 200:
-            # Extract and verify the response content
-            content = response.get('choices', [{}])[0].get('message', {}).get('content', '').strip()
-            if content:
-                return content
-            else:
-                return "Sorry, the response from the assistant was empty or invalid."
-        else:
-            return "Sorry, the response from the assistant was empty or invalid."
+    # Prepare the chat context with the query
+    chat_context = [Message(content=query + " Provee links si los hay")]
     
-    except requests.RequestException as e:
-        return f"Network error: {e}"
-    except KeyError as e:
-        return f"Error extracting response content: {e}"
-    except Exception as e:
-        return f"Unexpected error: {e}"
+    # Get the response from the assistant
+    response = assistant.chat_completions(messages=chat_context)
+    
+    # Extract and return the response content
+    content = response['choices'][0]['message']['content']
+
+    if content is None:
+        content = "No se encontró información relacionada con la consulta."
+
+    return content
 
 def course_retrieval(argument):
     query = argument
     """
     Chat with the assistant and get a response based on the provided query.
+
+    Args:
+        query (str): The query to send to the assistant.
+
+    Returns:
+        str: The response content from the assistant.
     """
-    if not assistant:
-        return "Assistant not found. Please check the assistant name or create it if necessary."
 
-    try:
-        print("[PINECONE RAG] Sent query to Pinecone RAG:", query)
-        # Detect the language of the query and translate it to Spanish if needed.
-        query_language = detect_language(query)
-        if query_language != "es":
-            print("[PINECONE RAG] Original language is not Spanish, translating to Spanish...")
-            query = translate(query, "es")
-        print("[PINECONE RAG] Sent query to Pinecone RAG:", query)
+    print("[PINECONE RAG] Sent query to Pinecone RAG:", query)
+    # Detect the language of the query and translate it to Spanish if needed. (The DB is in Spanish)
+    query_language = detect_language(query)
+    if query_language != "es":
+        print("[PINECONE RAG] original language is not Spanish, translating to Spanish...")
+        query = translate(query, "es")
+    print("[PINECONE RAG] Sent query to Pinecone RAG:", query)
 
-        # Prepare the chat context with the query
-        chat_context = [Message(content=query + " Provee links si los hay. Prioriza la informacion referente a Syllabus")]
-        
-        # Get the response from the assistant
-        response = assistant.chat_completions(messages=chat_context)
-        
-        # Check if the response status code is 200
-        if response.status_code == 200:
-            # Extract and verify the response content
-            content = response.get('choices', [{}])[0].get('message', {}).get('content', '').strip()
-            if content:
-                return content
-            else:
-                return "Sorry, the response from the assistant was empty or invalid."
-        else:
-            return "Sorry, the response from the assistant was empty or invalid."
+    # Prepare the chat context with the query
+    chat_context = [Message(content=query + " Provee links si los hay. Prioriza la informacion referente a Syllabus")]
     
-    except requests.RequestException as e:
-        return f"Network error: {e}"
-    except KeyError as e:
-        return f"Error extracting response content: {e}"
-    except Exception as e:
-        return f"Unexpected error: {e}"
+    # Get the response from the assistant
+    response = assistant.chat_completions(messages=chat_context)
+    
+    # Extract and return the response content
+    content = response['choices'][0]['message']['content']
+
+    if content is None:
+        content = "No se encontró información relacionada con la consulta."
+
+    return content
 
 # THIS CAN BE USED AS A LIBRARY FUNCTION, AND BE CALLED FROM ANOTHER FILE
 if __name__ == "__main__":
+
+
     # Example usage
     query = 'Que becas ofrece la universidad?'
     response_content = general_retrieval(query)
