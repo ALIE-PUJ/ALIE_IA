@@ -9,7 +9,7 @@ if __name__ == "__main__":
     from Tagging import *
 else:
     # Imported as part of a package, relative import
-    from Tagging import *
+    from .Tagging import *
 
 # Set global parameters
 temperature = 0

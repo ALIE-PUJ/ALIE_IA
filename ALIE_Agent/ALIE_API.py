@@ -4,7 +4,7 @@ import threading
 # Imports de librerías propias
 from AgentExecutor import *
 from Others.Supervision.JSON_Detector import *
-from Others.Tagging.TaggerChainLibrary import *
+from Others.Tagging.TaggingAgentExecutor import *
 
 # Initialize the Flask app
 app = Flask(__name__)
@@ -29,10 +29,10 @@ def process_query_ALIE(user_question, priority):
     return agent_answer
 
 # Function to handle tagging in the background
-def background_tagging(user_question, agent_answer):
-    user_prompts = [user_question]
-    agent_responses = [agent_answer]
-    tag_interaction_until_ok(user_prompts, agent_responses)
+def background_tagging(user_question, agent_answer, priority):
+    user_prompts = [user_question] # Turn into array
+    agent_responses = [agent_answer] # Turn into array
+    agent_tag(user_prompts, agent_responses, priority)
     print("Tagging completed.")
 
 # Flask route for ALIE
@@ -64,7 +64,7 @@ def ALIE():
     print("\033[34mSent answer to user:", response, "\033[0m")
 
     # 4. Start the background tagging process in a new thread
-    threading.Thread(target=background_tagging, args=(user_question, alie_answer)).start()
+    threading.Thread(target=background_tagging, args=(user_question, alie_answer, priority)).start()
 
     # Return the agent answer as JSON
     return jsonify(response)

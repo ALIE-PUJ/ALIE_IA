@@ -32,10 +32,10 @@ def process_query_ALIE(user_question, priority):
     return agent_answer
 
 # Function to handle tagging in the background
-def background_tagging(user_question, agent_answer):
-    user_prompts = [user_question]
-    agent_responses = [agent_answer]
-    agent_tag(user_prompts, agent_responses)
+def background_tagging(user_question, agent_answer, priority):
+    user_prompts = [user_question] # Turn into array
+    agent_responses = [agent_answer] # Turn into array
+    agent_tag(user_prompts, agent_responses, priority)
     print("Tagging completed.")
 
 # Main function that simulates user interaction
@@ -50,7 +50,7 @@ def ALIE(prompt, priority):
     print(f"\033[34m[ALIE] Answer: {alie_answer}\033[0m")
 
     # 4. Start the background tagging process in a new thread
-    threading.Thread(target=background_tagging, args=(user_question, alie_answer)).start()
+    threading.Thread(target=background_tagging, args=(user_question, alie_answer, priority)).start()
 
 # Entry point for the program
 if __name__ == "__main__":
