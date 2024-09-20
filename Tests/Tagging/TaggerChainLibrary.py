@@ -4,35 +4,50 @@ import os
 import time
 
 # Importar librería propia
-from TaggingToolsLibrary import *
+# Library import depending on the context (Being used as a library or being executed directly)
+if __name__ == "__main__":
+    # Direct execution, absolute import
+    from TaggingToolsLibrary import *
+else:
+    # Imported as part of a package, relative import
+    from .TaggingToolsLibrary import *
 
 # Set the maximum execution time for the main agent
 max_execution_time = 10
 
 # Definir los modelos y herramientas
 def create_llms():
-    # Definir el modelo principal (Llama)
-    llm_primary = ChatOpenAI(
-        model="lmstudio-community/Meta-Llama-3-8B-Instruct-GGUF",
-        temperature=0.9,
+
+    # Definir el modelo principal (Groq)
+    llm_primary = ChatGroq(
+        model="llama3-8b-8192",
+        temperature=0,
         max_tokens=None,
         timeout=None,
-        base_url="http://localhost:1234/v1",
-        api_key="lm-studio"
     )
 
-    # Definir el modelo alternativo 1 (Groq)
+    # Definir el modelo alternativo
     llm_alternative_1 = ChatGroq(
-        model="llama3-8b-8192",
-        temperature=0.9,
+        model="llama-3.1-70b-versatile", # Modelo mas inteligente, por si el primario falla
+        temperature=0,
         max_tokens=None,
         timeout=None,
     )
 
     # Definir el modelo alternativo 2 (otro modelo, por ejemplo)
     llm_alternative_2 = ChatOpenAI(
+        model="lmstudio-community/Meta-Llama-3-8B-Instruct-GGUF",
+        temperature=0,
+        max_tokens=None,
+        timeout=None,
+        base_url="http://localhost:1234/v1",
+        api_key="lm-studio"
+    )
+
+    # Definir el modelo alternativo 3 (otro modelo, por ejemplo)
+    llm_alternative_3 = ChatOpenAI(
         model="openai/gpt-3.5-turbo",
-        temperature=0.9,
+        temperature=0,
         max_tokens=None,
         timeout=None,
         base_url="https://api.openai.com/v1",
@@ -97,11 +112,11 @@ def tag_interaction_until_ok(user_prompts, agent_responses):
                 ))
 
                 # Imprimir el resultado
-                print("Answer: ", output)
+                print("\033[33mAnswer: ", output, "\033[0m")
 
                 # Verificar si el resultado comienza con "Tag:Done"
                 if output.startswith("Tag:Done"):  # Tag:Done. Significa que se realizó el llamado a la función correctamente
-                    print("Tagging complete and successful.")
+                    print("\033[33mTagging complete and successful.\033[0m")
                     stop_timer(start_time)  # Detener el contador de tiempo y mostrar la duración
                     return output  # Devolver el resultado exitoso
                 
@@ -136,19 +151,25 @@ def tag_interaction_until_ok(user_prompts, agent_responses):
     # Iniciar la ejecución con la primera cadena y cambiar en caso de error
     return try_chain(evaluation_chain_0, 0, [evaluation_chain_1, evaluation_chain_2])
 
-# Ejemplo de uso
-# Arrays de usuario y agente
-user_prompts = [
-    "Hola, cual es el codigo de estructuras de datos",
-    "4196",
-    "Perfecto, gracias!"
-]
+# THIS CAN BE USED AS A LIBRARY FUNCTION, AND BE CALLED FROM ANOTHER FILE
 
-agent_responses = [
-    "Cual curso? Especifica el codigo",
-    "El curso de estructuras de datos es 4196"
-]
+if __name__ == "__main__":
 
-# Llamar a la función para ejecutar el bucle con múltiples interacciones y cadenas con prioridad
-final_tag = tag_interaction_until_ok(user_prompts, agent_responses)
-print("<---- Final tag: ", final_tag)
+    '''
+    # Ejemplo de uso
+    # Arrays de usuario y agente
+    user_prompts = [
+        "Hola, cual es el codigo de estructuras de datos",
+        "4196",
+        "Perfecto, gracias!"
+    ]
+
+    agent_responses = [
+        "Cual curso? Especifica el codigo",
+        "El curso de estructuras de datos es 4196"
+    ]
+
+    # Llamar a la función para ejecutar el bucle con múltiples interacciones y cadenas con prioridad
+    tag = tag_interaction_until_ok(user_prompts, agent_responses)
+    print("<---- Generated tag: ", tag)
+    '''
