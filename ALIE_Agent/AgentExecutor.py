@@ -81,7 +81,7 @@ def call_process_user_query_with_retries(user_input, api_url, api_headers, model
     while retries < max_retries:
 
         answer = process_user_query_and_translate(user_input, api_url, api_headers, model, support_structured_output) # Call With Translation
-        # answer = process_user_query(user_input, api_url, api_headers, support_structured_output) # Call Without Translation
+        # answer = process_user_query(user_input, api_url, api_headers, model, support_structured_output) # Call Without Translation
 
         if answer is not None:
 

@@ -9,7 +9,7 @@ if __name__ == "__main__":
     from Tagging import *
 else:
     # Imported as part of a package, relative import
-    from .Tagging import *
+    from Tagging import *
 
 # Set global parameters
 temperature = 0
@@ -270,6 +270,7 @@ def tag_interaction(user_prompts, agent_responses, api_url, api_headers, model, 
 
 if __name__ == "__main__":
 
+    '''
     # Model data
 
     # LmStudio
@@ -289,6 +290,7 @@ if __name__ == "__main__":
     }
 
     '''
+    # Ex 1.
     # Ejemplo de uso
     # Arrays de usuario y agente
     user_prompts = [
@@ -303,6 +305,8 @@ if __name__ == "__main__":
     # Expected sentiment tag: neg
     '''
 
+    # Ex 2.
+    # Ejemplo de uso
     # Arrays de usuario y agente
     user_prompts = [
         "Hola, cual es el codigo de estructuras de datos",
@@ -327,3 +331,7 @@ if __name__ == "__main__":
     print("\nProcessing user query using Groq...")
     answer = tag_interaction(user_prompts, agent_responses, api_url_groq, api_headers_groq, model_groq, support_structured_output=False)
     print("Answer = ", answer)
+    '''
+    
+# Importante: Para reducir las respuestas erroneas y alucinaciones, el agente unicamente provee el agumento tag. 
+# Tanto user_prompts como agent_responses se manejan por fuera de la llamada al agente, al igual que el idioma de la interacción.

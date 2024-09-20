@@ -4,7 +4,7 @@ import threading
 # Imports de librerías propias
 from AgentExecutor import *
 from Others.Supervision.JSON_Detector import *
-from Others.Tagging.TaggerChainLibrary import *
+from Others.Tagging.TaggingAgentExecutor import *
 
 # Flujo principal
 # 1. Enviar query al agent_executor
@@ -35,7 +35,7 @@ def process_query_ALIE(user_question, priority):
 def background_tagging(user_question, agent_answer):
     user_prompts = [user_question]
     agent_responses = [agent_answer]
-    tag_interaction_until_ok(user_prompts, agent_responses)
+    agent_tag(user_prompts, agent_responses)
     print("Tagging completed.")
 
 # Main function that simulates user interaction
