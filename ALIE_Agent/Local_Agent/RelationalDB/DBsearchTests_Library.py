@@ -423,6 +423,27 @@ def get_student_courses_fetch(student_id: int) -> list:
     finally:
         conn.close()
 
+# Funcion para buscar todos los cursos
+def get_all_courses_fetch() -> list:
+    """
+    Fetches all available courses from the database.
+    
+    :return: A list of dictionaries containing course details.
+    """
+    try:
+        conn = create_connection()
+        with conn.cursor() as cursor:
+            query = "SELECT * FROM Curso"
+            cursor.execute(query)
+            result = cursor.fetchall()
+            columns = [desc[0] for desc in cursor.description]
+            result_with_columns = [dict(zip(columns, row)) for row in result]
+            return result_with_columns
+    except Error as e:
+        return f"Error: {e}"
+    finally:
+        conn.close()
+
 
 
 
@@ -850,5 +871,32 @@ def get_student_courses(argument: str) -> str:
         descripcion += f"\nPeriod: {periodo}\n"
         for curso in cursos:
             descripcion += f"- {curso}\n"
+    
+    return descripcion
+
+# Función para obtener todos los cursos y retornar en lenguaje natural
+# Redireccion: NO
+def get_all_courses(argument) -> str:
+    """
+    Returns a list of all available courses.
+    
+    :return: A formatted string with the list of courses.
+    
+    Example call:
+    get_all_courses()
+    """
+    # Llamada a la función fetch
+    resultados = get_all_courses_fetch()
+    
+    if not resultados:
+        return "No courses available."
+
+    # Formatear la salida
+    descripcion = "Available courses:\n"
+    for curso in resultados:
+        descripcion += (
+            f"- Course ID: {curso['id_curso']}, Name: {curso['nombre']}, "
+            f"Description: {curso['descripcion']}\n"
+        )
     
     return descripcion

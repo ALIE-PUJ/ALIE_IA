@@ -163,6 +163,18 @@ FUNCTIONS = {
             }
         }
     },
+    "get_all_courses": {
+        "function_name": get_all_courses,
+        "description": "Returns a list of all available courses. Should always be used when the user asks for a list of ALL the avaibale courses.",
+        "argument": "No arguments needed. Just an empty string.",
+        "example": {
+            "query": "What courses are available?",
+            "expected": {
+                "function_name": "get_all_courses",
+                "argument": ""
+            }
+        }
+    },
     "general_retrieval": {
         "function_name": general_retrieval,
         "description": "Retrieves general information from the university vector store to search information to solve a query.",
