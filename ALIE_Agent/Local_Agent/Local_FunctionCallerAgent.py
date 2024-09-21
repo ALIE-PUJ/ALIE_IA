@@ -167,7 +167,7 @@ FUNCTIONS = {
     },
     "normal_conversation": {
         "function_name": normal_conversation,
-        "description": "Lets you chat with the user. Should be used when the user is not asking for specific information, so no additional tools are needed. It is a simple conversation function for things like a greeting, basic questions, etc. For example: Hi, Hello, How are you?, Are you ok? etc.",
+        "description": "Lets you chat with the user. Should be used when the user is not asking for specific information, so no additional tools are needed. It is a simple conversation function for things like a greeting, basic questions, etc. For example: Hi, Hello, How are you?, Are you ok? etc. Also use it to manage random interactions that dont have sense or context, like: Great! Super! Awesome! OK. etc.",
         "argument": "The query from the user that requires no specific information.",
         "user_input": "The query from the user that requires no specific information.",
         "example": {
