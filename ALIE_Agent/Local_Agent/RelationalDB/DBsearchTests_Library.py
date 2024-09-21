@@ -130,6 +130,11 @@ def find_course_name(course_name: str) -> str:
         return course_name # Si no se encuentra una coincidencia, devolver el curso original
 
 
+
+
+
+# Consultas SQL.
+
 # Funcion para buscar Estudiantes
 def get_students_by_name_fetch(name: str) -> str:
     try:
@@ -351,6 +356,35 @@ def get_teacher_by_name_fetch(teacher_name: str) -> str:
         with conn.cursor() as cursor:
             query = sql.SQL("SELECT * FROM Profesor WHERE LOWER(nombres) LIKE LOWER(%s)")
             cursor.execute(query, (f"%{teacher_name}%",))
+            result = cursor.fetchall()
+            columns = [desc[0] for desc in cursor.description]
+            result_with_columns = [dict(zip(columns, row)) for row in result]
+            return result_with_columns
+    except Error as e:
+        return f"Error: {e}"
+    finally:
+        conn.close()
+
+# Funcion para buscar las notas de un estudiante por periodo
+def get_student_grades_by_period_fetch(student_id: int) -> list:
+    """
+    Fetches all grades for a student, organized by period.
+    
+    :param student_id: The ID of the student.
+    :return: A list of dictionaries with course names, periods, and grades.
+    """
+    try:
+        conn = create_connection()
+        with conn.cursor() as cursor:
+            query = """
+            SELECT Curso.nombre AS curso_nombre, Clase.periodo, Nota.nota 
+            FROM Nota
+            JOIN Clase ON Nota.id_clase = Clase.id_clase
+            JOIN Curso ON Clase.id_curso = Curso.id_curso
+            WHERE Nota.id_estudiante = %s
+            ORDER BY Clase.periodo
+            """
+            cursor.execute(query, (student_id,))
             result = cursor.fetchall()
             columns = [desc[0] for desc in cursor.description]
             result_with_columns = [dict(zip(columns, row)) for row in result]
@@ -703,4 +737,48 @@ def get_teacher_by_name(argument: str) -> str:
             f"Email: {profesor['email']}, "
             f"Phone: {profesor['telefono']}.\n"
         )
+    return descripcion
+
+# Función para obtener las notas de un estudiante por periodo y retornar en lenguaje natural
+# Redireccion: NO
+def get_student_grades_by_period(argument: str) -> str:
+    """
+    Returns the grades of a student, organized by period.
+    
+    :param argument: The ID of the student as a string.
+    :return: A formatted string with the student's grades by period.
+    
+    Example call:
+    get_student_grades_by_period("1")
+    """
+    # Convertir el argumento a un entero
+    try:
+        student_id = int(argument)
+    except ValueError:
+        return f"Invalid student ID: {argument}. Please provide a valid numeric ID."
+
+    # Llamada a la función que obtiene los datos
+    resultados = get_student_grades_by_period_fetch(student_id)
+    
+    if not resultados:
+        return f"No grades found for student ID {student_id}."
+    
+    # Agrupar las notas por período
+    periodos = {}
+    for resultado in resultados:
+        periodo = resultado['periodo']
+        if periodo not in periodos:
+            periodos[periodo] = []
+        periodos[periodo].append({
+            'curso': resultado['curso_nombre'],
+            'nota': resultado['nota']
+        })
+    
+    # Formatear el resultado para la salida
+    descripcion = f"Grades for student ID {student_id}:\n"
+    for periodo, cursos in periodos.items():
+        descripcion += f"\nPeriod: {periodo}\n"
+        for curso in cursos:
+            descripcion += f"- Course: {curso['curso']}, Grade: {curso['nota']}\n"
+    
     return descripcion

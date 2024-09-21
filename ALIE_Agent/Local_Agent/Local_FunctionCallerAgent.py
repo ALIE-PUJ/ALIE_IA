@@ -139,6 +139,18 @@ FUNCTIONS = {
             }
         }
     },
+    "get_student_grades_by_period": {
+        "function_name": get_student_grades_by_period,
+        "description": "Returns the grades of a student, organized by period. Should always be used when the user asks for grades of a specific student.",
+        "argument": "The id of the student as a string.",
+        "example": {
+            "query": "What are my grades? My id is 1234",
+            "expected": {
+                "function_name": "get_student_grades_by_period",
+                "argument": "1234"
+            }
+        }
+    },
     "general_retrieval": {
         "function_name": general_retrieval,
         "description": "Retrieves general information from the university vector store to search information to solve a query.",
@@ -394,7 +406,7 @@ def generate_final_response(final_message, url, headers, model):
         "messages": [
             {
                 "role": "system",
-                "content": "Your task is to craft a thoughtful and comprehensive final response for the user, incorporating all the details provided by the function result. Please aim to be as clear and helpful as possible, ensuring that the information is both accurate and easy to understand. Be friendly, engaging and relatable. Be sure to provide consistent information with what the result of the function says."
+                "content": "Your task is to craft a thoughtful and comprehensive final response for the user, incorporating all the details provided by the function result. Please aim to be as clear and helpful as possible, ensuring that the information is both accurate and easy to understand. Be friendly, engaging and relatable. Be sure to provide consistent information with what the result of the function says. Do not provide any new information that is not in the function result. If you need to ask for more information, please do so in a polite and respectful manner. DO NOT MAKE UP INFORMATION. If you are unsure about something, it is better to say so than to provide incorrect information."
             },
             {
                 "role": "user",

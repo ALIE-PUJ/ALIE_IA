@@ -74,5 +74,10 @@ def ALIE():
 
 # Entry point for the program
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=6000, threaded=True)
+
+    import sys
+    sys.stdout.reconfigure(line_buffering=True) # Para que los prints se muestren en tiempo real
+
+    app.run(host='0.0.0.0', port=6000, threaded=True, debug=True)
     # Threaded = True para que el servidor pueda manejar múltiples solicitudes simultáneamente
+    # Debug = True para que el servidor se reinicie automáticamente después de cada cambio en el código
