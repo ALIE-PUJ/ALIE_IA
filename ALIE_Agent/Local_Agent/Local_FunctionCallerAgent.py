@@ -6,10 +6,12 @@ if __name__ == "__main__":
     # Direct execution, absolute import
     from RelationalDB.DBsearchTests_Library import *
     from RAG.Pinecone_Chat import *
+    from Conversation.LLM_NormalConversation import *
 else:
     # Imported as part of a package, relative import
     from .RelationalDB.DBsearchTests_Library import *
     from .RAG.Pinecone_Chat import *
+    from .Conversation.LLM_NormalConversation import *
 
 # Set global parameters
 temperature = 0
@@ -146,8 +148,21 @@ FUNCTIONS = {
         "example": {
             "query": "What are the contents of Estructuras de datos?",
             "expected": {
-                "function_name": "course_retrieval_system",
+                "function_name": "course_retrieval",
                 "argument": "What are the contents of Estructuras de datos?"
+            }
+        }
+    },
+    "normal_conversation": {
+        "function_name": normal_conversation,
+        "description": "Lets you chat with the user. Should be used when the user is not asking for specific information, so no additional tools are needed. It is a simple conversation function for things like a greeting, basic questions, etc. For example: Hi, Hello, How are you?, Are you ok? etc.",
+        "argument": "The query from the user that requires no specific information.",
+        "user_input": "The query from the user that requires no specific information.",
+        "example": {
+            "query": "Hi!",
+            "expected": {
+                "function_name": "normal_conversation",
+                "argument": "Hi!"
             }
         }
     }
@@ -314,9 +329,20 @@ def handle_function_call(user_input, url, headers, functions, model, support_str
         if function_name in functions:
             func = functions[function_name]["function_name"]
             
+            # Normal function args for most function calls
             func_args = {
                 "argument": argument
             }
+
+            # Function-specific args for normal_conversation
+            if function_name == "normal_conversation":
+                func_args = {
+                "argument": argument,
+                "url": url,
+                "headers": headers,
+                "model": model
+                }
+                print("[normal_conversation] CREATED SPECIFIC FUNCTION ARGS ---> Function name: ", function_name, ". Function args: ", func_args)
 
             print("[DEBUG] ---> Function name: ", function_name, ". Function args: ", func_args)
             
@@ -397,7 +423,7 @@ def process_user_query(user_input, api_url, api_headers, model, support_structur
         if final_message:
 
             # DIRECT RETURNS LIST
-            direct_return_function_names = ["course_retrieval", "general_retrieval"] # List of functions that return the final message directly
+            direct_return_function_names = ["course_retrieval", "general_retrieval", "normal_conversation"] # List of functions that return the final message directly
             if function_name in direct_return_function_names:
                 print("[ALIE LANGCHAIN DEBUG: Found direct return function. Returning function_result.]")
                 return function_result

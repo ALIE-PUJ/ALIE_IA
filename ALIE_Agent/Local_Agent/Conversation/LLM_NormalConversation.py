@@ -3,10 +3,10 @@ import json
 import os
 
 # Set global parameters
-temperature = 0
+temperature = 0.9
 max_tokens = 1000
 
-def generate_response(argument, url, headers, model):
+def normal_conversation(argument, url, headers, model):
     """
     Generates an LLM response.
     
@@ -27,7 +27,7 @@ def generate_response(argument, url, headers, model):
         "messages": [
             {
                 "role": "system",
-                "content": "Your task is to craft a thoughtful and comprehensive response for the user. Please aim to be as clear and helpful as possible, ensuring that the information is both accurate and easy to understand. Be friendly, engaging and relatable."
+                "content": "You are ALIE, an assistant for the Pontificia Universidad Javeriana. You solve academic queries. In this case, your task is to craft a thoughtful and comprehensive response for the user. Please aim to be as clear and helpful as possible, ensuring that the information is both accurate and easy to understand. Be friendly, engaging and relatable. DO NOT provide any false information."
             },
             {
                 "role": "user",
@@ -79,11 +79,11 @@ if __name__ == "__main__":
     # Run the function call and generate the final response
     # Example usage for LmStudio:
     print("\nProcessing user query using LmStudio...")
-    answer = generate_response(user_input, api_url_lmstudio, api_headers_lmstudio, model_lmstudio)
+    answer = normal_conversation(user_input, api_url_lmstudio, api_headers_lmstudio, model_lmstudio)
     print("Answer = ", answer)
 
     # Example usage for Groq:
     #print("\nProcessing user query using Groq...")
-    #answer = generate_response(user_input, api_url_groq, api_headers_groq, model_groq)
+    #answer = normal_conversation(user_input, api_url_groq, api_headers_groq, model_groq)
     #print("Answer = ", answer)
     '''

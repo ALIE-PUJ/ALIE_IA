@@ -37,12 +37,18 @@ def translate(query: str, target_language: str) -> str:
         print(f"Error translating query: {e}")
         return query # Return the original query if translation fails
 
+# Función para detectar el idioma de una consulta
 def detect_language(query: str) -> str:
     """
     Detect the language of the given query.
     """
     try:
         detected_language = detect(query)
+
+        if detected_language not in ["en", "es"]:
+            print(f"Detected language: {detected_language}. Defaulting to Spanish.")
+            return "es"
+
         return detected_language
     except LangDetectException as e:
         print(f"Error detecting language: {e}")
@@ -138,8 +144,10 @@ def course_retrieval(argument):
 # THIS CAN BE USED AS A LIBRARY FUNCTION, AND BE CALLED FROM ANOTHER FILE
 if __name__ == "__main__":
 
-
+    '''
     # Example usage
     query = 'Que becas ofrece la universidad?'
+    query = 'Which are the available scholarships?'
     response_content = general_retrieval(query)
     print("Response:", response_content)
+    '''
