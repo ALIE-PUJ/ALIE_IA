@@ -13,8 +13,17 @@ COPY . .
 # Instala las dependencias necesarias
 RUN pip install -r requirements.txt
 
-# Define el comando a ejecutar
-CMD ["python", "ALIE_API.py"]
+# Ejecutar el manejador de agentes
+# CMD ["python", "ALIE_API.py"]
+
+# Crea un script de inicio que ejecuta ambos comandos (Manejador de agentes e inicializar Pinecone)
+RUN echo '#!/bin/bash\npython Local_Agent/RAG/Pinecone_Init.py\npython ALIE_API.py' > /app/start.sh
+
+# Da permisos de ejecución al script
+RUN chmod +x /app/start.sh
+
+# Ejecuta el script en lugar de CMD individual
+CMD ["bash", "/app/start.sh"]
 
 # Para construir la imagen individualmente, ejecuta el siguiente comando: docker build -t my-db-init-image .
 # Para ejecutar el contenedor, ejecuta el siguiente comando: docker run my-db-init-image
