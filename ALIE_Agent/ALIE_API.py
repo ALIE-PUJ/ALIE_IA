@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS, cross_origin # CORS for angular
 import threading
 
 # Imports de librerías propias
@@ -8,6 +9,7 @@ from Others.Tagging.TaggingAgentExecutor import *
 
 # Initialize the Flask app
 app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": ["*"]}}) # Habilita CORS para la APP Flask. Necesario para que funcione adecuadamente con Angular
 
 # Flujo principal
 def process_query_ALIE(user_question, priority):
