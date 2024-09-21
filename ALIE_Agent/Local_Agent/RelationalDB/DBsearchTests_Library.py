@@ -9,7 +9,7 @@ def create_connection():
     """
     return psycopg2.connect(
         host=os.getenv('COCKROACHDB_HOST', 'localhost'),
-        port=os.getenv('COCKROACHDB_PASS', 5432),
+        port=os.getenv('COCKROACHDB_PORT', 5432),
         user=os.getenv('COCKROACHDB_USER', 'root'),
         password=os.getenv('COCKROACHDB_PASS', 'pass'),
         database='alie_db'
