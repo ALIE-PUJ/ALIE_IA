@@ -33,13 +33,25 @@ FUNCTIONS = {
     },
     "get_course_by_name": {
         "function_name": get_course_by_name,
-        "description": "Searches a course basic information by its name. It provides the course code and description. For more detailed information like contents, expected learning outcomes, etc. Use course_retrieval.",
+        "description": "Searches a course basic information by its name. It provides the course name, code and description. For more detailed information like contents, expected learning outcomes, etc. Use course_retrieval.",
         "argument": "The name of the course to search for.",
         "example": {
             "query": "Which is the course code for the course named 'Estructuras de datos'?",
             "expected": {
                 "function_name": "get_course_by_name",
                 "argument": "Estructuras de datos"
+            }
+        }
+    },
+    "get_course_by_code": {
+        "function_name": get_course_by_code,
+        "description": "Searches a course basic information by its code. It provides the course name, code and description. For more detailed information like contents, expected learning outcomes, etc. Use course_retrieval.",
+        "argument": "The code of the course to search for.",
+        "example": {
+            "query": "Which is the name of the course with code 4196?",
+            "expected": {
+                "function_name": "get_course_by_code",
+                "argument": "4196"
             }
         }
     },

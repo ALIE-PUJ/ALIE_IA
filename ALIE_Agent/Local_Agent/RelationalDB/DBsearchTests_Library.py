@@ -1,6 +1,7 @@
 import psycopg2
 from psycopg2 import sql, Error
 import os
+import difflib
 
 # Create a new connection in each function
 def create_connection():
@@ -14,6 +15,120 @@ def create_connection():
         password=os.getenv('COCKROACHDB_PASS', 'pass'),
         database='alie_db'
     )
+
+
+# Course filtering
+def find_course_name(course_name: str) -> str:
+    """
+    Procesa la consulta para extraer el nombre del curso al que hace referencia.
+    Maneja variaciones ortográficas y consultas en inglés o con errores.
+    """
+    # Diccionario de cursos con posibles variaciones en español e inglés
+    cursos_dict = {
+        'calculo diferencial': 'Calculo Diferencial',
+        'differential calculus': 'Calculo Diferencial',
+        'logica y matematicas discretas': 'Logica y Matematicas Discretas',
+        'logic and discrete mathematics': 'Logica y Matematicas Discretas',
+        'introduccion a la programacion': 'Introduccion a la Programación',
+        'introduction to programming': 'Introduccion a la Programación',
+        'pensamiento sistemico': 'Pensamiento Sistemico',
+        'systems thinking': 'Pensamiento Sistemico',
+        'introduccion a la ingenieria': 'Introduccion a la Ingenieria',
+        'introduction to engineering': 'Introduccion a la Ingenieria',
+        'constitucion y derecho civil': 'Constitución y Derecho Civil',
+        'constitution and civil law': 'Constitución y Derecho Civil',
+        'calculo integral': 'Calculo Integral',
+        'integral calculus': 'Calculo Integral',
+        'fisica mecanica': 'Fisica Mecánica',
+        'mechanical physics': 'Fisica Mecánica',
+        'algebra lineal': 'Algebra Lineal',
+        'linear algebra': 'Algebra Lineal',
+        'programacion avanzada': 'Programación Avanzada',
+        'advanced programming': 'Programación Avanzada',
+        'ecuaciones diferenciales': 'Ecuaciones Diferenciales',
+        'differential equations': 'Ecuaciones Diferenciales',
+        'proyecto de diseño en ingenieria': 'Proyecto de Diseño en Ingenieria',
+        'engineering design project': 'Proyecto de Diseño en Ingenieria',
+        'significacion teologica': 'Significación Teologica',
+        'theological significance': 'Significación Teologica',
+        'calculo vectorial': 'Calculo Vectorial',
+        'vector calculus': 'Calculo Vectorial',
+        'probabilidad y estadistica': 'Probabilidad y Estadistica',
+        'probability and statistics': 'Probabilidad y Estadistica',
+        'analisis y diseño de software': 'Analisis y Diseño de Software',
+        'software analysis and design': 'Analisis y Diseño de Software',
+        'bases de datos': 'Bases de Datos',
+        'databases': 'Bases de Datos',
+        'arquitectura y organizacion del computador': 'Arquitectura y Organizacion del Computador',
+        'computer architecture and organization': 'Arquitectura y Organizacion del Computador',
+        'proyecto social universitario': 'Proyecto Social Universitario',
+        'university social project': 'Proyecto Social Universitario',
+        'estructuras de datos': 'Estructuras de Datos',
+        'data structures': 'Estructuras de Datos',
+        'analisis numerico': 'Analisis Numerico',
+        'numerical analysis': 'Analisis Numerico',
+        'fundamentos de ingenieria de software': 'Fundamentos de Ingenieria de Software',
+        'software engineering fundamentals': 'Fundamentos de Ingenieria de Software',
+        'sistemas operativos': 'Sistemas Operativos',
+        'operating systems': 'Sistemas Operativos',
+        'desarrollo web': 'Desarrollo Web',
+        'web development': 'Desarrollo Web',
+        'fundamentos de seguridad de la informacion': 'Fundamentos de Seguridad de la Informacion',
+        'information security fundamentals': 'Fundamentos de Seguridad de la Informacion',
+        'teoria de la computacion': 'Teoria de la Computacion',
+        'theory of computation': 'Teoria de la Computacion',
+        'sistemas de informacion': 'Sistemas de Informacion',
+        'information systems': 'Sistemas de Informacion',
+        'inteligencia artificial': 'Inteligencia Artificial',
+        'artificial intelligence': 'Inteligencia Artificial',
+        'gestion de proyectos de innovacion y emprendimiento de ti': 'Gestion de Proyectos de Innovacion y Emprendimiento de TI',
+        'it innovation and entrepreneurship project management': 'Gestion de Proyectos de Innovacion y Emprendimiento de TI',
+        'arquitectura de software': 'Arquitectura de Software',
+        'software architecture': 'Arquitectura de Software',
+        'tecnologias digitales emergentes': 'Tecnologias Digitales Emergentes',
+        'emerging digital technologies': 'Tecnologias Digitales Emergentes',
+        'gestion financiera de proyectos de ti': 'Gestion Financiera de Proyectos de TI',
+        'financial management of it projects': 'Gestion Financiera de Proyectos de TI',
+        'gerencia estrategica de ti': 'Gerencia Estrategica de TI',
+        'strategic it management': 'Gerencia Estrategica de TI',
+        'optimizacion y simulacion': 'Optimizacion y Simulacion',
+        'optimization and simulation': 'Optimizacion y Simulacion',
+        'planeacion de proyecto final': 'Planeacion de Proyecto Final',
+        'final project planning': 'Planeacion de Proyecto Final',
+        'proyecto de innovacion y emprendimiento': 'Proyecto de Innovacion y Emprendimiento',
+        'innovation and entrepreneurship project': 'Proyecto de Innovacion y Emprendimiento',
+        'comunicaciones y redes': 'Comunicaciones y Redes',
+        'communications and networks': 'Comunicaciones y Redes',
+        'introduccion a sistemas distribuidos': 'Introduccion a Sistemas Distribuidos',
+        'introduction to distributed systems': 'Introduccion a Sistemas Distribuidos',
+        'proyecto de grado': 'Proyecto de Grado',
+        'thesis project': 'Proyecto de Grado',
+        'etica en la era de la informacion': 'Etica en la Era de la Informacion',
+        'ethics in the information age': 'Etica en la Era de la Informacion',
+        'epistemologia de la ingenieria': 'Epistemologia de la Ingenieria',
+        'epistemology of engineering': 'Epistemologia de la Ingenieria',
+        'introduccion a la computacion movil': 'Introduccion a la Computacion Movil',
+        'introduction to mobile computing': 'Introduccion a la Computacion Movil',
+        'fe y compromiso del ingeniero': 'Fe y Compromiso del Ingeniero',
+        'faith and commitment of the engineer': 'Fe y Compromiso del Ingeniero',
+        'analisis de algoritmos': 'Analisis de algoritmos',
+        'algorithm analysis': 'Analisis de algoritmos',
+    }
+
+    # Limpiar la consulta
+    course_name = course_name.lower()
+
+    # Buscar el curso más cercano en el diccionario
+    curso_match = difflib.get_close_matches(course_name, cursos_dict.keys(), n=1, cutoff=0.5) # Ajusar cutoff si es necesario
+    
+    # Devolver el nombre oficial del curso si se encuentra una coincidencia
+    if curso_match:
+        print(f"[DB COURSES] Course name matched: {curso_match[0]} with {cursos_dict[curso_match[0]]}")
+        return cursos_dict[curso_match[0]] # Devolver el curso más cercano
+    else:
+        print(f"[DB COURSES] No course name matched. Returning base one: {course_name}")
+        return course_name # Si no se encuentra una coincidencia, devolver el curso original
+
 
 # Funcion para buscar Estudiantes
 def get_students_by_name_fetch(name: str) -> str:
@@ -46,6 +161,23 @@ def get_course_by_name_fetch(course_name: str) -> str:
         return f"Error: {e}"
     finally:
         conn.close()
+
+# Funcion para buscar Curso por codigo
+def get_course_by_code_fetch(course_code: str) -> str:
+    try:
+        conn = create_connection()
+        with conn.cursor() as cursor:
+            query = sql.SQL("SELECT * FROM Curso WHERE id_curso = %s")
+            cursor.execute(query, (course_code,))
+            result = cursor.fetchall()
+            columns = [desc[0] for desc in cursor.description]
+            result_with_columns = [dict(zip(columns, row)) for row in result]
+            return result_with_columns
+    except Error as e:
+        return f"Error: {e}"
+    finally:
+        conn.close()
+
 
 # Funcion para buscar Clases por codigo de curso
 def get_classes_by_course_code_fetch(course_code: str) -> str:
@@ -235,6 +367,7 @@ def get_teacher_by_name_fetch(teacher_name: str) -> str:
 # Conversion a lenguaje natural
 
 # Función para buscar estudiante por nombre y retornar en lenguaje natural
+# Redireccion: NO
 def get_students_by_name(argument: str) -> str:
     """
     Searches for students by their name.
@@ -267,6 +400,7 @@ def get_students_by_name(argument: str) -> str:
     return descripcion
 
 # Función para buscar curso por nombre y retornar en lenguaje natural
+# Redireccion: SI. a get_course_by_code
 def get_course_by_name(argument: str) -> str:
     """
     Searches for courses by their name.
@@ -279,10 +413,20 @@ def get_course_by_name(argument: str) -> str:
     Example call:
     get_course_by_name("Mathematics")
     """
+
+    # Si el argumento es un número, redirigir a get_course_by_code
+    if argument.isdigit():
+        print("[DBSearch] received a number, redirecting to get_course_by_code")
+        return get_course_by_code(argument)
+
     # Busca cursos por su nombre.
     # La entrada es el nombre del curso, y la función devuelve
     # una lista de cursos cuyos nombres coinciden con la entrada.
-    resultados = get_course_by_name_fetch(argument)  # Función original
+
+    # Encontrar un match por si esta traducido o escrito de forma diferente
+    course_name = find_course_name(argument)
+
+    resultados = get_course_by_name_fetch(course_name)  # Función original
     if not resultados:
         return f"There are no courses with the name {argument}."
 
@@ -294,7 +438,42 @@ def get_course_by_name(argument: str) -> str:
         )
     return descripcion
 
+# Función para buscar curso por código y retornar en lenguaje natural
+# Redireccion: SI. a get_course_by_name
+def get_course_by_code(argument: str) -> str:
+    """
+    Searches for courses by their code.
+    The input is the course code, and the function returns
+    a list of courses whose codes match the input.
+    
+    :param argument: The code of the course to search for.
+    :return: A list of dictionaries representing courses whose codes match the input.
+    
+    Example call:
+    get_course_by_code("CS101")
+    """
+
+    # Si el argumento es una palabra, redirigir a get_course_by_name
+    if not argument.isdigit():
+        print("[DBSearch] received a word, redirecting to get_course_by_name")
+        return get_course_by_name(argument)
+
+    print(f"[DBSearch] Searching for course with code: {argument}")
+    resultados = get_course_by_code_fetch(argument)  # Llamada a la función fetch
+    if not resultados:
+        return f"There are no courses with the code {argument}."
+
+    descripcion = f"I found the following course: '{argument}':\n"
+    for curso in resultados:
+        descripcion += (
+            f"- Course: {curso['nombre']} (ID: {curso['id_curso']}), "
+            f"Description: {curso['descripcion']}.\n"
+        )
+    return descripcion
+
+
 # Función para buscar clases por código de curso y retornar en lenguaje natural
+# Redireccion: SI. a get_classes_by_course_name
 def get_classes_by_course_code(argument: str) -> str:
     """
     Searches for classes by course code.
@@ -307,6 +486,12 @@ def get_classes_by_course_code(argument: str) -> str:
     Example call:
     get_classes_by_course_code("1511")
     """
+
+    # Si el argumento es una palabra, redirigir a get_classes_by_course_name
+    if not argument.isdigit():
+        print("[DBSearch] received a word, redirecting to get_classes_by_course_name")
+        return get_classes_by_course_name(argument)
+
     # Busca clases por el código del curso.
     # La entrada es el código del curso, y la función devuelve
     # una lista de clases asociadas con ese código de curso.
@@ -325,6 +510,7 @@ def get_classes_by_course_code(argument: str) -> str:
     return descripcion
 
 # Función para buscar clases por nombre de curso y retornar en lenguaje natural
+# Redireccion: SI. a get_classes_by_course_code
 def get_classes_by_course_name(argument: str) -> str:
     """
     Searches for classes by course name.
@@ -337,10 +523,20 @@ def get_classes_by_course_name(argument: str) -> str:
     Example call:
     get_classes_by_course_name("Mathematics")
     """
+
+    # Si el argumento es un número, redirigir a get_classes_by_course_code
+    if argument.isdigit():
+        print("[DBSearch] received a number, redirecting to get_classes_by_course_code")
+        return get_classes_by_course_code(argument)
+
     # Busca clases por el nombre del curso.
     # La entrada es el nombre del curso, y la función devuelve
     # una lista de clases asociadas con ese nombre de curso.
-    resultados = get_classes_by_course_name_fetch(argument)  # Función original
+
+    # Encontrar un match por si esta traducido o escrito de forma diferente
+    course_name = find_course_name(argument)
+
+    resultados = get_classes_by_course_name_fetch(course_name)  # Función original
     if not resultados:
         return f"There are no classes for the course '{argument}'."
 
@@ -354,6 +550,7 @@ def get_classes_by_course_name(argument: str) -> str:
     return descripcion
 
 # Función para buscar clase por código y retornar en lenguaje natural
+# Redireccion: NO
 def get_class_by_code(argument: str) -> str:
     """
     Searches for a class by its code.
@@ -384,6 +581,7 @@ def get_class_by_code(argument: str) -> str:
     return descripcion
 
 # Función para buscar prerrequisitos por nombre de curso y retornar en lenguaje natural
+# Redireccion: SI. a get_prerequisites_by_course_code
 def get_prerequisites_by_course_name(argument: str) -> str:
     """
     Searches for prerequisites of a course by course name.
@@ -399,13 +597,17 @@ def get_prerequisites_by_course_name(argument: str) -> str:
 
     # If the received args contain a number and not only letters
     if argument.isdigit():
-        print("[DBSearch] received a number, redirecting to get_prerequisites_by_course_code_fetch")
+        print("[DBSearch] received a number, redirecting to get_prerequisites_by_course_code")
         return get_prerequisites_by_course_code(argument)
 
     # Busca prerrequisitos de un curso por nombre del curso.
     # La entrada es el nombre del curso, y la función devuelve
     # una lista de prerrequisitos para ese curso.
-    resultados = get_prerequisites_by_course_name_fetch(argument)  # Función original
+
+    # Encontrar un match por si esta traducido o escrito de forma diferente
+    course_name = find_course_name(argument)
+
+    resultados = get_prerequisites_by_course_name_fetch(course_name)  # Función original
     if not resultados:
         return f"There are no prerequisites for the course '{argument}'."
 
@@ -415,6 +617,7 @@ def get_prerequisites_by_course_name(argument: str) -> str:
     return descripcion
 
 # Función para buscar prerrequisitos por código de curso y retornar en lenguaje natural
+# Redireccion: SI. a get_prerequisites_by_course_name
 def get_prerequisites_by_course_code(argument: str) -> str:
     """
     Searches for prerequisites of a course by course code.
@@ -447,6 +650,7 @@ def get_prerequisites_by_course_code(argument: str) -> str:
 
 
 # Función para obtener horarios de clases y retornar en lenguaje natural
+# Redireccion: NO
 def get_class_schedule(argument: str) -> str:
     """
     Searches for the schedule(s) of a class by its class ID.
@@ -472,6 +676,7 @@ def get_class_schedule(argument: str) -> str:
     return descripcion
 
 # Función para buscar profesor por nombre y retornar en lenguaje natural
+# Redireccion: NO
 def get_teacher_by_name(argument: str) -> str:
     """
     Searches for professors by their name.
