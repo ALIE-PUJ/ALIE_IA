@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+
+  # API para el front-end
+  alie_api:
+    image: harbor.alie.javeriana.edu.co/images/alie_api:latest
+    build:
+      context: .ALIE_Agent  # Contexto de construcción en la carpeta ALIE_Agent
+      dockerfile: Dockerfile
+    environment: # Variables de entorno. Unicamente aplica cuadno se corre en local con docker-compose. En el cluster, aplican las del cluster.
+      MONGO_URI: "mongodb://admin:admin123@mongodb:27017"
+    ports:
+      - "6000:6000"
+    restart: on-failure # Reiniciar en caso de fallo
