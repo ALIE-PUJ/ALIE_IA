@@ -9,16 +9,24 @@ services:
       context: ./ALIE_Agent  # Contexto de construcción en la carpeta ALIE_Agent
       dockerfile: Dockerfile
     environment: # Variables de entorno. Unicamente aplica cuadno se corre en local con docker-compose. En el cluster, aplican las del cluster.
-      MONGO_URI: "mongodb://admin:admin123@mongodb:27017"
-      LMSTUDIO_HOST: "127.0.0.1"
-      LMSTUDIO_PORT: "1234"
+      # INTERNAL SERVICES
+        # LMStudio
+      LMSTUDIO_HOST: "host.docker.internal" # Toma la dirección de localhost. 127.0.0.1
+      LMSTUDIO_PORT: "1234" # Puerto de LMStudio por defecto
+        # Databases
+      MONGO_URI: "mongodb://admin:admin123@host.docker.internal:27017" # Toma la dirección de localhost con host.docker.internal, sobre el cual corre el contenedor de MongoDB con ALIE_DBB.
       COCKROACHDB_HOST: "host.docker.internal" # Dado que se ejecuta en local, con la BD corriendo en otro contenedor
-      COCKROACHDB_PORT: "5432"
-      COCKROACHDB_USER: "root"
-      COCKROACHDB_PASS: "pass"
+      COCKROACHDB_PORT: "5432" # Puerto por defecto para PostgreSQL
+      COCKROACHDB_USER: "root" # Usuario por defecto para PostgreSQL
+      COCKROACHDB_PASS: "pass" # Contraseña por defecto para PostgreSQL
+        # EXTERNAL SERVICES
+      PINECONE_API_KEY: ${PINECONE_API_KEY} # Toma la variable de entorno del sistema para Pinecone
+      GROQ_API_KEY: ${GROQ_API_KEY} # Toma la variable de entorno del sistema para Groq
     ports:
       - "6000:6000"
     restart: on-failure # Reiniciar en caso de fallo
-
+    
 
 # Los datos de los modelos a usar siempre se encuentran en los ejecutores de agentes: AgentExecutor y TaggingAgentExecutor
+# Para conseguir una API Key de Pinecone: https://app.pinecone.io/
+# Para conseguir una API Key de Groq: https://console.groq.com/keys
