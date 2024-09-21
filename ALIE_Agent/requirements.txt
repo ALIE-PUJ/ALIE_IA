@@ -3,7 +3,7 @@ Flask==3.0.2
 Flask-Cors==4.0.0
 
 # Request Management
-requests==2.31.0
+requests==2.32.3
 
 # Translate
 deep-translator==1.11.4
