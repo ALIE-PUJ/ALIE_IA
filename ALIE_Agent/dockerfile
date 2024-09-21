@@ -16,7 +16,7 @@ RUN pip install -r requirements.txt
 # Ejecutar el manejador de agentes
 # CMD ["python", "ALIE_API.py"]
 
-# Crea un script de inicio que ejecuta ambos comandos (Manejador de agentes e inicializar Pinecone)
+# Crea un script de inicio que ejecuta ambos comandos (inicializar Pinecone y luego servir la API del Manejador de agentes)
 RUN echo '#!/bin/bash\npython Local_Agent/RAG/Pinecone_Init.py\npython ALIE_API.py' > /app/start.sh
 
 # Da permisos de ejecución al script
