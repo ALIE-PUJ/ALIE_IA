@@ -1,5 +1,6 @@
 import time
 import threading
+import os
 
 # Library import depending on the context (Being used as a library or being executed directly)
 if __name__ == "__main__":
@@ -77,7 +78,14 @@ def call_process_tag_with_retries(user_prompts, agent_responses, api_url, api_he
 # Model data
 
 # LmStudio
-api_url_lmstudio = "http://127.0.0.1:1234/v1/chat/completions"
+# Obtiene la base de la URL de una variable de entorno, o usa '127.0.0.1' si no existe
+host = os.getenv('LMSTUDIO_HOST', '127.0.0.1')
+# Obtiene el puerto de una variable de entorno, o usa '1234' si no existe
+port = os.getenv('LMSTUDIO_PORT', '1234')
+
+# Concatena la ruta final para obtener la URL completa
+api_url_lmstudio = f"http://{host}:{port}/v1/chat/completions"
+print(f"[INFO - Tagging] LmStudio API URL: {api_url_lmstudio}")
 model_lmstudio = 'lmstudio-community/Meta-Llama-3-8B-Instruct-GGUF'
 api_headers_lmstudio = {
     "Content-Type": "application/json"

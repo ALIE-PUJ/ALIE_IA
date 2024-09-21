@@ -8,10 +8,10 @@ def create_connection():
     Creates a new connection to the PostgreSQL database.
     """
     return psycopg2.connect(
-        host='localhost', 
-        port=5432,
-        user=os.getenv('USER', 'root'),
-        password=os.getenv('PASS', 'pass'),
+        host=os.getenv('COCKROACHDB_HOST', 'localhost'),
+        port=os.getenv('COCKROACHDB_PASS', 5432),
+        user=os.getenv('COCKROACHDB_USER', 'root'),
+        password=os.getenv('COCKROACHDB_PASS', 'pass'),
         database='alie_db'
     )
 

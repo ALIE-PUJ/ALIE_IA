@@ -13,3 +13,6 @@ services:
     ports:
       - "6000:6000"
     restart: on-failure # Reiniciar en caso de fallo
+
+
+# Los datos de los modelos a usar siempre se encuentran en los ejecutores de agentes: AgentExecutor y TaggingAgentExecutor
