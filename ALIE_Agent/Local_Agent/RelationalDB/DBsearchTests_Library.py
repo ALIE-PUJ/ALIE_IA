@@ -394,6 +394,35 @@ def get_student_grades_by_period_fetch(student_id: int) -> list:
     finally:
         conn.close()
 
+# Funcion para buscar los cursos de un estudiante
+def get_student_courses_fetch(student_id: int) -> list:
+    """
+    Fetches all the courses a student has taken.
+    
+    :param student_id: The ID of the student.
+    :return: A list of dictionaries containing the course name and period.
+    """
+    try:
+        conn = create_connection()
+        with conn.cursor() as cursor:
+            query = """
+            SELECT Curso.nombre AS curso_nombre, Clase.periodo 
+            FROM Estudiante_Clase
+            JOIN Clase ON Estudiante_Clase.id_clase = Clase.id_clase
+            JOIN Curso ON Clase.id_curso = Curso.id_curso
+            WHERE Estudiante_Clase.id_estudiante = %s
+            ORDER BY Clase.periodo
+            """
+            cursor.execute(query, (student_id,))
+            result = cursor.fetchall()
+            columns = [desc[0] for desc in cursor.description]
+            result_with_columns = [dict(zip(columns, row)) for row in result]
+            return result_with_columns
+    except Error as e:
+        return f"Error: {e}"
+    finally:
+        conn.close()
+
 
 
 
@@ -780,5 +809,46 @@ def get_student_grades_by_period(argument: str) -> str:
         descripcion += f"\nPeriod: {periodo}\n"
         for curso in cursos:
             descripcion += f"- Course: {curso['curso']}, Grade: {curso['nota']}\n"
+    
+    return descripcion
+
+# Función para obtener los cursos de un estudiante y retornar en lenguaje natural
+# Redireccion: NO
+def get_student_courses(argument: str) -> str:
+    """
+    Returns all the courses a student has taken, organized by period.
+    
+    :param argument: The ID of the student as a string.
+    :return: A formatted string with the student's courses by period.
+    
+    Example call:
+    get_student_courses("1")
+    """
+    # Convertir el argumento a entero
+    try:
+        student_id = int(argument)
+    except ValueError:
+        return f"Invalid student ID: {argument}. Please provide a valid numeric ID."
+    
+    # Llamada a la función fetch
+    resultados = get_student_courses_fetch(student_id)
+    
+    if not resultados:
+        return f"No courses found for student ID {student_id}."
+    
+    # Agrupar los cursos por período
+    periodos = {}
+    for resultado in resultados:
+        periodo = resultado['periodo']
+        if periodo not in periodos:
+            periodos[periodo] = []
+        periodos[periodo].append(resultado['curso_nombre'])
+    
+    # Formatear la salida
+    descripcion = f"Courses taken by student ID {student_id}:\n"
+    for periodo, cursos in periodos.items():
+        descripcion += f"\nPeriod: {periodo}\n"
+        for curso in cursos:
+            descripcion += f"- {curso}\n"
     
     return descripcion

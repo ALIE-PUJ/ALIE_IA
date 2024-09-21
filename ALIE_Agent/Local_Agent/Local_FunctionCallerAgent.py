@@ -151,6 +151,18 @@ FUNCTIONS = {
             }
         }
     },
+    "get_student_courses": {
+        "function_name": get_student_courses,
+        "description": "Returns all the courses a student has taken, organized by period. Should always be used when the user asks for courses taken by a specific student.",
+        "argument": "The id of the student as a string.",
+        "example": {
+            "query": "What courses have I taken? My id is 5678",
+            "expected": {
+                "function_name": "get_student_courses",
+                "argument": "5678"
+            }
+        }
+    },
     "general_retrieval": {
         "function_name": general_retrieval,
         "description": "Retrieves general information from the university vector store to search information to solve a query.",
