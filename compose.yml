@@ -10,6 +10,12 @@ services:
       dockerfile: Dockerfile
     environment: # Variables de entorno. Unicamente aplica cuadno se corre en local con docker-compose. En el cluster, aplican las del cluster.
       MONGO_URI: "mongodb://admin:admin123@mongodb:27017"
+      LMSTUDIO_HOST: "127.0.0.1"
+      LMSTUDIO_PORT: "1234"
+      COCKROACHDB_HOST: "host.docker.internal" # Dado que se ejecuta en local, con la BD corriendo en otro contenedor
+      COCKROACHDB_PORT: "5432"
+      COCKROACHDB_USER: "root"
+      COCKROACHDB_PASS: "pass"
     ports:
       - "6000:6000"
     restart: on-failure # Reiniciar en caso de fallo
