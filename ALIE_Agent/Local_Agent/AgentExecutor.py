@@ -1,12 +1,45 @@
 import time
 import threading
+from deep_translator import GoogleTranslator
+from langdetect import detect, LangDetectException
 
 # Local imports (Library)
-from Local_Agent.Local_FunctionCallerAgent import *
-from Others.Translation.DeepTranslator_Translate import *
+if __name__ == "__main__":
+    # Direct execution, absolute import
+    from Local_FunctionCallerAgent import *
+else:
+    # Imported as part of a package, relative import
+    from .Local_FunctionCallerAgent import *
 
 # Global timeout
 global_timeout = 60  # 60 segundos
+
+
+
+# Función para traducir una consulta
+def translate(query: str, target_language: str) -> str:
+    """
+    Translate a given query to the specified target language, regardless of the original language.
+    """
+    try:
+        translator = GoogleTranslator(source='auto', target=target_language)
+        translated = translator.translate(query)
+        return translated
+    except Exception as e:
+        print(f"Error translating query: {e}")
+        return query # Return the original query if translation fails
+
+# Función para detectar el idioma de una consulta
+def detect_language(query: str) -> str:
+    """
+    Detect the language of the given query.
+    """
+    try:
+        detected_language = detect(query)
+        return detected_language
+    except LangDetectException as e:
+        print(f"Error detecting language: {e}")
+        return "es" # Default to Spanish if language detection fails
 
 # Función genérica que ejecuta una función con timeout sobre un hilo
 def ejecutar_con_timeout(func, args=(), kwargs=None, timeout=5):

@@ -3,7 +3,7 @@ from flask_cors import CORS, cross_origin # CORS for angular
 import threading
 
 # Imports de librerías propias
-from AgentExecutor import *
+from Local_Agent.AgentExecutor import *
 from Others.Supervision.JSON_Detector import *
 from Others.Tagging.TaggingAgentExecutor import *
 
@@ -34,7 +34,8 @@ def process_query_ALIE(user_question, priority):
 def background_tagging(user_question, agent_answer, priority):
     user_prompts = [user_question] # Turn into array
     agent_responses = [agent_answer] # Turn into array
-    agent_tag(user_prompts, agent_responses, priority)
+    tag = agent_tag(user_prompts, agent_responses, priority)
+    print("\033[33mTagging result:", tag, "\033[0m")
     print("Tagging completed.")
 
 # Flask route for ALIE
