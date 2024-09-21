@@ -81,3 +81,23 @@ if __name__ == "__main__":
     app.run(host='0.0.0.0', port=6000, threaded=True, debug=True)
     # Threaded = True para que el servidor pueda manejar múltiples solicitudes simultáneamente
     # Debug = True para que el servidor se reinicie automáticamente después de cada cambio en el código
+    
+    # Funciones disponibles:
+    '''
+    Nombre: get_students_by_name, Funcionalidad: Busca estudiantes por su nombre.
+    Nombre: get_course_by_name, Funcionalidad: Busca información básica de un curso por su nombre.
+    Nombre: get_course_by_code, Funcionalidad: Busca información básica de un curso por su código.
+    Nombre: get_classes_by_course_code, Funcionalidad: Busca clases por el código de un curso.
+    Nombre: get_classes_by_course_name, Funcionalidad: Busca clases por el nombre de un curso.
+    Nombre: get_class_by_code, Funcionalidad: Busca una clase por su código.
+    Nombre: get_prerequisites_by_course_name, Funcionalidad: Busca prerrequisitos de un curso por su nombre.
+    Nombre: get_prerequisites_by_course_code, Funcionalidad: Busca prerrequisitos de un curso por su código.
+    Nombre: get_class_schedule, Funcionalidad: Busca el horario de una clase por su ID.
+    Nombre: get_teacher_by_name, Funcionalidad: Busca profesores por su nombre.
+    Nombre: get_student_grades_by_period, Funcionalidad: Devuelve las notas de un estudiante organizadas por periodo.
+    Nombre: get_student_courses, Funcionalidad: Devuelve todos los cursos que ha cursado un estudiante.
+    Nombre: get_all_courses, Funcionalidad: Devuelve una lista de todos los cursos disponibles.
+    Nombre: general_retrieval, Funcionalidad: Recupera información general de la universidad.
+    Nombre: course_retrieval, Funcionalidad: Busca información detallada sobre un curso.
+    Nombre: normal_conversation, Funcionalidad: Permite conversar de manera simple sin buscar información específica.
+    '''
