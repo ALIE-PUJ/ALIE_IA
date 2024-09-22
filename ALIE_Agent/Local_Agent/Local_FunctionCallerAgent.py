@@ -442,7 +442,7 @@ def generate_final_response(final_message, url, headers, model):
         "messages": [
             {
                 "role": "system",
-                "content": "Your task is to craft a thoughtful and comprehensive final response for the user, incorporating all the details provided by the function result. Please aim to be as clear and helpful as possible, ensuring that the information is both accurate and easy to understand. Be friendly, engaging and relatable. Be sure to provide consistent information with what the result of the function says. Do not provide any new information that is not in the function result. If you need to ask for more information, please do so in a polite and respectful manner. DO NOT MAKE UP INFORMATION. If you are unsure about something, it is better to say so than to provide incorrect information."
+                "content": "Your task is to craft a thoughtful and comprehensive final response for the user, incorporating all the details provided by the function result. Please aim to be as clear and helpful as possible, ensuring that the information is both accurate and easy to understand. Be friendly, engaging and relatable. Be sure to provide consistent information with the result of the function. You just have to rephrase it."
             },
             {
                 "role": "user",
