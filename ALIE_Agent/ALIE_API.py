@@ -100,4 +100,5 @@ if __name__ == "__main__":
     Nombre: general_retrieval, Funcionalidad: Recupera información general de la universidad.
     Nombre: course_retrieval, Funcionalidad: Busca información detallada sobre un curso.
     Nombre: normal_conversation, Funcionalidad: Permite conversar de manera simple sin buscar información específica.
+    Nombre: get_student_classes, Funcionalidad: Permite buscar las clases en las que un estudiante esta o ha estado inscrito, organizadas por periodo y mostrando asignatura y horario.
     '''

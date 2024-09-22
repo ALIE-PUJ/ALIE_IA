@@ -444,6 +444,43 @@ def get_all_courses_fetch() -> list:
     finally:
         conn.close()
 
+# Función para buscar las clases de un estudiante
+def get_student_classes_fetch(student_id: int) -> list:
+    """
+    Fetches all the classes a student is enrolled in, along with the course name and schedule.
+    
+    :param student_id: The ID of the student.
+    :return: A list of dictionaries containing the class ID, course name, period, and schedule.
+    """
+    try:
+        conn = create_connection()
+        with conn.cursor() as cursor:
+            query = """
+            SELECT 
+                Clase.id_clase AS clase_id, 
+                Curso.nombre AS curso_nombre, 
+                Clase.periodo,
+                Horario_Clase.dia,
+                Horario_Clase.hora_inicio,
+                Horario_Clase.hora_fin
+            FROM Estudiante_Clase
+            JOIN Clase ON Estudiante_Clase.id_clase = Clase.id_clase
+            JOIN Curso ON Clase.id_curso = Curso.id_curso
+            LEFT JOIN Horario_Clase ON Clase.id_clase = Horario_Clase.id_clase
+            WHERE Estudiante_Clase.id_estudiante = %s
+            ORDER BY Clase.periodo DESC, Horario_Clase.dia, Horario_Clase.hora_inicio
+            """
+            cursor.execute(query, (student_id,))
+            result = cursor.fetchall()
+            columns = [desc[0] for desc in cursor.description]
+            result_with_columns = [dict(zip(columns, row)) for row in result]
+            return result_with_columns
+    except Error as e:
+        return f"Error: {e}"
+    finally:
+        conn.close()
+
+
 
 
 
@@ -898,5 +935,66 @@ def get_all_courses(argument) -> str:
             f"- Course ID: {curso['id_curso']}, Name: {curso['nombre']}, "
             f"Description: {curso['descripcion']}\n"
         )
+    
+    return descripcion
+
+# Función para obtener las clases de un estudiante y retornar en lenguaje natural
+# Redireccion: NO
+def get_student_classes(argument: str) -> str:
+    """
+    Returns all the classes a student is enrolled in, organized by period.
+    
+    :param argument: The ID of the student as a string.
+    :return: A formatted string with the student's classes by period.
+    
+    Example call:
+    get_student_classes("200")
+    """
+    # Convertir el argumento a entero
+    try:
+        student_id = int(argument)
+    except ValueError:
+        return f"Invalid student ID: {argument}. Please provide a valid numeric ID."
+    
+    # Llamada a la función fetch
+    resultados = get_student_classes_fetch(student_id)
+
+    # Verificar si el resultado es una lista de diccionarios
+    if not isinstance(resultados, list):
+        return f"Error fetching classes for student ID {student_id}. {resultados}"
+
+    if not resultados:
+        return f"No classes found for student ID {student_id}."
+    
+    # Agrupar las clases por período
+    periodos = {}
+    for resultado in resultados:
+        if isinstance(resultado, dict) and 'periodo' in resultado and 'curso_nombre' in resultado:
+            periodo = resultado['periodo']
+            curso_nombre = resultado['curso_nombre']
+            clase_id = resultado['clase_id']
+            dia = resultado['dia']
+            hora_inicio = resultado['hora_inicio']
+            hora_fin = resultado['hora_fin']
+            
+            if periodo not in periodos:
+                periodos[periodo] = []
+            periodos[periodo].append({
+                'curso_nombre': curso_nombre,
+                'clase_id': clase_id,
+                'dia': dia,
+                'hora_inicio': hora_inicio,
+                'hora_fin': hora_fin
+            })
+        else:
+            return f"Error: Unexpected result format for student ID {student_id}."
+
+    # Formatear la salida
+    descripcion = f"Classes taken by student ID {student_id}:\n"
+    for periodo in sorted(periodos.keys(), reverse=True):  # Ordenar de mayor a menor
+        descripcion += f"\nPeriod: {periodo}\n"
+        for clase in periodos[periodo]:
+            descripcion += (f"- Class ID: {clase['clase_id']}, Course: {clase['curso_nombre']}, "
+                            f"Day: {clase['dia']}, Time: {clase['hora_inicio']} - {clase['hora_fin']}\n")
     
     return descripcion

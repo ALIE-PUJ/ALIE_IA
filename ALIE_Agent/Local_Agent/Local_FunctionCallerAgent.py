@@ -175,6 +175,18 @@ FUNCTIONS = {
             }
         }
     },
+    "get_student_classes": {
+        "function_name": get_student_classes,
+        "description": "Returns a formatted string with all the classes a student is enrolled in, organized by schedule and period. Should be used when the user asks for the classes of a specific student, or for schedules of the enrolled classes or periods.",
+        "argument": "The ID of the student as a string.",
+        "example": {
+            "query": "What classes is student 200 enrolled in?",
+            "expected": {
+                "function_name": "get_student_classes",
+                "argument": "200"
+            }
+        }
+    },
     "general_retrieval": {
         "function_name": general_retrieval,
         "description": "Retrieves general information from the university vector store to search information to solve a query.",
