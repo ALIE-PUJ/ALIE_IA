@@ -30,6 +30,19 @@ def translate(query: str, target_language: str) -> str:
         print(f"Error translating query: {e}")
         return query # Return the original query if translation fails
 
+# Función para traducir una consulta
+def translate_from_english_to_spanish(query: str) -> str:
+    """
+    Translate a given query to the specified target language, regardless of the original language.
+    """
+    try:
+        translator = GoogleTranslator(source='en', target='es')
+        translated = translator.translate(query)
+        return translated
+    except Exception as e:
+        print(f"Error translating query: {e}")
+        return query # Return the original query if translation fails
+
 # Función para detectar el idioma de una consulta
 def detect_language(query: str) -> str:
     """
@@ -90,10 +103,15 @@ def process_user_query_and_translate(user_input, api_url, api_headers, model, su
     anwser_language = detect_language(answer)
     print(f"[POSTPROCESS - INFO] Detected Answer language: {anwser_language}")
 
-    if True:
-    # if answer is not None and anwser_language != user_language: # If the answer is not None and the language is different from the user language
+
+
+    # Temporal bug fix. Always translate from english back to spanish
+    answer = translate_from_english_to_spanish(answer)
+
+
+
+    if answer is not None and anwser_language != user_language: # If the answer is not None and the language is different from the user language
         print(f"[POSTPROCESS - INFO] The answer is not in the user's original language. Translating answer back to original language...")
-        user_language = 'es' # Always translate to spanish
         answer = translate(answer, user_language) # translate back to original user language
     else:
         print(f"[POSTPROCESS - INFO] The answer is in the user's original language '{user_language}'. Returning answer...")
