@@ -23,7 +23,7 @@ services:
       PINECONE_API_KEY: ${PINECONE_API_KEY} # Toma la variable de entorno del sistema para Pinecone
       GROQ_API_KEY: ${GROQ_API_KEY} # Toma la variable de entorno del sistema para Groq
     ports:
-      - "6000:6000"
+      - "3000:3000"
     restart: on-failure # Reiniciar en caso de fallo
     
 
