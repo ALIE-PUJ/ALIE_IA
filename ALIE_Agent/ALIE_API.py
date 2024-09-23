@@ -45,6 +45,7 @@ def ALIE():
     data = request.json
     user_question = data.get('input')
     priority = data.get('priority')
+    token = data.get('auth_token')
 
     if priority == 'True':
         priority = True
