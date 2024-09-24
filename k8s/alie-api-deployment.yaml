@@ -22,22 +22,39 @@ spec:
     spec:
       containers:
         - env:
-            - name: COCKROACHDB_HOST
-              value: host.docker.internal
-            - name: COCKROACHDB_PASS
-              value: pass
-            - name: COCKROACHDB_PORT
-              value: "5432"
             - name: COCKROACHDB_USER
-              value: root
-            - name: GROQ_API_KEY
+              valueFrom:
+                configMapKeyRef:
+                  name: db-config
+                  key: db-user
+            - name: COCKROACHDB_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: db-pass
+            - name: COCKROACHDB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: db-config
+                  key: db-host
+            - name: COCKROACHDB_PORT
+              valueFrom:
+              configMapKeyRef:
+                  name: db-config
+                  key: db-port
             - name: LMSTUDIO_HOST
               value: host.docker.internal
             - name: LMSTUDIO_PORT
               value: "1234"
             - name: MONGO_URI
-              value: mongodb://admin:admin123@host.docker.internal:27017
+              valueFrom:
+                secretKeyRef:
+                  name: connection-str
+                  key: connectionString.standard
             - name: PINECONE_API_KEY
+              value: "Placeholder"
+            - name: GROQ_API_KEY
+              value: "Placeholder"
           image: harbor.alie.javeriana.edu.co/images/alie_api:latest
           name: alie-api
           ports:
