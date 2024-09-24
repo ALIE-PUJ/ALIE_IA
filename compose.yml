@@ -24,7 +24,7 @@ services:
       GROQ_API_KEY: ${GROQ_API_KEY} # Toma la variable de entorno del sistema para Groq
     ports:
       - "3000:3000"
-    restart: on-failure # Reiniciar en caso de fallo
+    restart: always # Reiniciar en caso de fallo
     
 
 # Los datos de los modelos a usar siempre se encuentran en los ejecutores de agentes: AgentExecutor y TaggingAgentExecutor
