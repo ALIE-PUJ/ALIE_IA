@@ -111,7 +111,7 @@ def upload_collection_to_pinecone(db, collection_name, api_key, base_url, data_d
     
     upload_compiled_doc_to_pinecone(api_key, base_url, compiled_filepath, collection_name)
     print(f"Datos de la colección '{collection_name}' subidos a Pinecone.")
-    time.sleep(2)
+    time.sleep(5)
 
 def process_collections(db, collection_names, data_dir, api_key, base_url):
     for collection_name in collection_names:
@@ -143,6 +143,9 @@ def reinit_collection(collection_name):
     print("Compilación, eliminación de archivos antiguos y subida de nuevos documentos completada, Para la coleccion ", collection_name)
 
 def main():
+
+    print("Iniciando proceso de reinicio de la base de datos vectorial...")
+
     # Paso 1: Obtener la URI de conexión a MongoDB y conectar a la base de datos
     mongo_uri = get_mongo_uri()
     client = connect_to_mongo(mongo_uri)
