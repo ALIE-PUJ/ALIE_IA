@@ -170,7 +170,7 @@ def main():
             if file_id:
                 print(f"Eliminando archivo con ID: {file_id}")
                 delete_file_from_pinecone(api_key, base_url, file_id)
-                time.sleep(2)
+                time.sleep(5)
     else:
         print("La respuesta de la API no es una lista de IDs de archivos.")
     
