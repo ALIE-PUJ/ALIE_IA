@@ -150,7 +150,7 @@ def main():
     mongo_uri = get_mongo_uri()
     client = connect_to_mongo(mongo_uri)
     db = client['ALIE_DB']
-    collection_names = ["Syllabus", "InformacionPrivada_General", "InformacionPrivada_QA", "InformacionPublica_General", "InformacionPublica_QA"]
+    collection_names = ["Syllabus", "InformacionPrivada_General", "InformacionPrivada_QA", "InformacionPublica_General", "InformacionPublica_QA", "InteraccionesPrevias"]
 
     # Paso 2: Configurar las variables de Pinecone
     api_key = os.getenv("PINECONE_API_KEY")
