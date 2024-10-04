@@ -2,6 +2,23 @@ version: '3.8'
 
 services:
 
+  # Servicio de inicializacion de Pinecone
+  pinecone_init:
+    image: harbor.alie.javeriana.edu.co/images/pinecone_init:latest
+    build:
+      context: ./ALIE_Agent/Local_Agent/RAG  # Contexto de construcción en la carpeta /ALIE_Agent/Local_Agent/RAG
+      dockerfile: Dockerfile
+    environment: # Variables de entorno. Unicamente aplica cuadno se corre en local con docker-compose. En el cluster, aplican las del cluster.
+      # INTERNAL SERVICES
+        # Databases
+      MONGO_URI: "mongodb://admin:admin123@host.docker.internal:27017" # Toma la dirección de localhost con host.docker.internal, sobre el cual corre el contenedor de MongoDB con ALIE_DBB.
+        # EXTERNAL SERVICES
+      PINECONE_API_KEY: ${PINECONE_API_KEY} # Toma la variable de entorno del sistema para Pinecone
+    restart: on-failure # Reiniciar UNICAMENTE en caso de fallo. Hace el trabajo, y se detiene.
+    labels:
+      kompose.cronjob.schedule: "0 7 * * *"  # Ejecutar a las 7:00 AM
+
+
   # API para el front-end
   alie_api:
     image: harbor.alie.javeriana.edu.co/images/alie_api:latest
@@ -24,10 +41,9 @@ services:
       GROQ_API_KEY: ${GROQ_API_KEY} # Toma la variable de entorno del sistema para Groq
     ports:
       - "3000:3000"
+    depends_on:
+      - pinecone_init # Espera a que el servicio de inicialización de Pinecone esté listo
     restart: always # Reiniciar en caso de fallo
-    labels:
-      kompose.cronjob.schedule: "0 7 * * *"  # Ejecutar a las 7:00 AM
-
     
 
 # Los datos de los modelos a usar siempre se encuentran en los ejecutores de agentes: AgentExecutor y TaggingAgentExecutor
