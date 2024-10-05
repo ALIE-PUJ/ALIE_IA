@@ -39,7 +39,7 @@ def background_tagging(user_question, agent_answer, priority):
     print("Tagging completed.")
 
 # Flask route for ALIE
-@app.route('/alie', methods=['POST'])
+@app.route('/api/ia/chat', methods=['POST'])
 def ALIE():
     # Extract the user question from the POST request
     data = request.json
