@@ -6,6 +6,7 @@ import threading
 from Local_Agent.AgentExecutor import *
 from Others.Supervision.JSON_Detector import *
 from Others.Tagging.TaggingAgentExecutor import *
+from InternalAuth import *
 
 # Initialize the Flask app
 app = Flask(__name__)
@@ -41,6 +42,16 @@ def background_tagging(user_question, agent_answer, priority):
 # Flask route for ALIE
 @app.route('/api/ia/chat', methods=['POST'])
 def ALIE():
+
+
+    # Verificar token. Si no es válido, devolver un error 401. Si es válido, continuar con la lógica de negocio
+    auth_header = request.headers.get('Authorization')
+    if not validate_auth_header(auth_header):
+        return jsonify(success=False, message="Token de autorización inválido o faltante"), 401
+    else:
+        print("Token de autorización válido. Continuando con la lógica de negocio...")
+
+
     # Extract the user question from the POST request
     data = request.json
     user_question = data.get('input')

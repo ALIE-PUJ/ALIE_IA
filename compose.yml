@@ -27,6 +27,8 @@ services:
       dockerfile: Dockerfile
     environment: # Variables de entorno. Unicamente aplica cuadno se corre en local con docker-compose. En el cluster, aplican las del cluster.
       # INTERNAL SERVICES
+        # Auth
+      AUTH_SRV_URL: "http://host.docker.internal:2000" # URL del servicio de autenticación
         # LMStudio
       LMSTUDIO_HOST: "host.docker.internal" # Toma la dirección de localhost. 127.0.0.1
       LMSTUDIO_PORT: "1234" # Puerto de LMStudio por defecto
