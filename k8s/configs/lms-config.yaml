@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: lms-config
+data:
+  host: "lms-runner.lms-runner.svc.cluster.local"
+  port: "1234"
