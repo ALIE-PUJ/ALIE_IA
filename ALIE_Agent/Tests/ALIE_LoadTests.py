@@ -144,6 +144,7 @@ if __name__ == "__main__":
 Resultados para el computador de Luis 
 (1 sola instancia de ALIE y LMStudio en ejecución. Tagging para todas las interacciones)
 (Timeout: 60 segundos. Modelos: 2. LmStudio (ALIE-Model), Groq (Llama3-70b))
+En la prueba de carga NO HAY ESPERA entre solicitudes y/o tandas de solicitudes. Por lo mismo, el tagging de la solicitud anterior afecta la siguiente.
 
 Resultados de las pruebas de carga:
 
