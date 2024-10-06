@@ -20,6 +20,7 @@ spec:
       labels:
         io.kompose.service: alie-api
     spec:
+      replicas: 6
       containers:
         - image: harbor.alie.javeriana.edu.co/images/alie_api:latest
           name: alie-api
