@@ -1,0 +1,27 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -o k8s
+    kompose.cronjob.schedule: 0 7 * * *
+    kompose.version: 1.34.0 (cbf2835db)
+  labels:
+    io.kompose.service: pinecone-init
+  name: pinecone-init
+spec:
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            io.kompose.service: pinecone-init
+        spec:
+          containers:
+            - env:
+                - name: MONGO_URI
+                  value: mongodb://admin:admin123@host.docker.internal:27017
+                - name: PINECONE_API_KEY
+              image: harbor.alie.javeriana.edu.co/images/pinecone_init:latest
+              name: pinecone-init
+          restartPolicy: OnFailure
+  schedule: 0 7 * * *
