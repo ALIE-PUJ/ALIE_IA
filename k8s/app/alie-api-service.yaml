@@ -6,7 +6,7 @@ metadata:
     kompose.version: 1.34.0 (cbf2835db)
   labels:
     io.kompose.service: alie-api
-  name: alie_api
+  name: alie-api
 spec:
   ports:
     - name: "3000"
