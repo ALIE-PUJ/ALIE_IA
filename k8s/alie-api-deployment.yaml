@@ -60,7 +60,7 @@ spec:
                   name: connection-str
                   key: connectionString.standard
             - name: PINECONE_API_KEY
-          
+            - name: GROQ_API_KEY
           ports:
             - containerPort: 3000
               protocol: TCP
