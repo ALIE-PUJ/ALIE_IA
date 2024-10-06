@@ -1,3 +1,4 @@
 .gitsecret/keys/random_seed
 !*.secret
 k8s/configs/external-apis-secret.yaml
+k8s/configs/docs-db-secret.yaml

@@ -18,9 +18,16 @@ spec:
         spec:
           containers:
             - env:
-                - name: MONGO_URI
-                  value: mongodb://admin:admin123@host.docker.internal:27017
-                - name: PINECONE_API_KEY
+              - name: MONGO_URI
+                valueFrom:
+                  secretKeyRef:
+                    name: docs-db-secret
+                    key: connectionString.standard
+              - name: PINECONE_API_KEY
+                valueFrom:
+                  secretKeyRef:
+                    name: external-apis-secret
+                    key: pinecone-key
               image: harbor.alie.javeriana.edu.co/images/pinecone_init:latest
               name: pinecone-init
           restartPolicy: OnFailure
