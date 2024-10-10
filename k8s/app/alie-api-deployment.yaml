@@ -69,6 +69,11 @@ spec:
                 secretKeyRef:
                   name: external-apis-secret
                   key: groq-key
+            - name: AUTH_SRV_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: auth-config
+                  key: url
           ports:
             - containerPort: 3000
               protocol: TCP
