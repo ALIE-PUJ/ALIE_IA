@@ -43,7 +43,8 @@ def normal_conversation(argument, url, headers, model):
     print(f"[normal_conversation] ---> Payload: {final_payload}")
     
     final_response = requests.post(url, headers=headers, data=json.dumps(final_payload))
-    
+    print("1.1 --> [HANDLE FUNCTION CALL - NORMAL CONVERSATION] Raw model response: ", final_response.json())
+
     if final_response.status_code == 200:
         final_result = final_response.json()["choices"][0]["message"]["content"]
         print("[NormalConversation] Raw Response: ", final_response)
