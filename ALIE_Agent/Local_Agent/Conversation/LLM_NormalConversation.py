@@ -39,6 +39,8 @@ def normal_conversation(argument, url, headers, model):
         "max_tokens": max_tokens,
         "stream": False
     }
+
+    print(f"[normal_conversation] ---> Payload: {final_payload}")
     
     final_response = requests.post(url, headers=headers, data=json.dumps(final_payload))
     
