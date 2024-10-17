@@ -174,7 +174,7 @@ port = os.getenv('LMSTUDIO_PORT', '1234')
 # Concatena la ruta final para obtener la URL completa
 api_url_lmstudio = f"http://{host}:{port}/v1/chat/completions"
 print(f"[INFO - AgentExecutor] LmStudio API URL: {api_url_lmstudio}")
-model_lmstudio = 'lmstudio-community/Meta-Llama-3-8B-Instruct-GGUF'
+model_lmstudio = 'luisalejandrobf/ALIE_Model-Q4_K_M-GGUF'
 api_headers_lmstudio = {
     "Content-Type": "application/json"
 }

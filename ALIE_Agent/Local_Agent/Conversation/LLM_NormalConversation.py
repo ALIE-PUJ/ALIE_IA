@@ -43,10 +43,12 @@ def normal_conversation(argument, url, headers, model):
     
     if final_response.status_code == 200:
         final_result = final_response.json()["choices"][0]["message"]["content"]
+        print("[NormalConversation] Raw Response: ", final_response)
         print(f"[INFO] ---> Final Response by model: {final_result}")
         return final_result
     else:
         print(f"[ERROR] ---> Final response request failed with status code {final_response.status_code}")
+        print("[NormalConversation] Raw Response: ", final_response)
         return None
 
 # THIS CAN BE USED AS A LIBRARY FUNCTION, AND BE CALLED FROM ANOTHER FILE
@@ -58,7 +60,7 @@ if __name__ == "__main__":
 
     # LmStudio
     api_url_lmstudio = "http://127.0.0.1:1234/v1/chat/completions"
-    model_lmstudio = 'lmstudio-community/Meta-Llama-3-8B-Instruct-GGUF'
+    model_lmstudio = 'luisalejandrobf/ALIE_Model-Q4_K_M-GGUF'
     api_headers_lmstudio = {
         "Content-Type": "application/json"
     }
