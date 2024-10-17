@@ -18,6 +18,7 @@ def normal_conversation(argument, url, headers, model):
     """
 
     message = argument
+    print(f"[normal_conversation] ---> Posting to: {url}")
     print(f"[INFO] ---> Posting to generate a response to message: {message}")
 
     # print("Final message: ", message)
