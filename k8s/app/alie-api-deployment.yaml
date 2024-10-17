@@ -8,7 +8,7 @@ metadata:
     io.kompose.service: alie-api
   name: alie-api
 spec:
-  replicas: 6
+  replicas: 1
   selector:
     matchLabels:
       io.kompose.service: alie-api
