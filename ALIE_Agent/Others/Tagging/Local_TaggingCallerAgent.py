@@ -281,7 +281,7 @@ if __name__ == "__main__":
 
     # LmStudio
     api_url_lmstudio = "http://127.0.0.1:1234/v1/chat/completions"
-    model_lmstudio = 'lmstudio-community/Meta-Llama-3-8B-Instruct-GGUF'
+    model_lmstudio = 'luisalejandrobf/ALIE_Model-Q4_K_M-GGUF'
     api_headers_lmstudio = {
         "Content-Type": "application/json"
     }
