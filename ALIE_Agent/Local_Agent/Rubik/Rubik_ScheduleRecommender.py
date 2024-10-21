@@ -247,5 +247,5 @@ def rubik(student_id=None):
 
 
 if __name__ == "__main__":
-    student_id = 2
+    student_id = 6
     print(rubik(student_id))  # Llamar a la función con un ID de estudiante

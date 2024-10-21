@@ -1,6 +1,7 @@
 import psycopg2
 import os
-from datetime import datetime, time, timedelta
+import random
+from datetime import datetime, time
 
 # Function to create connection to the database
 def create_connection():
@@ -48,21 +49,27 @@ def check_prerequisites(course_id):
             return [row[0] for row in cursor.fetchall()]
 
 # Function to get recommended courses that the student has not taken
+# 15 course limit. Organized by semester (ascending) to prioritize lower semester courses
 def get_recommended_courses(student_id):
     completed_courses = get_completed_courses(student_id)
+    print("Cursos completados por el estudiante:", completed_courses)
     completed_course_ids = [course[0] for course in completed_courses]
 
     with create_connection() as conn:
         with conn.cursor() as cursor:
             query = """
-            SELECT Curso.id_curso, Curso.nombre, Curso.creditos
+            SELECT Curso.id_curso, Curso.nombre, Curso.creditos, Semestre_Sugerido.semestre
             FROM Curso
+            JOIN Semestre_Sugerido ON Curso.id_curso = Semestre_Sugerido.id_curso
             WHERE Curso.id_curso NOT IN %s
+            ORDER BY Semestre_Sugerido.semestre ASC
+            LIMIT 15  -- Limitar a un máximo de 15 cursos recomendados
             """
             if completed_course_ids:
                 cursor.execute(query, (tuple(completed_course_ids),))
             else:
                 cursor.execute(query)  # If no completed courses
+
             recommended_courses = cursor.fetchall()
             
             # Verify prerequisites
@@ -72,15 +79,15 @@ def get_recommended_courses(student_id):
                 prereqs = check_prerequisites(course_id)
                 prereqs_met = all(prereq in completed_course_ids for prereq in prereqs)
                 recommended_courses_with_prereqs.append(
-                    (course_id, course[1], course[2], prereqs_met, bool(prereqs))  # Add bool(prereqs) to know if there are prerequisites
+                    (course_id, course[1], course[2], prereqs_met, bool(prereqs), course[3])  # Add recommended semester
                 )
 
             return recommended_courses_with_prereqs
 
 # Function to get classes and schedules for recommended courses in the latest period
 def get_classes_in_latest_period_for_recommended_courses(recommended_courses):
-    # max_period = get_max_period()  # Get the maximum period
-    max_period = "2024-3"
+    max_period = get_max_period()  # Get the maximum period
+    # max_period = "2024-3"
 
     print("Target period:", max_period)
 
@@ -137,21 +144,15 @@ def print_classes(classes_by_course, max_period):
         for cls in class_list:
             print(f"  - Clase ID: {cls[0]}, Día: {cls[2]}, Hora Inicio: {cls[3]}, Hora Fin: {cls[4]} (Periodo: {max_period})")
 
-
-
-
-
-
-
-
-
-import random
-from datetime import datetime, time
-
-def create_schedules(classes_by_course):
+# Function to create schedules
+def create_schedules(classes_by_course, recommended_courses):
     def is_conflict(schedule, new_class):
+        if new_class is None:  # No conflict for classes without schedule
+            return False
         new_day, new_start, new_end = new_class[2], new_class[3], new_class[4]
-        for cls in schedule:
+        for _, cls in schedule:
+            if cls is None:
+                continue
             if cls[2] == new_day and (
                 (new_start <= cls[3] < new_end) or
                 (new_start < cls[4] <= new_end) or
@@ -165,10 +166,21 @@ def create_schedules(classes_by_course):
         total_credits = 0
         courses_added = set()
 
+        # Combine classes with schedule and without schedule
+        all_classes = []
+        for course in recommended_courses:
+            course_id = course[0]
+            if course_id in classes_by_course:
+                for cls in classes_by_course[course_id]:
+                    all_classes.append((course_id, cls))
+            else:
+                all_classes.append((course_id, None))  # Classes without schedule
+
+        # Sort classes with schedule, put classes without schedule at the end
         sorted_classes = sorted(
-            [(course_id, cls) for course_id, classes in classes_by_course.items() for cls in classes],
-            key=lambda x: x[1][3]  # Sort by start time
-        )
+            [c for c in all_classes if c[1] is not None],
+            key=lambda x: x[1][3] if x[1] is not None else time(23, 59)  # Sort by start time
+        ) + [c for c in all_classes if c[1] is None]
 
         if not prefer_day:
             sorted_classes.reverse()  # For night preference, reverse the order
@@ -177,60 +189,86 @@ def create_schedules(classes_by_course):
             if course_id in courses_added:
                 continue
             
-            start_time = datetime.combine(datetime.today(), cls[3]).time()
-            if (prefer_day and start_time >= time(18, 0)) or (not prefer_day and start_time < time(18, 0)):
-                continue
+            if cls is not None:
+                start_time = datetime.combine(datetime.today(), cls[3]).time()
+                if (prefer_day and start_time >= time(18, 0)) or (not prefer_day and start_time < time(18, 0)):
+                    continue
 
             if not is_conflict(schedule, cls):
-                schedule.append(cls)
+                schedule.append((course_id, cls))
                 courses_added.add(course_id)
                 total_credits += sum(c[2] for c in recommended_courses if c[0] == course_id)
 
                 if total_credits >= max_credits:
                     break
 
-        return [cls[0] for cls in schedule]  # Return only class IDs
+        return schedule
 
     schedules = []
-    for load, credits in [("baja", 14), ("media", 18), ("alta", 22)]:
+    for load, credits in [("baja", 10), ("media", 18), ("alta", 25)]:
         day_schedule = generate_schedule(credits, prefer_day=True)
         night_schedule = generate_schedule(credits, prefer_day=False)
         schedules.extend([day_schedule, night_schedule])
 
     return schedules
 
+# Function to print schedules
 def print_schedules(schedules, classes_by_course, recommended_courses):
-    load_names = ["baja (diurno)", "baja (nocturno)", "media (diurno)", "media (nocturno)", "alta (diurno)", "alta (nocturno)"]
+    load_names = ["Baja (hasta 10 créditos)", "Media (Hasta 18 créditos)", "Alta (Hasta 25 créditos)"]
     
-    for i, schedule in enumerate(schedules):
-        print(f"\nHorario para carga {load_names[i]}:")
-        total_credits = 0
+    def find_alternative_classes(course_id, current_class):
+        if course_id not in classes_by_course:
+            return []
+        return [
+            c for c in classes_by_course[course_id]
+            if c[0] != current_class[0] and  # Different class ID
+               c[2] == current_class[2] and  # Same day
+               c[3] == current_class[3] and  # Same start time
+               c[4] == current_class[4]      # Same end time
+        ]
+
+    for i in range(0, len(schedules), 2):
+        print(f"\nHorarios para carga {load_names[i//2]}")
         
-        for class_id in schedule:
-            for course_id, classes in classes_by_course.items():
-                for cls in classes:
-                    if cls[0] == class_id:
-                        course_info = next(c for c in recommended_courses if c[0] == course_id)
-                        print(f"Curso: {course_info[1]} (ID: {course_id})")
-                        print(f"  Clase ID: {cls[0]}, Día: {cls[2]}, Hora Inicio: {cls[3]}, Hora Fin: {cls[4]}")
-                        total_credits += course_info[2]
-        
-        print(f"Total de créditos: {total_credits}")
-
-
-
-
+        for j, period in enumerate(["Diurno", "Nocturno"]):
+            print(f"{period}")
+            schedule = schedules[i+j]
+            total_credits = 0
+            
+            for course_id, cls in schedule:
+                course_info = next((c for c in recommended_courses if c[0] == course_id), None)
+                if course_info is None:
+                    print(f"Advertencia: No se encontró información para el curso ID: {course_id}")
+                    continue
+                
+                print(f"Curso: {course_info[1]} (ID: {course_id})")
+                
+                if cls is not None:
+                    alternative_classes = find_alternative_classes(course_id, cls)
+                    alt_class_ids = ", ".join(str(c[0]) for c in alternative_classes)
+                    alt_info = f" (Alternativas de curso con un mismo horario: {alt_class_ids})" if alternative_classes else ""
+                    print(f"  Clase ID: {cls[0]}, Día: {cls[2]}, Hora Inicio: {cls[3]}, Hora Fin: {cls[4]}{alt_info}")
+                else:
+                    print("  Horario no especificado")
+                
+                total_credits += course_info[2]
+            
+            print(f"Total de créditos: {total_credits}")
+            print()  # Add an empty line between Diurno and Nocturno schedules
 
 # Example usage
 if __name__ == "__main__":
-    student_id = 2  # Student ID
+    student_id = 3
     recommended_courses = get_recommended_courses(student_id)
-    print_recommended_courses(recommended_courses)
+    if recommended_courses:
+        print_recommended_courses(recommended_courses)
+        # Get classes in the latest period for recommended courses
+        classes_by_course, max_period = get_classes_in_latest_period_for_recommended_courses(recommended_courses)
+        print_classes(classes_by_course, max_period)
 
-    # Get classes in the latest period for recommended courses
-    classes_by_course, max_period = get_classes_in_latest_period_for_recommended_courses(recommended_courses)
-    print_classes(classes_by_course, max_period)
-
-    # Create schedules
-    schedules = create_schedules(classes_by_course)
-    print_schedules(schedules, classes_by_course, recommended_courses)
+        # Create schedules
+        print("\nHorarios...")
+        schedules = create_schedules(classes_by_course, recommended_courses)
+        print_schedules(schedules, classes_by_course, recommended_courses)
+    else:
+        print("No hay cursos recomendados para el estudiante.")
