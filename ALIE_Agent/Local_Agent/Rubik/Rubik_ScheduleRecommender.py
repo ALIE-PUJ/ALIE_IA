@@ -56,7 +56,7 @@ def get_student_courses(student_id):
     Fetches all the courses that a student has completed or enrolled in.
 
     :param student_id: The ID of the student.
-    :return: A list of dictionaries containing the course ID, course name, semester, and course type.
+    :return: A list of dictionaries containing the course ID, course name, semester, course type, class ID, and period.
     """
     try:
         conn = create_connection()
@@ -66,7 +66,9 @@ def get_student_courses(student_id):
                 Curso.id_curso,
                 Curso.nombre AS curso_nombre,
                 Semestre_Sugerido.semestre,
-                Semestre_Sugerido.tipo_curso
+                Semestre_Sugerido.tipo_curso,
+                Clase.id_clase,      -- Include class ID
+                Clase.periodo        -- Include period
             FROM Estudiante_Clase
             JOIN Clase ON Estudiante_Clase.id_clase = Clase.id_clase
             JOIN Curso ON Clase.id_curso = Curso.id_curso
@@ -156,8 +158,8 @@ def get_course_mapping():
     for semestre in sorted(semestres.keys()):  # Ordenar los semestres en orden ascendente
         descripcion += f"\nSemester {semestre}:\n"
         for course in semestres[semestre]:
-            descripcion += (f"- Course ID: {course['id_curso']}, Name: {course['curso_nombre']}, "
-                            f"Recommended semester: {course['semestre']}, Type: {course['tipo_curso']}\n")
+            descripcion += (f"- Course ID: {course['id_curso']}, Name: {course['curso_nombre']} "
+                            f"| Recommended semester: {course['semestre']}, Type: {course['tipo_curso']}\n")
     
     return descripcion
 
@@ -191,7 +193,8 @@ def get_student_info_mapping(student_id):
     for semestre in sorted(semestres_estudiante.keys()):
         descripcion += f"\nSemester {semestre}:\n"
         for course in semestres_estudiante[semestre]:
-            descripcion += (f"- Course ID: {course['id_curso']}, Name: {course['curso_nombre']}, "
+            descripcion += (f"- Course ID: {course['id_curso']}, Name: {course['curso_nombre']} "
+                            f"(Class ID: {course['id_clase']}, Period: {course['periodo']}) | "
                             f"Recommended semester: {course['semestre']}, Type: {course['tipo_curso']}\n")
     
     # Determinar el semestre actual basado en la cantidad de cursos por semestre
