@@ -20,9 +20,10 @@ def get_completed_courses(student_id):
         with conn.cursor() as cursor:
             query = """
             SELECT Curso.id_curso, Curso.nombre, Curso.creditos
-            FROM Nota
-            JOIN Curso ON Nota.id_curso = Curso.id_curso
-            WHERE Nota.id_estudiante = %s
+            FROM Estudiante_Clase
+            JOIN Clase ON Estudiante_Clase.id_clase = Clase.id_clase
+            JOIN Curso ON Clase.id_curso = Curso.id_curso
+            WHERE Estudiante_Clase.id_estudiante = %s
             """
             cursor.execute(query, (student_id,))
             return cursor.fetchall()
@@ -42,6 +43,7 @@ def check_prerequisites(course_id):
 # Función para obtener los cursos recomendados que el estudiante no ha tomado
 def get_recommended_courses(student_id):
     completed_courses = get_completed_courses(student_id)
+
     completed_course_ids = [course[0] for course in completed_courses]
 
     with create_connection() as conn:

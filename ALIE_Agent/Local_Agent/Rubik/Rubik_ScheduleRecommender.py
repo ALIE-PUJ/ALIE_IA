@@ -53,10 +53,12 @@ def get_courses_and_semester_mapping():
 # Función auxiliar para obtener los cursos que ha visto un estudiante
 def get_student_courses(student_id):
     """
-    Fetches all the courses that a student has completed or enrolled in.
+    Fetches all the courses that a student has completed or enrolled in,
+    including their grades.
 
     :param student_id: The ID of the student.
-    :return: A list of dictionaries containing the course ID, course name, semester, course type, class ID, and period.
+    :return: A list of dictionaries containing the course ID, course name, semester,
+             course type, class ID, period, and grade.
     """
     try:
         conn = create_connection()
@@ -68,11 +70,14 @@ def get_student_courses(student_id):
                 Semestre_Sugerido.semestre,
                 Semestre_Sugerido.tipo_curso,
                 Clase.id_clase,      -- Include class ID
-                Clase.periodo        -- Include period
+                Clase.periodo,       -- Include period
+                Nota.nota            -- Include grade, it will be NULL if not found
             FROM Estudiante_Clase
             JOIN Clase ON Estudiante_Clase.id_clase = Clase.id_clase
             JOIN Curso ON Clase.id_curso = Curso.id_curso
             JOIN Semestre_Sugerido ON Curso.id_curso = Semestre_Sugerido.id_curso
+            LEFT JOIN Nota ON Estudiante_Clase.id_clase = Nota.id_clase 
+                            AND Estudiante_Clase.id_estudiante = Nota.id_estudiante
             WHERE Estudiante_Clase.id_estudiante = %s
             ORDER BY Semestre_Sugerido.semestre ASC
             """
@@ -170,7 +175,7 @@ def get_student_info_mapping(student_id):
     Fetches the courses taken by the student and determines their current semester.
 
     :param student_id: The ID of the student.
-    :return: A formatted string with the student's courses and current semester.
+    :return: A formatted string with the student's courses, current semester, and grades.
     """
     student_courses = get_student_courses(student_id)
 
@@ -193,8 +198,11 @@ def get_student_info_mapping(student_id):
     for semestre in sorted(semestres_estudiante.keys()):
         descripcion += f"\nSemester {semestre}:\n"
         for course in semestres_estudiante[semestre]:
+            # Convert 'None' to 'N/A' for display
+            grade = course['nota'] if course['nota'] is not None else 'N/A'
             descripcion += (f"- Course ID: {course['id_curso']}, Name: {course['curso_nombre']} "
                             f"(Class ID: {course['id_clase']}, Period: {course['periodo']}) | "
+                            f"Grade: {grade} | "
                             f"Recommended semester: {course['semestre']}, Type: {course['tipo_curso']}\n")
     
     # Determinar el semestre actual basado en la cantidad de cursos por semestre
@@ -239,5 +247,5 @@ def rubik(student_id=None):
 
 
 if __name__ == "__main__":
-    student_id = 2
+    student_id = 1
     print(rubik(student_id))  # Llamar a la función con un ID de estudiante
