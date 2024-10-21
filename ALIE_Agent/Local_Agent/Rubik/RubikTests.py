@@ -1,5 +1,6 @@
 import psycopg2
 import os
+from datetime import datetime, time, timedelta
 
 # Function to create connection to the database
 def create_connection():
@@ -49,7 +50,6 @@ def check_prerequisites(course_id):
 # Function to get recommended courses that the student has not taken
 def get_recommended_courses(student_id):
     completed_courses = get_completed_courses(student_id)
-
     completed_course_ids = [course[0] for course in completed_courses]
 
     with create_connection() as conn:
@@ -79,8 +79,11 @@ def get_recommended_courses(student_id):
 
 # Function to get classes and schedules for recommended courses in the latest period
 def get_classes_in_latest_period_for_recommended_courses(recommended_courses):
-    max_period = get_max_period()  # Get the maximum period
-    
+    # max_period = get_max_period()  # Get the maximum period
+    max_period = "2024-3"
+
+    print("Target period:", max_period)
+
     # Extract course IDs from recommended courses
     course_ids = [course[0] for course in recommended_courses]
 
@@ -104,16 +107,9 @@ def get_classes_in_latest_period_for_recommended_courses(recommended_courses):
                         classes_by_course[course_id] = []
                     classes_by_course[course_id].append(cls)
 
-                # Format and print the result
-                print(f"\nClases disponibles en el periodo {max_period} para los cursos recomendados:\n")
-                for course_id, class_list in classes_by_course.items():
-                    # Get the course name from recommended courses
-                    course_name = next(course[1] for course in recommended_courses if course[0] == course_id)
-                    print(f"Curso: {course_name} (ID: {course_id})")
-                    for cls in class_list:
-                        print(f"  - Clase ID: {cls[0]}, Día: {cls[2]}, Hora Inicio: {cls[3]}, Hora Fin: {cls[4]} (Periodo: {max_period})")
+                return classes_by_course, max_period
             else:
-                print("No hay cursos recomendados disponibles en el periodo más reciente.")
+                return {}, max_period  # Return empty dict if no recommended courses
 
 # Function to print recommended courses
 def print_recommended_courses(recommended_courses):
@@ -127,11 +123,114 @@ def print_recommended_courses(recommended_courses):
         
         print(f"- ID: {course[0]}, Nombre: {course[1]}, Créditos: {course[2]} {prereq_status}")
 
+# Function to print classes
+def print_classes(classes_by_course, max_period):
+    if not classes_by_course:
+        print("No hay clases disponibles en el periodo más reciente para los cursos recomendados.")
+        return
+
+    print(f"\nClases disponibles en el periodo {max_period} para los cursos recomendados:\n")
+    for course_id, class_list in classes_by_course.items():
+        # Get the course name from recommended courses
+        course_name = next(course[1] for course in recommended_courses if course[0] == course_id)
+        print(f"Curso: {course_name} (ID: {course_id})")
+        for cls in class_list:
+            print(f"  - Clase ID: {cls[0]}, Día: {cls[2]}, Hora Inicio: {cls[3]}, Hora Fin: {cls[4]} (Periodo: {max_period})")
+
+
+
+
+
+
+
+
+
+import random
+from datetime import datetime, time
+
+def create_schedules(classes_by_course):
+    def is_conflict(schedule, new_class):
+        new_day, new_start, new_end = new_class[2], new_class[3], new_class[4]
+        for cls in schedule:
+            if cls[2] == new_day and (
+                (new_start <= cls[3] < new_end) or
+                (new_start < cls[4] <= new_end) or
+                (cls[3] <= new_start and new_end <= cls[4])
+            ):
+                return True
+        return False
+
+    def generate_schedule(max_credits, prefer_day):
+        schedule = []
+        total_credits = 0
+        courses_added = set()
+
+        sorted_classes = sorted(
+            [(course_id, cls) for course_id, classes in classes_by_course.items() for cls in classes],
+            key=lambda x: x[1][3]  # Sort by start time
+        )
+
+        if not prefer_day:
+            sorted_classes.reverse()  # For night preference, reverse the order
+
+        for course_id, cls in sorted_classes:
+            if course_id in courses_added:
+                continue
+            
+            start_time = datetime.combine(datetime.today(), cls[3]).time()
+            if (prefer_day and start_time >= time(18, 0)) or (not prefer_day and start_time < time(18, 0)):
+                continue
+
+            if not is_conflict(schedule, cls):
+                schedule.append(cls)
+                courses_added.add(course_id)
+                total_credits += sum(c[2] for c in recommended_courses if c[0] == course_id)
+
+                if total_credits >= max_credits:
+                    break
+
+        return [cls[0] for cls in schedule]  # Return only class IDs
+
+    schedules = []
+    for load, credits in [("baja", 14), ("media", 18), ("alta", 22)]:
+        day_schedule = generate_schedule(credits, prefer_day=True)
+        night_schedule = generate_schedule(credits, prefer_day=False)
+        schedules.extend([day_schedule, night_schedule])
+
+    return schedules
+
+def print_schedules(schedules, classes_by_course, recommended_courses):
+    load_names = ["baja (diurno)", "baja (nocturno)", "media (diurno)", "media (nocturno)", "alta (diurno)", "alta (nocturno)"]
+    
+    for i, schedule in enumerate(schedules):
+        print(f"\nHorario para carga {load_names[i]}:")
+        total_credits = 0
+        
+        for class_id in schedule:
+            for course_id, classes in classes_by_course.items():
+                for cls in classes:
+                    if cls[0] == class_id:
+                        course_info = next(c for c in recommended_courses if c[0] == course_id)
+                        print(f"Curso: {course_info[1]} (ID: {course_id})")
+                        print(f"  Clase ID: {cls[0]}, Día: {cls[2]}, Hora Inicio: {cls[3]}, Hora Fin: {cls[4]}")
+                        total_credits += course_info[2]
+        
+        print(f"Total de créditos: {total_credits}")
+
+
+
+
+
 # Example usage
 if __name__ == "__main__":
     student_id = 2  # Student ID
     recommended_courses = get_recommended_courses(student_id)
     print_recommended_courses(recommended_courses)
 
-    # Get and print classes in the latest period for recommended courses
-    get_classes_in_latest_period_for_recommended_courses(recommended_courses)
+    # Get classes in the latest period for recommended courses
+    classes_by_course, max_period = get_classes_in_latest_period_for_recommended_courses(recommended_courses)
+    print_classes(classes_by_course, max_period)
+
+    # Create schedules
+    schedules = create_schedules(classes_by_course)
+    print_schedules(schedules, classes_by_course, recommended_courses)
