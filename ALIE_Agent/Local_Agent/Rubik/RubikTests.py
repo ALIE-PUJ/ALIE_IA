@@ -52,7 +52,7 @@ def check_prerequisites(course_id):
 # 15 course limit. Organized by semester (ascending) to prioritize lower semester courses
 def get_recommended_courses(student_id):
     completed_courses = get_completed_courses(student_id)
-    print("Cursos completados por el estudiante:", completed_courses)
+    # print("Cursos completados por el estudiante:", completed_courses)
     completed_course_ids = [course[0] for course in completed_courses]
 
     with create_connection() as conn:
@@ -134,6 +134,20 @@ def print_recommended_courses(recommended_courses):
             prereq_status = "(Sin prerrequisitos)"
         
         print(f"- ID: {course[0]}, Nombre: {course[1]}, Créditos: {course[2]} {prereq_status}")
+
+# Function to return recommended courses as a string
+def get_recommended_courses_text(recommended_courses):
+    result = "Cursos recomendados para el estudiante:\n"
+    for course in recommended_courses:
+        # Check if the course has prerequisites
+        if course[4]:  # If it has prerequisites
+            prereq_status = "(Prerequisito cumplido)" if course[3] else "(Prerequisito no cumplido)"
+        else:
+            prereq_status = "(Sin prerrequisitos)"
+        
+        result += f"- ID: {course[0]}, Nombre: {course[1]}, Créditos: {course[2]} {prereq_status}\n"
+    
+    return result
 
 # Function to print classes
 def print_classes(classes_by_course, max_period):
@@ -221,7 +235,7 @@ def create_schedules(classes_by_course, recommended_courses):
                 continue
 
             if cls is None:
-                print(f"Adding class without schedule: Course ID {course_id}")
+                # print(f"Adding class without schedule: Course ID {course_id}")
                 schedule.append((course_id, [None]))
                 courses_added.add(course_id)
                 total_credits += sum(c[2] for c in recommended_courses if c[0] == course_id)
@@ -307,24 +321,81 @@ def print_schedules(schedules, classes_by_course, recommended_courses):
             print(f"Total de créditos: {total_credits}")
             print()  # Add an empty line between Diurno and Nocturno schedules
 
+# Function to return schedules as a string
+def get_schedules_text(schedules, classes_by_course, recommended_courses):
+    load_names = ["Baja (Alrededor de 10 créditos)", "Media (Alrededor de 18 créditos)", "Alta (Alrededor de 25 créditos)"]
+    
+    max_period = get_max_period()  # Assuming this function is defined elsewhere
+    result = f"Horarios generados para el siguiente periodo de inscripción ({max_period}):\n"
+
+    for i in range(0, len(schedules), 2):
+        result += f"\nHorarios para carga {load_names[i//2]}\n"
+
+        for j, period in enumerate(["Diurno", "Nocturno"]):
+            result += f"{period}\n"
+            schedule = schedules[i+j]
+            total_credits = 0
+
+            for course_id, classes in schedule:
+                course_info = next((c for c in recommended_courses if c[0] == course_id), None)
+                if course_info is None:
+                    result += f"Advertencia: No se encontró información para el curso ID: {course_id}\n"
+                    continue
+
+                result += f"Curso: {course_info[1]} (ID: {course_id}) [{course_info[2]} créditos]\n"
+
+                for cls in classes:
+                    if cls is not None:
+                        result += f"  Clase ID: {cls[0]}, Día: {cls[2]}, Hora Inicio: {cls[3]}, Hora Fin: {cls[4]}\n"
+                    else:
+                        result += "  Horario no especificado\n"
+
+                total_credits += course_info[2]
+
+            result += f"Total de créditos: {total_credits}\n"
+            result += "\n"  # Add an empty line between Diurno and Nocturno schedules
+    
+    return result
+
+def rubik_schedule_generator(student_id):
+
+    try:
+        # print("Generando horarios para el estudiante con ID:", student_id)
+        student_text = f"Generando horarios para el estudiante con ID: {student_id}"
+
+        recommended_courses = get_recommended_courses(student_id)
+        
+        if recommended_courses:
+            # Recommended courses
+            # print_recommended_courses(recommended_courses)
+            recommended_courses_text = get_recommended_courses_text(recommended_courses)
+            # print(recommended_courses_text)
+
+            # Classes in the latest period for recommended courses
+            classes_by_course, max_period = get_classes_in_latest_period_for_recommended_courses(recommended_courses)
+            #print("classes_by_course:", classes_by_course)
+            #print_classes(classes_by_course, max_period)
+
+            # Schedules
+            schedules, schedules_onlyIds = create_schedules(classes_by_course, recommended_courses)
+            # print_schedules(schedules, classes_by_course, recommended_courses)
+            schedules_text = get_schedules_text(schedules, classes_by_course, recommended_courses)
+            # print(schedules_text)
+            # print("Schedules only IDs:", schedules_onlyIds)
+
+            return student_text + "\n" + recommended_courses_text + "\n" + schedules_text
+        else:
+            # print("No hay cursos recomendados para el estudiante.")
+            return "No hay cursos recomendados para el estudiante. Probablemente ya ha completado todos los cursos."
+    except Exception as e:
+        error_message = f"Ocurrió un error al generar los horarios. Intente más tarde."
+        # print(error_message)
+        return error_message
+
 # Example usage
 if __name__ == "__main__":
-    student_id = 8
-    recommended_courses = get_recommended_courses(student_id)
-    if recommended_courses:
-        print_recommended_courses(recommended_courses)
-        # Get classes in the latest period for recommended courses
-        classes_by_course, max_period = get_classes_in_latest_period_for_recommended_courses(recommended_courses)
-        #print("classes_by_course:", classes_by_course)
-        #print_classes(classes_by_course, max_period)
+    student_id = 2
+    rubik_text = rubik_schedule_generator(student_id)
+    print(rubik_text)
 
-        # Create schedules
-        print("\nHorarios...")
-        schedules, schedules_onlyIds = create_schedules(classes_by_course, recommended_courses)
-        print_schedules(schedules, classes_by_course, recommended_courses)
-
-        # print("Schedules only IDs:", schedules_onlyIds)
-    else:
-        print("No hay cursos recomendados para el estudiante.")
-
-# Una clase diurna acaba como maximo a las 18:00, y una clase nocturna empieza como minimo a las 14:00
+    # Una clase diurna acaba como maximo a las 18:00, y una clase nocturna empieza como minimo a las 14:00
