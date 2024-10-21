@@ -87,7 +87,7 @@ def get_recommended_courses(student_id):
 # Function to get classes and schedules for recommended courses in the latest period
 def get_classes_in_latest_period_for_recommended_courses(recommended_courses):
     max_period = get_max_period()  # Get the maximum period
-    # max_period = "2024-3"
+    max_period = "2024-3"
 
     print("Target period:", max_period)
 
@@ -144,21 +144,64 @@ def print_classes(classes_by_course, max_period):
         for cls in class_list:
             print(f"  - Clase ID: {cls[0]}, Día: {cls[2]}, Hora Inicio: {cls[3]}, Hora Fin: {cls[4]} (Periodo: {max_period})")
 
-# Function to create schedules
 def create_schedules(classes_by_course, recommended_courses):
+
+    def check_other_conflicts(schedule, classes_by_course, selected_cls, sorted_classes):
+        # Obtenemos el id de la clase actual
+        class_id = selected_cls[0]
+        selected_course_id = selected_cls[1]
+        print("Checking conflicts for class:", class_id)
+
+        # Obtener todas las sesiones de la misma clase (mismo id_clase)
+        alternative_classes = [session for session in classes_by_course.get(selected_course_id, []) if session[0] == class_id]
+
+        if alternative_classes:
+            # print("All the sessions found for the selected class:", alternative_classes)
+            found_alternative_classes = True
+        else:
+            print("No sessions found for the selected class")
+
+        # print("sorted_classes: ", sorted_classes)
+
+        alternative_class_conflict = True # Assume there is a conflict
+
+        # Return the alternative class sessions conflict
+        for course_id, cls in sorted_classes:
+            # print("Checking course:", course_id)
+
+            if cls is not None and course_id == selected_course_id:
+                # print("Checking class:", cls[0], "against class:", class_id)
+                if cls[0] == class_id:
+                    print("Found the same class, with class id ", cls[0])
+                    # Check if there is a conflict
+                    alternative_class_conflict = is_conflict(schedule, cls)
+                    print("Checking for specific Alternative class conflict with class", cls[0], ". Specific schedule: ", cls, ". Result: ", alternative_class_conflict)
+
+                    # If there is a conflict, return False
+                    if alternative_class_conflict:
+                        print("Conflict found. Returning False")
+                        return False
+
+        # Return the alternative class sessions conflict, but negate it to return the opposite
+        print("Returning not alternative_class_conflict: ", not alternative_class_conflict)
+        return not alternative_class_conflict
+
+        return False
+
     def is_conflict(schedule, new_class):
         if new_class is None:  # No conflict for classes without schedule
             return False
         new_day, new_start, new_end = new_class[2], new_class[3], new_class[4]
-        for _, cls in schedule:
-            if cls is None:
-                continue
-            if cls[2] == new_day and (
-                (new_start <= cls[3] < new_end) or
-                (new_start < cls[4] <= new_end) or
-                (cls[3] <= new_start and new_end <= cls[4])
-            ):
-                return True
+        for _, classes in schedule:  # Check against all classes in the schedule
+            for cls in classes:
+                if cls is None:
+                    continue
+                if cls[2] == new_day and (
+                    (new_start <= cls[3] < new_end) or
+                    (new_start < cls[4] <= new_end) or
+                    (cls[3] <= new_start and new_end <= cls[4])
+                ):
+                    return True
         return False
 
     def generate_schedule(max_credits, prefer_day):
@@ -171,8 +214,7 @@ def create_schedules(classes_by_course, recommended_courses):
         for course in recommended_courses:
             course_id = course[0]
             if course_id in classes_by_course:
-                for cls in classes_by_course[course_id]:
-                    all_classes.append((course_id, cls))
+                all_classes.extend([(course_id, cls) for cls in classes_by_course[course_id]])
             else:
                 all_classes.append((course_id, None))  # Classes without schedule
 
@@ -188,19 +230,23 @@ def create_schedules(classes_by_course, recommended_courses):
         for course_id, cls in sorted_classes:
             if course_id in courses_added:
                 continue
-            
+
             if cls is not None:
                 start_time = datetime.combine(datetime.today(), cls[3]).time()
                 if (prefer_day and start_time >= time(18, 0)) or (not prefer_day and start_time < time(18, 0)):
                     continue
 
-            if not is_conflict(schedule, cls):
-                schedule.append((course_id, cls))
-                courses_added.add(course_id)
-                total_credits += sum(c[2] for c in recommended_courses if c[0] == course_id)
+                if not is_conflict(schedule, cls) and check_other_conflicts(schedule, classes_by_course, cls, sorted_classes) == True:
+                    print("Adding class to schedule: #", cls[0], ". No conflicts found.")
 
-                if total_credits >= max_credits:
-                    break
+                    schedule.append((course_id, [cls]))
+                    courses_added.add(course_id)
+                    total_credits += sum(c[2] for c in recommended_courses if c[0] == course_id)
+
+                    if total_credits >= max_credits:
+                        break
+        else:
+            return []  # No schedule found
 
         return schedule
 
@@ -212,58 +258,45 @@ def create_schedules(classes_by_course, recommended_courses):
 
     return schedules
 
-# Function to print schedules
 def print_schedules(schedules, classes_by_course, recommended_courses):
     load_names = ["Baja (hasta 10 créditos)", "Media (Hasta 18 créditos)", "Alta (Hasta 25 créditos)"]
-    
-    def find_alternative_classes(course_id, current_class):
-        if course_id not in classes_by_course:
-            return []
-        return [
-            c for c in classes_by_course[course_id]
-            if c[0] != current_class[0] and  # Different class ID
-               c[2] == current_class[2] and  # Same day
-               c[3] == current_class[3] and  # Same start time
-               c[4] == current_class[4]      # Same end time
-        ]
 
     for i in range(0, len(schedules), 2):
         print(f"\nHorarios para carga {load_names[i//2]}")
-        
+
         for j, period in enumerate(["Diurno", "Nocturno"]):
             print(f"{period}")
             schedule = schedules[i+j]
             total_credits = 0
-            
-            for course_id, cls in schedule:
+
+            for course_id, classes in schedule:
                 course_info = next((c for c in recommended_courses if c[0] == course_id), None)
                 if course_info is None:
                     print(f"Advertencia: No se encontró información para el curso ID: {course_id}")
                     continue
-                
+
                 print(f"Curso: {course_info[1]} (ID: {course_id})")
-                
-                if cls is not None:
-                    alternative_classes = find_alternative_classes(course_id, cls)
-                    alt_class_ids = ", ".join(str(c[0]) for c in alternative_classes)
-                    alt_info = f" (Alternativas de curso con un mismo horario: {alt_class_ids})" if alternative_classes else ""
-                    print(f"  Clase ID: {cls[0]}, Día: {cls[2]}, Hora Inicio: {cls[3]}, Hora Fin: {cls[4]}{alt_info}")
-                else:
-                    print("  Horario no especificado")
-                
+
+                for cls in classes:
+                    if cls is not None:
+                        print(f"  Clase ID: {cls[0]}, Día: {cls[2]}, Hora Inicio: {cls[3]}, Hora Fin: {cls[4]}")
+                    else:
+                        print("  Horario no especificado")
+
                 total_credits += course_info[2]
-            
+
             print(f"Total de créditos: {total_credits}")
             print()  # Add an empty line between Diurno and Nocturno schedules
 
 # Example usage
 if __name__ == "__main__":
-    student_id = 3
+    student_id = 2
     recommended_courses = get_recommended_courses(student_id)
     if recommended_courses:
         print_recommended_courses(recommended_courses)
         # Get classes in the latest period for recommended courses
         classes_by_course, max_period = get_classes_in_latest_period_for_recommended_courses(recommended_courses)
+        print("classes_by_course:", classes_by_course)
         print_classes(classes_by_course, max_period)
 
         # Create schedules
