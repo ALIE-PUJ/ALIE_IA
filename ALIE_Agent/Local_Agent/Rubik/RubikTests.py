@@ -187,6 +187,7 @@ def create_schedules(classes_by_course, recommended_courses):
 
     def generate_schedule(max_credits, prefer_day):
         schedule = []
+        schedule_onlyIds = []
         total_credits = 0
         courses_added = set()
 
@@ -230,30 +231,35 @@ def create_schedules(classes_by_course, recommended_courses):
                 if not is_conflict(schedule, cls) and check_other_conflicts(schedule, classes_by_course, (cls[0], course_id)):
                     print(f"Adding class to schedule: {cls[0]}. No conflicts found.")
                     schedule.append((course_id, [cls]))
+                    schedule_onlyIds.append(cls[0])
                     courses_added.add(course_id)
                     total_credits += sum(c[2] for c in recommended_courses if c[0] == course_id)
 
+                    # Esto permite tener un margen de tolerancia de 1-2-3 créditos, por lo general
                     if total_credits >= max_credits:
                         break
         #else:
             #return None  # No schedule found
 
-        return schedule
+        return schedule, schedule_onlyIds
 
     schedules = []
+    schedules_onlyIds = []
     for load, credits in [("baja", 10), ("media", 18), ("alta", 25)]:
-        day_schedule = generate_schedule(credits, prefer_day=True)
-        night_schedule = generate_schedule(credits, prefer_day=False)
+        day_schedule, day_schedule_onlyIds = generate_schedule(credits, prefer_day=True)
+        night_schedule, night_schedule_onlyIds = generate_schedule(credits, prefer_day=False)
         if day_schedule is not None:
             schedules.append(day_schedule)
+            schedules_onlyIds.append(f"{load} diurna: {day_schedule_onlyIds}")
         if night_schedule is not None:
             schedules.append(night_schedule)
+            schedules_onlyIds.append(f"{load} nocturna: {night_schedule_onlyIds}")
 
-    return schedules
+    return schedules, schedules_onlyIds
 
 
 def print_schedules(schedules, classes_by_course, recommended_courses):
-    load_names = ["Baja (hasta 10 créditos)", "Media (Hasta 18 créditos)", "Alta (Hasta 25 créditos)"]
+    load_names = ["Baja (Alrededor de 10 créditos)", "Media (Alrededor de 18 créditos)", "Alta (Alrededor de 25 créditos)"]
 
     for i in range(0, len(schedules), 2):
         print(f"\nHorarios para carga {load_names[i//2]}")
@@ -295,8 +301,10 @@ if __name__ == "__main__":
 
         # Create schedules
         print("\nHorarios...")
-        schedules = create_schedules(classes_by_course, recommended_courses)
-        print_schedules(schedules, classes_by_course, recommended_courses)
+        schedules, schedules_onlyIds = create_schedules(classes_by_course, recommended_courses)
+        # print_schedules(schedules, classes_by_course, recommended_courses)
+
+        print("Schedules only IDs:", schedules_onlyIds)
     else:
         print("No hay cursos recomendados para el estudiante.")
 
