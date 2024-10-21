@@ -163,13 +163,18 @@ def create_schedules(classes_by_course, recommended_courses):
         else:
             print(f"No alternative sessions found for class {class_id}")
 
+        # Initialize a list to store non-conflicting classes
+        non_conflicting_classes = []
+
         for alt_cls in alternative_classes:
             if is_conflict(schedule, alt_cls):
-
                 print(f"Conflict found when trying to add alternative class {alt_cls[0]} with schedule {alt_cls}")
-                return False
+                return False, None
+            else:
+                # If there's no conflict, add the class to the non-conflicting list
+                non_conflicting_classes.append(alt_cls)
 
-        return True
+        return True, non_conflicting_classes
 
     def is_conflict(schedule, new_class):
         if new_class is None:  # No conflict for classes without schedule
@@ -230,9 +235,16 @@ def create_schedules(classes_by_course, recommended_courses):
                 if (prefer_day and start_time >= time(18, 0)) or (not prefer_day and start_time < time(14, 0)):
                     continue
 
-                if not is_conflict(schedule, cls) and check_other_conflicts(schedule, classes_by_course, (cls[0], course_id)):
+                has_no_conflict, non_conflicting_classes = check_other_conflicts(schedule, classes_by_course, (cls[0], course_id))
+                if not is_conflict(schedule, cls) and has_no_conflict:
                     print(f"Adding class to schedule: {cls[0]}. No conflicts found.")
                     schedule.append((course_id, [cls]))
+
+                    for alt_cls in non_conflicting_classes:
+                        #  (Only if its not the base class session)
+                        if alt_cls != cls:
+                            schedule[-1][1].append(alt_cls)
+
                     schedule_onlyIds.append(cls[0])
                     courses_added.add(course_id)
                     total_credits += sum(c[2] for c in recommended_courses if c[0] == course_id)
@@ -277,7 +289,7 @@ def print_schedules(schedules, classes_by_course, recommended_courses):
                     print(f"Advertencia: No se encontró información para el curso ID: {course_id}")
                     continue
 
-                print(f"Curso: {course_info[1]} (ID: {course_id})")
+                print(f"Curso: {course_info[1]} (ID: {course_id}) [{course_info[2]} créditos]")
 
                 for cls in classes:
                     if cls is not None:
@@ -292,7 +304,7 @@ def print_schedules(schedules, classes_by_course, recommended_courses):
 
 # Example usage
 if __name__ == "__main__":
-    student_id = 3
+    student_id = 5
     recommended_courses = get_recommended_courses(student_id)
     if recommended_courses:
         print_recommended_courses(recommended_courses)
@@ -306,7 +318,7 @@ if __name__ == "__main__":
         schedules, schedules_onlyIds = create_schedules(classes_by_course, recommended_courses)
         print_schedules(schedules, classes_by_course, recommended_courses)
 
-        print("Schedules only IDs:", schedules_onlyIds)
+        # print("Schedules only IDs:", schedules_onlyIds)
     else:
         print("No hay cursos recomendados para el estudiante.")
 
