@@ -150,6 +150,7 @@ def print_classes(classes_by_course, max_period):
             print(f"  - Clase ID: {cls[0]}, Día: {cls[2]}, Hora Inicio: {cls[3]}, Hora Fin: {cls[4]} (Periodo: {max_period})")
 
 def create_schedules(classes_by_course, recommended_courses):
+
     def check_other_conflicts(schedule, classes_by_course, selected_cls):
         class_id = selected_cls[0]
         selected_course_id = selected_cls[1]
@@ -164,7 +165,8 @@ def create_schedules(classes_by_course, recommended_courses):
 
         for alt_cls in alternative_classes:
             if is_conflict(schedule, alt_cls):
-                print(f"Conflict found between class {class_id} and alternative class {alt_cls[0]}")
+
+                print(f"Conflict found when trying to add alternative class {alt_cls[0]} with schedule {alt_cls}")
                 return False
 
         return True
@@ -302,7 +304,7 @@ if __name__ == "__main__":
         # Create schedules
         print("\nHorarios...")
         schedules, schedules_onlyIds = create_schedules(classes_by_course, recommended_courses)
-        # print_schedules(schedules, classes_by_course, recommended_courses)
+        print_schedules(schedules, classes_by_course, recommended_courses)
 
         print("Schedules only IDs:", schedules_onlyIds)
     else:
