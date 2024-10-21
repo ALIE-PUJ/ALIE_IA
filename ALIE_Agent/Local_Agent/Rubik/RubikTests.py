@@ -92,9 +92,9 @@ def get_recommended_courses(student_id):
 # Function to get classes and schedules for recommended courses in the latest period
 def get_classes_in_latest_period_for_recommended_courses(recommended_courses):
     max_period = get_max_period()  # Get the maximum period
-    max_period = "2024-3"
+    # max_period = "2024-3"
 
-    print("Target period:", max_period)
+    # print("Target period:", max_period)
 
     # Extract course IDs from recommended courses
     course_ids = [course[0] for course in recommended_courses]
@@ -154,21 +154,23 @@ def create_schedules(classes_by_course, recommended_courses):
     def check_other_conflicts(schedule, classes_by_course, selected_cls):
         class_id = selected_cls[0]
         selected_course_id = selected_cls[1]
-        print(f"Checking conflicts for class: {class_id}")
+        #print(f"Checking conflicts for class: {class_id}")
 
         alternative_classes = [session for session in classes_by_course.get(selected_course_id, []) if session[0] == class_id]
 
         if alternative_classes:
-            print(f"Alternative sessions found for class {class_id}: {alternative_classes}")
+            #print(f"Alternative sessions found for class {class_id}: {alternative_classes}")
+            ex1 = 0
         else:
-            print(f"No alternative sessions found for class {class_id}")
+            #print(f"No alternative sessions found for class {class_id}")
+            ex2 = 0
 
         # Initialize a list to store non-conflicting classes
         non_conflicting_classes = []
 
         for alt_cls in alternative_classes:
             if is_conflict(schedule, alt_cls):
-                print(f"Conflict found when trying to add alternative class {alt_cls[0]} with schedule {alt_cls}")
+                #print(f"Conflict found when trying to add alternative class {alt_cls[0]} with schedule {alt_cls}")
                 return False, None
             else:
                 # If there's no conflict, add the class to the non-conflicting list
@@ -237,7 +239,7 @@ def create_schedules(classes_by_course, recommended_courses):
 
                 has_no_conflict, non_conflicting_classes = check_other_conflicts(schedule, classes_by_course, (cls[0], course_id))
                 if not is_conflict(schedule, cls) and has_no_conflict:
-                    print(f"Adding class to schedule: {cls[0]}. No conflicts found.")
+                    #print(f"Adding class to schedule: {cls[0]}. No conflicts found.")
                     schedule.append((course_id, [cls]))
 
                     for alt_cls in non_conflicting_classes:
@@ -275,6 +277,9 @@ def create_schedules(classes_by_course, recommended_courses):
 def print_schedules(schedules, classes_by_course, recommended_courses):
     load_names = ["Baja (Alrededor de 10 créditos)", "Media (Alrededor de 18 créditos)", "Alta (Alrededor de 25 créditos)"]
 
+    max_period = get_max_period()
+    print(f"Horarios generados para el siguiente periodo de inscripcion ({max_period}):")
+
     for i in range(0, len(schedules), 2):
         print(f"\nHorarios para carga {load_names[i//2]}")
 
@@ -304,14 +309,14 @@ def print_schedules(schedules, classes_by_course, recommended_courses):
 
 # Example usage
 if __name__ == "__main__":
-    student_id = 5
+    student_id = 8
     recommended_courses = get_recommended_courses(student_id)
     if recommended_courses:
         print_recommended_courses(recommended_courses)
         # Get classes in the latest period for recommended courses
         classes_by_course, max_period = get_classes_in_latest_period_for_recommended_courses(recommended_courses)
-        print("classes_by_course:", classes_by_course)
-        print_classes(classes_by_course, max_period)
+        #print("classes_by_course:", classes_by_course)
+        #print_classes(classes_by_course, max_period)
 
         # Create schedules
         print("\nHorarios...")
