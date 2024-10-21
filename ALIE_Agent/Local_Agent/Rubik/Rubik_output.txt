@@ -1,0 +1,301 @@
+Datos del estudiante:
+- Nombres: Nelly
+- Apellidos: Hurtado
+- Email: christianestrada@example.com
+- Teléfono: +573248329102
+
+[PENSUM] Cursos y su mapeo sugerido:
+
+Semestre 1:
+- ID del curso: 1295, Nombre: Calculo Diferencial | Semestre recomendado: 1, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 33518, Nombre: Logica y Matematicas Discretas | Semestre recomendado: 1, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 33698, Nombre: Introduccion a la Programación | Semestre recomendado: 1, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 4075, Nombre: Pensamiento Sistemico | Semestre recomendado: 1, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 33763, Nombre: Introduccion a la Ingenieria | Semestre recomendado: 1, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 34809, Nombre: Fundamentos de Seguridad de la Informacion | Semestre recomendado: 1, Tipo: Núcleo de Formación Fundamental
+
+Semestre 2:
+- ID del curso: 1297, Nombre: Calculo Integral | Semestre recomendado: 2, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 1290, Nombre: Algebra Lineal | Semestre recomendado: 2, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 33699, Nombre: Programación Avanzada | Semestre recomendado: 2, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 34816, Nombre: Gestion Financiera de Proyectos de TI | Semestre recomendado: 2, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 33733, Nombre: Proyecto de Diseño en Ingenieria | Semestre recomendado: 2, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 34580, Nombre: Arquitectura y Organizacion del Computador | Semestre recomendado: 2, Tipo: Núcleo de Formación Fundamental
+
+Semestre 3:
+- ID del curso: 33732, Nombre: Probabilidad y Estadistica | Semestre recomendado: 3, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 33700, Nombre: Bases de Datos | Semestre recomendado: 3, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 34805, Nombre: Analisis y Diseño de Software | Semestre recomendado: 3, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 4190, Nombre: Comunicaciones y Redes | Semestre recomendado: 3, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 2544, Nombre: Significación Teologica | Semestre recomendado: 3, Tipo: Núcleo de Formación Fundamental
+
+Semestre 4:
+- ID del curso: 4196, Nombre: Estructuras de Datos | Semestre recomendado: 4, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 4082, Nombre: Sistemas de Informacion | Semestre recomendado: 4, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 34803, Nombre: Gestion de Proyectos de Innovacion y Emprendimiento de TI | Semestre recomendado: 4, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 34806, Nombre: Fundamentos de Ingenieria de Software | Semestre recomendado: 4, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 4085, Nombre: Sistemas Operativos | Semestre recomendado: 4, Tipo: Núcleo de Formación Fundamental
+
+Semestre 5:
+- ID del curso: 1299, Nombre: Calculo Vectorial | Semestre recomendado: 5, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 34801, Nombre: Teoria de la Computacion | Semestre recomendado: 5, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 34810, Nombre: Proyecto de Innovacion y Emprendimiento | Semestre recomendado: 5, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 22586, Nombre: Introduccion a Sistemas Distribuidos | Semestre recomendado: 5, Tipo: Núcleo de Formación Fundamental
+
+Semestre 6:
+- ID del curso: 1340, Nombre: Fisica Mecánica | Semestre recomendado: 6, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 1300, Nombre: Ecuaciones Diferenciales | Semestre recomendado: 6, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 34866, Nombre: Optimizacion y Simulacion | Semestre recomendado: 6, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 3194, Nombre: Analisis de algoritmos | Semestre recomendado: 6, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 34807, Nombre: Desarrollo Web | Semestre recomendado: 6, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 34808, Nombre: Introduccion a la Computacion Movil | Semestre recomendado: 6, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 2476, Nombre: Fe y Compromiso del Ingeniero | Semestre recomendado: 6, Tipo: Núcleo de Formación Fundamental
+
+Semestre 7:
+- ID del curso: 1291, Nombre: Analisis Numerico | Semestre recomendado: 7, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 4084, Nombre: Inteligencia Artificial | Semestre recomendado: 7, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 31339, Nombre: Planeacion de Proyecto Final | Semestre recomendado: 7, Tipo: Énfasis
+- ID del curso: 4185, Nombre: Arquitectura de Software | Semestre recomendado: 7, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 5100, Nombre: Proyecto Social Universitario | Semestre recomendado: 7, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 34863, Nombre: Etica en la Era de la Informacion | Semestre recomendado: 7, Tipo: Núcleo de Formación Fundamental
+
+Semestre 8:
+- ID del curso: 34802, Nombre: Tecnologias Digitales Emergentes | Semestre recomendado: 8, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 34814, Nombre: Proyecto de Grado | Semestre recomendado: 8, Tipo: Énfasis
+- ID del curso: 34804, Nombre: Gerencia Estrategica de TI | Semestre recomendado: 8, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 16143, Nombre: Constitución y Derecho Civil | Semestre recomendado: 8, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 2356, Nombre: Epistemologia de la Ingenieria | Semestre recomendado: 8, Tipo: Núcleo de Formación Fundamental
+
+
+[CURSOS DEL ESTUDIANTE] Cursos tomados por el estudiante con ID 3, ordenados por su semestre sugerido:
+
+Semestre 1:
+- ID del curso: 33698, Nombre: Introduccion a la Programación (ID de la clase: 38, Periodo: 2021-1) | Nota: 4.20 | Semestre recomendado: 1, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 1295, Nombre: Calculo Diferencial (ID de la clase: 103, Periodo: 2021-1) | Nota: 4.20 | Semestre recomendado: 1, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 33763, Nombre: Introduccion a la Ingenieria (ID de la clase: 112, Periodo: 2021-1) | Nota: 4.20 | Semestre recomendado: 1, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 34809, Nombre: Fundamentos de Seguridad de la Informacion (ID de la clase: 114, Periodo: 2021-1) | Nota: 4.20 | Semestre recomendado: 1, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 4075, Nombre: Pensamiento Sistemico (ID de la clase: 29, Periodo: 2021-1) | Nota: 4.20 | Semestre recomendado: 1, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 33518, Nombre: Logica y Matematicas Discretas (ID de la clase: 131, Periodo: 2021-1) | Nota: 4.20 | Semestre recomendado: 1, Tipo: Núcleo de Formación Fundamental
+
+Semestre 2:
+- ID del curso: 1297, Nombre: Calculo Integral (ID de la clase: 152, Periodo: 2021-3) | Nota: 3.90 | Semestre recomendado: 2, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 34580, Nombre: Arquitectura y Organizacion del Computador (ID de la clase: 167, Periodo: 2021-3) | Nota: 4.30 | Semestre recomendado: 2, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 33733, Nombre: Proyecto de Diseño en Ingenieria (ID de la clase: 173, Periodo: 2021-3) | Nota: 4.20 | Semestre recomendado: 2, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 1290, Nombre: Algebra Lineal (ID de la clase: 176, Periodo: 2021-3) | Nota: 4.90 | Semestre recomendado: 2, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 34816, Nombre: Gestion Financiera de Proyectos de TI (ID de la clase: 180, Periodo: 2021-3) | Nota: 4.50 | Semestre recomendado: 2, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 33699, Nombre: Programación Avanzada (ID de la clase: 188, Periodo: 2021-3) | Nota: 3.50 | Semestre recomendado: 2, Tipo: Núcleo de Formación Fundamental
+
+Semestre 3:
+- ID del curso: 34805, Nombre: Analisis y Diseño de Software (ID de la clase: 227, Periodo: 2022-1) | Nota: 3.50 | Semestre recomendado: 3, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 33700, Nombre: Bases de Datos (ID de la clase: 205, Periodo: 2022-1) | Nota: 4.90 | Semestre recomendado: 3, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 2544, Nombre: Significación Teologica (ID de la clase: 212, Periodo: 2022-1) | Nota: 4.20 | Semestre recomendado: 3, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 4190, Nombre: Comunicaciones y Redes (ID de la clase: 215, Periodo: 2022-1) | Nota: 4.50 | Semestre recomendado: 3, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 33732, Nombre: Probabilidad y Estadistica (ID de la clase: 216, Periodo: 2022-1) | Nota: 3.90 | Semestre recomendado: 3, Tipo: Núcleo de Formación Fundamental
+
+Semestre 4:
+- ID del curso: 4082, Nombre: Sistemas de Informacion (ID de la clase: 266, Periodo: 2022-3) | Nota: 4.90 | Semestre recomendado: 4, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 4196, Nombre: Estructuras de Datos (ID de la clase: 278, Periodo: 2022-3) | Nota: 3.90 | Semestre recomendado: 4, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 34803, Nombre: Gestion de Proyectos de Innovacion y Emprendimiento de TI (ID de la clase: 286, Periodo: 2022-3) | Nota: 3.50 | Semestre recomendado: 4, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 34806, Nombre: Fundamentos de Ingenieria de Software (ID de la clase: 290, Periodo: 2022-3) | Nota: 4.50 | Semestre recomendado: 4, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 4085, Nombre: Sistemas Operativos (ID de la clase: 2500, Periodo: 2022-3) | Nota: 4.20 | Semestre recomendado: 4, Tipo: Núcleo de Formación Fundamental
+
+Semestre 5:
+- ID del curso: 34801, Nombre: Teoria de la Computacion (ID de la clase: 316, Periodo: 2023-1) | Nota: 4.90 | Semestre recomendado: 5, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 22586, Nombre: Introduccion a Sistemas Distribuidos (ID de la clase: 321, Periodo: 2023-1) | Nota: 4.50 | Semestre recomendado: 5, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 1299, Nombre: Calculo Vectorial (ID de la clase: 346, Periodo: 2023-1) | Nota: 3.90 | Semestre recomendado: 5, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 34810, Nombre: Proyecto de Innovacion y Emprendimiento (ID de la clase: 309, Periodo: 2023-1) | Nota: 3.50 | Semestre recomendado: 5, Tipo: Núcleo de Formación Fundamental
+
+Semestre 6:
+- ID del curso: 34808, Nombre: Introduccion a la Computacion Movil (ID de la clase: 363, Periodo: 2023-3) | Nota: 3.90 | Semestre recomendado: 6, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 1340, Nombre: Fisica Mecánica (ID de la clase: 367, Periodo: 2023-3) | Nota: 3.90 | Semestre recomendado: 6, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 2476, Nombre: Fe y Compromiso del Ingeniero (ID de la clase: 368, Periodo: 2023-3) | Nota: 4.90 | Semestre recomendado: 6, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 3194, Nombre: Analisis de algoritmos (ID de la clase: 371, Periodo: 2023-3) | Nota: 3.50 | Semestre recomendado: 6, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 1300, Nombre: Ecuaciones Diferenciales (ID de la clase: 372, Periodo: 2023-3) | Nota: 4.90 | Semestre recomendado: 6, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 34807, Nombre: Desarrollo Web (ID de la clase: 393, Periodo: 2023-3) | Nota: 4.50 | Semestre recomendado: 6, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 34866, Nombre: Optimizacion y Simulacion (ID de la clase: 351, Periodo: 2023-3) | Nota: 3.50 | Semestre recomendado: 6, Tipo: Núcleo de Formación Fundamental
+
+
+[SEMESTRE ACTUAL] El estudiante se encuentra en el semestre #6.
+Generando horarios para el estudiante con ID: 3
+
+Cursos recomendados para el estudiante:
+- ID: 1291, Nombre: Analisis Numerico, Créditos: 3 (Prerequisito cumplido)
+- ID: 4084, Nombre: Inteligencia Artificial, Créditos: 3 (Prerequisito cumplido)
+- ID: 31339, Nombre: Planeacion de Proyecto Final, Créditos: 2 (Prerequisito cumplido)
+- ID: 4185, Nombre: Arquitectura de Software, Créditos: 3 (Prerequisito cumplido)
+- ID: 5100, Nombre: Proyecto Social Universitario, Créditos: 2 (Prerequisito cumplido)
+- ID: 34863, Nombre: Etica en la Era de la Informacion, Créditos: 2 (Sin prerrequisitos)
+- ID: 34802, Nombre: Tecnologias Digitales Emergentes, Créditos: 2 (Sin prerrequisitos)
+- ID: 34804, Nombre: Gerencia Estrategica de TI, Créditos: 2 (Prerequisito cumplido)
+- ID: 16143, Nombre: Constitución y Derecho Civil, Créditos: 2 (Sin prerrequisitos)
+- ID: 2356, Nombre: Epistemologia de la Ingenieria, Créditos: 2 (Sin prerrequisitos)
+
+Clases disponibles en el periodo 2025-1 para los cursos recomendados:
+
+Curso: Analisis Numerico (ID: 1291)
+  - Clase ID: 619, Día: Lunes, Hora Inicio: 09:00:00, Hora Fin: 11:00:00 (Periodo: 2025-1)
+  - Clase ID: 619, Día: Miércoles, Hora Inicio: 09:00:00, Hora Fin: 11:00:00 (Periodo: 2025-1)
+  - Clase ID: 563, Día: Lunes, Hora Inicio: 11:00:00, Hora Fin: 13:00:00 (Periodo: 2025-1)
+  - Clase ID: 563, Día: Miércoles, Hora Inicio: 11:00:00, Hora Fin: 13:00:00 (Periodo: 2025-1)
+  - Clase ID: 740, Día: Lunes, Hora Inicio: 09:00:00, Hora Fin: 11:00:00 (Periodo: 2025-1)
+  - Clase ID: 740, Día: Miércoles, Hora Inicio: 09:00:00, Hora Fin: 11:00:00 (Periodo: 2025-1)
+Curso: Inteligencia Artificial (ID: 4084)
+  - Clase ID: 723, Día: Jueves, Hora Inicio: 14:00:00, Hora Fin: 17:00:00 (Periodo: 2025-1)
+  - Clase ID: 750, Día: Viernes, Hora Inicio: 09:00:00, Hora Fin: 12:00:00 (Periodo: 2025-1)
+  - Clase ID: 655, Día: Lunes, Hora Inicio: 09:00:00, Hora Fin: 12:00:00 (Periodo: 2025-1)
+  - Clase ID: 690, Día: Lunes, Hora Inicio: 09:00:00, Hora Fin: 12:00:00 (Periodo: 2025-1)
+  - Clase ID: 521, Día: Miércoles, Hora Inicio: 11:00:00, Hora Fin: 14:00:00 (Periodo: 2025-1)
+  - Clase ID: 573, Día: Jueves, Hora Inicio: 11:00:00, Hora Fin: 14:00:00 (Periodo: 2025-1)
+Curso: Arquitectura de Software (ID: 4185)
+  - Clase ID: 593, Día: Miércoles, Hora Inicio: 14:00:00, Hora Fin: 16:00:00 (Periodo: 2025-1)
+  - Clase ID: 593, Día: Viernes, Hora Inicio: 14:00:00, Hora Fin: 16:00:00 (Periodo: 2025-1)
+  - Clase ID: 713, Día: Miércoles, Hora Inicio: 09:00:00, Hora Fin: 11:00:00 (Periodo: 2025-1)
+  - Clase ID: 713, Día: Viernes, Hora Inicio: 09:00:00, Hora Fin: 11:00:00 (Periodo: 2025-1)
+  - Clase ID: 749, Día: Martes, Hora Inicio: 09:00:00, Hora Fin: 11:00:00 (Periodo: 2025-1)
+  - Clase ID: 749, Día: Jueves, Hora Inicio: 09:00:00, Hora Fin: 11:00:00 (Periodo: 2025-1)
+  - Clase ID: 620, Día: Miércoles, Hora Inicio: 11:00:00, Hora Fin: 13:00:00 (Periodo: 2025-1)
+  - Clase ID: 620, Día: Viernes, Hora Inicio: 11:00:00, Hora Fin: 13:00:00 (Periodo: 2025-1)
+Curso: Proyecto Social Universitario (ID: 5100)
+  - Clase ID: 761, Día: Lunes, Hora Inicio: 11:00:00, Hora Fin: 13:00:00 (Periodo: 2025-1)
+  - Clase ID: 681, Día: Martes, Hora Inicio: 18:00:00, Hora Fin: 21:00:00 (Periodo: 2025-1)
+  - Clase ID: 510, Día: Jueves, Hora Inicio: 18:00:00, Hora Fin: 21:00:00 (Periodo: 2025-1)
+Curso: Etica en la Era de la Informacion (ID: 34863)
+  - Clase ID: 618, Día: Viernes, Hora Inicio: 07:00:00, Hora Fin: 09:00:00 (Periodo: 2025-1)
+  - Clase ID: 577, Día: Miércoles, Hora Inicio: 16:00:00, Hora Fin: 18:00:00 (Periodo: 2025-1)
+  - Clase ID: 765, Día: Miércoles, Hora Inicio: 09:00:00, Hora Fin: 11:00:00 (Periodo: 2025-1)
+Curso: Planeacion de Proyecto Final (ID: 31339)
+  - Clase ID: 738, Día: Martes, Hora Inicio: 07:00:00, Hora Fin: 09:00:00 (Periodo: 2025-1)
+  - Clase ID: 671, Día: Viernes, Hora Inicio: 14:00:00, Hora Fin: 16:00:00 (Periodo: 2025-1)
+  - Clase ID: 507, Día: Viernes, Hora Inicio: 11:00:00, Hora Fin: 13:00:00 (Periodo: 2025-1)
+Curso: Tecnologias Digitales Emergentes (ID: 34802)
+  - Clase ID: 675, Día: Jueves, Hora Inicio: 14:00:00, Hora Fin: 16:00:00 (Periodo: 2025-1)
+  - Clase ID: 764, Día: Miércoles, Hora Inicio: 11:00:00, Hora Fin: 13:00:00 (Periodo: 2025-1)
+  - Clase ID: 766, Día: Lunes, Hora Inicio: 09:00:00, Hora Fin: 11:00:00 (Periodo: 2025-1)
+Curso: Gerencia Estrategica de TI (ID: 34804)
+  - Clase ID: 734, Día: Martes, Hora Inicio: 14:00:00, Hora Fin: 17:00:00 (Periodo: 2025-1)
+  - Clase ID: 564, Día: Jueves, Hora Inicio: 14:00:00, Hora Fin: 17:00:00 (Periodo: 2025-1)
+  - Clase ID: 741, Día: Miércoles, Hora Inicio: 14:00:00, Hora Fin: 17:00:00 (Periodo: 2025-1)
+Curso: Constitución y Derecho Civil (ID: 16143)
+  - Clase ID: 760, Día: Miércoles, Hora Inicio: 07:00:00, Hora Fin: 10:00:00 (Periodo: 2025-1)
+  - Clase ID: 714, Día: Viernes, Hora Inicio: 07:00:00, Hora Fin: 10:00:00 (Periodo: 2025-1)
+  - Clase ID: 678, Día: Martes, Hora Inicio: 09:00:00, Hora Fin: 12:00:00 (Periodo: 2025-1)
+Curso: Epistemologia de la Ingenieria (ID: 2356)
+  - Clase ID: 570, Día: Jueves, Hora Inicio: 09:00:00, Hora Fin: 11:00:00 (Periodo: 2025-1)
+  - Clase ID: 715, Día: Martes, Hora Inicio: 18:00:00, Hora Fin: 20:00:00 (Periodo: 2025-1)
+  - Clase ID: 672, Día: Jueves, Hora Inicio: 18:00:00, Hora Fin: 20:00:00 (Periodo: 2025-1)
+  - Clase ID: 651, Día: Martes, Hora Inicio: 09:00:00, Hora Fin: 12:00:00 (Periodo: 2025-1)
+  - Clase ID: 722, Día: Jueves, Hora Inicio: 09:00:00, Hora Fin: 12:00:00 (Periodo: 2025-1)
+  - Clase ID: 637, Día: Lunes, Hora Inicio: 09:00:00, Hora Fin: 11:00:00 (Periodo: 2025-1)
+  - Clase ID: 708, Día: Jueves, Hora Inicio: 09:00:00, Hora Fin: 11:00:00 (Periodo: 2025-1)
+  - Clase ID: 629, Día: Miércoles, Hora Inicio: 16:00:00, Hora Fin: 18:00:00 (Periodo: 2025-1)
+  - Clase ID: 775, Día: Viernes, Hora Inicio: 16:00:00, Hora Fin: 18:00:00 (Periodo: 2025-1)
+  - Clase ID: 615, Día: Lunes, Hora Inicio: 07:00:00, Hora Fin: 09:00:00 (Periodo: 2025-1)
+  - Clase ID: 503, Día: Viernes, Hora Inicio: 07:00:00, Hora Fin: 09:00:00 (Periodo: 2025-1)
+
+
+Horarios generados para el siguiente periodo de inscripción (2025-1):
+
+Horarios para carga Baja (Alrededor de 10 créditos)
+Diurno
+Curso: Planeacion de Proyecto Final (ID: 31339) [2 créditos]
+  Clase ID: 738, Día: Martes, Hora Inicio: 07:00:00, Hora Fin: 09:00:00
+Curso: Etica en la Era de la Informacion (ID: 34863) [2 créditos]
+  Clase ID: 618, Día: Viernes, Hora Inicio: 07:00:00, Hora Fin: 09:00:00
+Curso: Constitución y Derecho Civil (ID: 16143) [2 créditos]
+  Clase ID: 760, Día: Miércoles, Hora Inicio: 07:00:00, Hora Fin: 10:00:00
+Curso: Epistemologia de la Ingenieria (ID: 2356) [2 créditos]
+  Clase ID: 615, Día: Lunes, Hora Inicio: 07:00:00, Hora Fin: 09:00:00
+Curso: Inteligencia Artificial (ID: 4084) [3 créditos]
+  Clase ID: 750, Día: Viernes, Hora Inicio: 09:00:00, Hora Fin: 12:00:00
+Total de créditos: 11
+
+Nocturno
+Curso: Epistemologia de la Ingenieria (ID: 2356) [2 créditos]
+  Clase ID: 672, Día: Jueves, Hora Inicio: 18:00:00, Hora Fin: 20:00:00
+Curso: Proyecto Social Universitario (ID: 5100) [2 créditos]
+  Clase ID: 681, Día: Martes, Hora Inicio: 18:00:00, Hora Fin: 21:00:00
+Curso: Etica en la Era de la Informacion (ID: 34863) [2 créditos]
+  Clase ID: 577, Día: Miércoles, Hora Inicio: 16:00:00, Hora Fin: 18:00:00
+Curso: Gerencia Estrategica de TI (ID: 34804) [2 créditos]
+  Clase ID: 564, Día: Jueves, Hora Inicio: 14:00:00, Hora Fin: 17:00:00
+Curso: Arquitectura de Software (ID: 4185) [3 créditos]
+  Clase ID: 593, Día: Viernes, Hora Inicio: 14:00:00, Hora Fin: 16:00:00
+  Clase ID: 593, Día: Miércoles, Hora Inicio: 14:00:00, Hora Fin: 16:00:00
+Total de créditos: 11
+
+
+Horarios para carga Media (Alrededor de 18 créditos)
+Diurno
+Curso: Planeacion de Proyecto Final (ID: 31339) [2 créditos]
+  Clase ID: 738, Día: Martes, Hora Inicio: 07:00:00, Hora Fin: 09:00:00
+Curso: Etica en la Era de la Informacion (ID: 34863) [2 créditos]
+  Clase ID: 618, Día: Viernes, Hora Inicio: 07:00:00, Hora Fin: 09:00:00
+Curso: Constitución y Derecho Civil (ID: 16143) [2 créditos]
+  Clase ID: 760, Día: Miércoles, Hora Inicio: 07:00:00, Hora Fin: 10:00:00
+Curso: Epistemologia de la Ingenieria (ID: 2356) [2 créditos]
+  Clase ID: 615, Día: Lunes, Hora Inicio: 07:00:00, Hora Fin: 09:00:00
+Curso: Inteligencia Artificial (ID: 4084) [3 créditos]
+  Clase ID: 750, Día: Viernes, Hora Inicio: 09:00:00, Hora Fin: 12:00:00
+Curso: Arquitectura de Software (ID: 4185) [3 créditos]
+  Clase ID: 749, Día: Martes, Hora Inicio: 09:00:00, Hora Fin: 11:00:00
+  Clase ID: 749, Día: Jueves, Hora Inicio: 09:00:00, Hora Fin: 11:00:00
+Curso: Tecnologias Digitales Emergentes (ID: 34802) [2 créditos]
+  Clase ID: 766, Día: Lunes, Hora Inicio: 09:00:00, Hora Fin: 11:00:00
+Curso: Analisis Numerico (ID: 1291) [3 créditos]
+  Clase ID: 563, Día: Lunes, Hora Inicio: 11:00:00, Hora Fin: 13:00:00
+  Clase ID: 563, Día: Miércoles, Hora Inicio: 11:00:00, Hora Fin: 13:00:00
+Total de créditos: 19
+
+Nocturno
+Curso: Epistemologia de la Ingenieria (ID: 2356) [2 créditos]
+  Clase ID: 672, Día: Jueves, Hora Inicio: 18:00:00, Hora Fin: 20:00:00
+Curso: Proyecto Social Universitario (ID: 5100) [2 créditos]
+  Clase ID: 681, Día: Martes, Hora Inicio: 18:00:00, Hora Fin: 21:00:00
+Curso: Etica en la Era de la Informacion (ID: 34863) [2 créditos]
+  Clase ID: 577, Día: Miércoles, Hora Inicio: 16:00:00, Hora Fin: 18:00:00
+Curso: Gerencia Estrategica de TI (ID: 34804) [2 créditos]
+  Clase ID: 564, Día: Jueves, Hora Inicio: 14:00:00, Hora Fin: 17:00:00
+Curso: Arquitectura de Software (ID: 4185) [3 créditos]
+  Clase ID: 593, Día: Viernes, Hora Inicio: 14:00:00, Hora Fin: 16:00:00
+  Clase ID: 593, Día: Miércoles, Hora Inicio: 14:00:00, Hora Fin: 16:00:00
+Total de créditos: 11
+
+
+Horarios para carga Alta (Alrededor de 25 créditos)
+Diurno
+Curso: Planeacion de Proyecto Final (ID: 31339) [2 créditos]
+  Clase ID: 738, Día: Martes, Hora Inicio: 07:00:00, Hora Fin: 09:00:00
+Curso: Etica en la Era de la Informacion (ID: 34863) [2 créditos]
+  Clase ID: 618, Día: Viernes, Hora Inicio: 07:00:00, Hora Fin: 09:00:00
+Curso: Constitución y Derecho Civil (ID: 16143) [2 créditos]
+  Clase ID: 760, Día: Miércoles, Hora Inicio: 07:00:00, Hora Fin: 10:00:00
+Curso: Epistemologia de la Ingenieria (ID: 2356) [2 créditos]
+  Clase ID: 615, Día: Lunes, Hora Inicio: 07:00:00, Hora Fin: 09:00:00
+Curso: Inteligencia Artificial (ID: 4084) [3 créditos]
+  Clase ID: 750, Día: Viernes, Hora Inicio: 09:00:00, Hora Fin: 12:00:00
+Curso: Arquitectura de Software (ID: 4185) [3 créditos]
+  Clase ID: 749, Día: Martes, Hora Inicio: 09:00:00, Hora Fin: 11:00:00
+  Clase ID: 749, Día: Jueves, Hora Inicio: 09:00:00, Hora Fin: 11:00:00
+Curso: Tecnologias Digitales Emergentes (ID: 34802) [2 créditos]
+  Clase ID: 766, Día: Lunes, Hora Inicio: 09:00:00, Hora Fin: 11:00:00
+Curso: Analisis Numerico (ID: 1291) [3 créditos]
+  Clase ID: 563, Día: Lunes, Hora Inicio: 11:00:00, Hora Fin: 13:00:00
+  Clase ID: 563, Día: Miércoles, Hora Inicio: 11:00:00, Hora Fin: 13:00:00
+Curso: Gerencia Estrategica de TI (ID: 34804) [2 créditos]
+  Clase ID: 734, Día: Martes, Hora Inicio: 14:00:00, Hora Fin: 17:00:00
+Total de créditos: 21
+
+Nocturno
+Curso: Epistemologia de la Ingenieria (ID: 2356) [2 créditos]
+  Clase ID: 672, Día: Jueves, Hora Inicio: 18:00:00, Hora Fin: 20:00:00
+Curso: Proyecto Social Universitario (ID: 5100) [2 créditos]
+  Clase ID: 681, Día: Martes, Hora Inicio: 18:00:00, Hora Fin: 21:00:00
+Curso: Etica en la Era de la Informacion (ID: 34863) [2 créditos]
+  Clase ID: 577, Día: Miércoles, Hora Inicio: 16:00:00, Hora Fin: 18:00:00
+Curso: Gerencia Estrategica de TI (ID: 34804) [2 créditos]
+  Clase ID: 564, Día: Jueves, Hora Inicio: 14:00:00, Hora Fin: 17:00:00
+Curso: Arquitectura de Software (ID: 4185) [3 créditos]
+  Clase ID: 593, Día: Viernes, Hora Inicio: 14:00:00, Hora Fin: 16:00:00
+  Clase ID: 593, Día: Miércoles, Hora Inicio: 14:00:00, Hora Fin: 16:00:00
+Total de créditos: 11
+
