@@ -5,12 +5,12 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from threading import Event
 
 # Datos de autenticación
-BASE_URL_AUTH = 'http://localhost:2001/api/auth'
+BASE_URL_AUTH = 'http://alie.javeriana.edu.co/api/auth'
 USERNAME = "luis.bravo@javeriana.edu.com"
 PASSWORD = "123456"
 
 # ALIE API
-BASE_URL = 'http://localhost:3000/api/ia/chat'
+BASE_URL = 'http://alie.javeriana.edu.co/api/ia/chat'
 
 # Headers de la solicitud
 headers = {}

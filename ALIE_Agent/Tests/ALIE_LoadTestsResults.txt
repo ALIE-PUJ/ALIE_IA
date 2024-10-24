@@ -1,0 +1,36 @@
+Resultados de las pruebas de carga:
+
+Resultados de la prueba de carga con 100 solicitudes y 1 hilos:
+Tiempos de respuesta: mínimo=9.5474s, máximo=32.2216s, promedio=22.6560s
+Solicitudes exitosas: 100
+Solicitudes fallidas: 0
+
+Resultados de la prueba de carga con 100 solicitudes y 5 hilos:
+Tiempos de respuesta: mínimo=10.4494s, máximo=105.0089s, promedio=42.6547s
+Solicitudes exitosas: 100
+Solicitudes fallidas: 0
+
+Resultados de la prueba de carga con 100 solicitudes y 10 hilos:
+Tiempos de respuesta: mínimo=10.8933s, máximo=123.4725s, promedio=69.1591s
+Solicitudes exitosas: 76
+Solicitudes fallidas: 24
+
+Resultados de la prueba de carga con 100 solicitudes y 25 hilos:
+Tiempos de respuesta: mínimo=0.0000s, máximo=0.0000s, promedio=0.0000s
+Solicitudes exitosas: 0
+Solicitudes fallidas: 100
+
+Resultados de la prueba de carga con 100 solicitudes y 50 hilos:
+Tiempos de respuesta: mínimo=0.0000s, máximo=0.0000s, promedio=0.0000s
+Solicitudes exitosas: 0
+Solicitudes fallidas: 100
+
+Resultados de la prueba de carga con 100 solicitudes y 75 hilos:
+Tiempos de respuesta: mínimo=0.0000s, máximo=0.0000s, promedio=0.0000s
+Solicitudes exitosas: 0
+Solicitudes fallidas: 100
+
+Resultados de la prueba de carga con 100 solicitudes y 100 hilos:
+Tiempos de respuesta: mínimo=0.0000s, máximo=0.0000s, promedio=0.0000s
+Solicitudes exitosas: 0
+Solicitudes fallidas: 100
