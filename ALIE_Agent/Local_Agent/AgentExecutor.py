@@ -13,8 +13,8 @@ else:
     from .Local_FunctionCallerAgent import *
 
 # Global timeout
-global_timeout = 60  # 60 segundos
-
+global_timeout = int(os.getenv('GLOBAL_TIMEOUT', '120')) # 120 segundos por defecto
+print(f"[Global timeout (AgentExecutor)]: {global_timeout} segundos")
 
 
 # Función para traducir una consulta

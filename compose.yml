@@ -32,6 +32,8 @@ services:
         # LMStudio
       LMSTUDIO_HOST: "host.docker.internal" # Toma la dirección de localhost. 127.0.0.1
       LMSTUDIO_PORT: "1234" # Puerto de LMStudio por defecto
+        # Timeout
+      GLOBAL_TIMEOUT: "120" # Tiempo de espera global
         # Databases
       MONGO_URI: "mongodb://admin:admin123@host.docker.internal:27017" # Toma la dirección de localhost con host.docker.internal, sobre el cual corre el contenedor de MongoDB con ALIE_DBB.
       COCKROACHDB_HOST: "host.docker.internal" # Dado que se ejecuta en local, con la BD corriendo en otro contenedor

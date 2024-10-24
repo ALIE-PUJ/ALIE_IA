@@ -18,6 +18,7 @@ def normal_conversation(argument, url, headers, model):
     """
 
     message = argument
+    print(f"[normal_conversation] ---> Posting to: {url}")
     print(f"[INFO] ---> Posting to generate a response to message: {message}")
 
     # print("Final message: ", message)
@@ -38,9 +39,13 @@ def normal_conversation(argument, url, headers, model):
         "max_tokens": max_tokens,
         "stream": False
     }
+
+    print(f"[normal_conversation] ---> Payload: {final_payload}")
     
     final_response = requests.post(url, headers=headers, data=json.dumps(final_payload))
-    
+    print("1.1 --> [HANDLE FUNCTION CALL - NORMAL CONVERSATION] Raw model response: ", final_response.json())
+    print("1.2 --> [HANDLE FUNCTION CALL - NORMAL CONVERSATION] Model response status code = ", final_response.status_code)
+
     if final_response.status_code == 200:
         final_result = final_response.json()["choices"][0]["message"]["content"]
         print("[NormalConversation] Raw Response: ", final_response)

@@ -74,6 +74,8 @@ spec:
                 configMapKeyRef:
                   name: auth-config
                   key: url
+            - name: GLOBAL_TIMEOUT
+              value: "120"
           ports:
             - containerPort: 3000
               protocol: TCP

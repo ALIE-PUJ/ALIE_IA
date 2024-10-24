@@ -11,7 +11,9 @@ else:
     from .Local_TaggingCallerAgent import *
 
 # Global timeout
-global_timeout = 60  # 60 segundos
+global_timeout = int(os.getenv('GLOBAL_TIMEOUT', '120')) # 120 segundos por defecto
+print(f"[Global timeout (TaggingAgentExecutor)]: {global_timeout} segundos")
+
 
 # Función genérica que ejecuta una función con timeout sobre un hilo
 def ejecutar_con_timeout(func, args=(), kwargs=None, timeout=5):

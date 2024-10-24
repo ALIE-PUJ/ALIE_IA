@@ -357,6 +357,9 @@ def handle_function_call(user_input, url, headers, functions, model, support_str
     # Send the POST request
     response = requests.post(url, headers=headers, data=json.dumps(data))
 
+    print("1. --> [HANDLE FUNCTION CALL] Raw model response: ", response.json())
+    print("1. --> [HANDLE FUNCTION CALL] Model response status code: ", response.status_code)
+
     # Parse the response
     if response.status_code == 200:
         result = response.json()["choices"][0]["message"]["content"]
@@ -455,7 +458,9 @@ def generate_final_response(final_message, url, headers, model):
     }
     
     final_response = requests.post(url, headers=headers, data=json.dumps(final_payload))
-    
+    print("2. --> [POSTPROCESSING] Raw model response: ", final_response.json())
+    print("2. --> [POSTPROCESSING] Model response status code: ", final_response.status_code)
+
     if final_response.status_code == 200:
         final_result = final_response.json()["choices"][0]["message"]["content"]
         print(f"[INFO] ---> Final Response by model: {final_result}")

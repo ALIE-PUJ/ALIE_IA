@@ -111,7 +111,7 @@ def upload_collection_to_pinecone(db, collection_name, api_key, base_url, data_d
     
     upload_compiled_doc_to_pinecone(api_key, base_url, compiled_filepath, collection_name)
     print(f"Datos de la colección '{collection_name}' subidos a Pinecone.")
-    time.sleep(5)
+    time.sleep(15)
 
 def process_collections(db, collection_names, data_dir, api_key, base_url):
     for collection_name in collection_names:
@@ -170,7 +170,7 @@ def main():
             if file_id:
                 print(f"Eliminando archivo con ID: {file_id}")
                 delete_file_from_pinecone(api_key, base_url, file_id)
-                time.sleep(5)
+                time.sleep(15)
     else:
         print("La respuesta de la API no es una lista de IDs de archivos.")
     
