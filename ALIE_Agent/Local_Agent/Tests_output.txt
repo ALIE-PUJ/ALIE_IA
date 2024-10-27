@@ -92,7 +92,7 @@ There are 2 prerequisites for the course with code '4196':
 - Programación Avanzada.
 
 
-get_class_schedule_by_code:
+get_class_schedule:
 This are the schedules for class with ID 528:
 - Day: Lunes, from 16:00:00 to 18:00:00.
 - Day: Miércoles, from 16:00:00 to 18:00:00.

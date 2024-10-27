@@ -545,7 +545,7 @@ def get_students_by_name(argument: str) -> str:
     # La entrada es el nombre del estudiante, y la función devuelve
     # una lista de estudiantes cuyos nombres coinciden con la entrada.
     resultados = get_students_by_name_fetch(argument)  # Función original
-    if not resultados:
+    if not resultados or "Error" in resultados:
         return f"There are no students with the name {argument}."
     
     descripcion = f"I found {len(resultados)} students with the name '{argument}':\n"
@@ -588,7 +588,7 @@ def get_course_by_name(argument: str) -> str:
     course_name = find_course_name(argument)
 
     resultados = get_course_by_name_fetch(course_name)  # Función original
-    if not resultados:
+    if not resultados or "Error" in resultados:
         return f"There are no courses with the name {argument}."
 
     descripcion = f"I found the following course: '{argument}':\n"
@@ -621,9 +621,9 @@ def get_course_by_code(argument: str) -> str:
 
     print(f"[DBSearch] Searching for course with code: {argument}")
     resultados = get_course_by_code_fetch(argument)  # Llamada a la función fetch
-    if not resultados:
+    if not resultados or "Error" in resultados:
         return f"There are no courses with the code {argument}."
-
+    
     descripcion = f"I found the following course: '{argument}':\n"
     for curso in resultados:
         descripcion += (
@@ -657,9 +657,9 @@ def get_classes_by_course_code(argument: str) -> str:
     # La entrada es el código del curso, y la función devuelve
     # una lista de clases asociadas con ese código de curso.
     resultados = get_classes_by_course_code_fetch(argument)  # Función original
-    if not resultados or len(resultados) < 2:
+    if not resultados or len(resultados) < 2 or "Error" in resultados:
         return f"There are no classes for the course with code '{argument}'."
-
+    
     # El primer elemento es la información del curso, así que lo omitimos
     descripcion = f"There are {len(resultados) - 1} classes for the course with code '{argument}':\n"
     for clase in resultados[1:]:  # Empezamos desde el segundo elemento
@@ -698,7 +698,7 @@ def get_classes_by_course_name(argument: str) -> str:
     course_name = find_course_name(argument)
 
     resultados = get_classes_by_course_name_fetch(course_name)  # Función original
-    if not resultados:
+    if not resultados or "Error" in resultados:
         return f"There are no classes for the course '{argument}'."
 
     descripcion = f"I found {len(resultados)} classes for the course '{argument}':\n"
@@ -728,7 +728,7 @@ def get_class_by_code(argument: str) -> str:
     # La entrada es el código de la clase, y la función devuelve
     # detalles de la clase con ese código.
     resultados = get_class_by_code_fetch(argument)  # Función original
-    if not resultados:
+    if not resultados or "Error" in resultados:
         return f"There are no classes with the code '{argument}'."
 
     descripcion = f"I found a class with code '{argument}':\n"
@@ -769,7 +769,7 @@ def get_prerequisites_by_course_name(argument: str) -> str:
     course_name = find_course_name(argument)
 
     resultados = get_prerequisites_by_course_name_fetch(course_name)  # Función original
-    if not resultados:
+    if not resultados or "Error" in resultados:
         return f"There are no prerequisites for the course '{argument}'."
 
     descripcion = f"There are {len(resultados)} prerequisites for the course '{argument}':\n"
@@ -801,7 +801,7 @@ def get_prerequisites_by_course_code(argument: str) -> str:
     # La entrada es el código del curso, y la función devuelve
     # una lista de prerrequisitos para ese curso.
     resultados = get_prerequisites_by_course_code_fetch(argument)  # Función original
-    if not resultados:
+    if not resultados or "Error" in resultados:
         return f"There are no prerequisites for the course with code '{argument}'."
 
     descripcion = f"There are {len(resultados)} prerequisites for the course with code '{argument}':\n"
@@ -825,7 +825,7 @@ def get_class_schedule(argument: str) -> str:
     """
     # Busca los horarios de una clase por su ID.
     resultado = get_class_schedule_fetch(argument)
-    if not resultado:
+    if not resultado or "Error" in resultado:
         return "I am sorry, no schedules were found for the specified class."
 
     descripcion = f"This are the schedules for class with ID {argument}:\n"
@@ -854,7 +854,7 @@ def get_teacher_by_name(argument: str) -> str:
     # La entrada es el nombre del profesor, y la función devuelve
     # una lista de profesores cuyos nombres coinciden con la entrada.
     resultados = get_teacher_by_name_fetch(argument)  # Función original
-    if not resultados:
+    if not resultados or "Error" in resultados:
         return f"There are no professors with the name {argument}."
 
     descripcion = f"There are {len(resultados)} professors with the name '{argument}':\n"
@@ -887,7 +887,7 @@ def get_student_grades_by_period(argument: str) -> str:
     # Llamada a la función que obtiene los datos
     resultados = get_student_grades_by_period_fetch(student_id)
     
-    if not resultados:
+    if not resultados or "Error" in resultados:
         return f"No grades found for student ID {student_id}."
     
     # Agrupar las notas por período
@@ -931,7 +931,7 @@ def get_student_courses(argument: str) -> str:
     # Llamada a la función fetch
     resultados = get_student_courses_fetch(student_id)
     
-    if not resultados:
+    if not resultados or "Error" in resultados:
         return f"No courses found for student ID {student_id}."
     
     # Agrupar los cursos por período
@@ -965,7 +965,7 @@ def get_all_courses(argument) -> str:
     # Llamada a la función fetch
     resultados = get_all_courses_fetch()
     
-    if not resultados:
+    if not resultados or "Error" in resultados:
         return "No courses available."
 
     # Formatear la salida
@@ -1003,7 +1003,7 @@ def get_student_classes(argument: str) -> str:
     if not isinstance(resultados, list):
         return f"Error fetching classes for student ID {student_id}. {resultados}"
 
-    if not resultados:
+    if not resultados or "Error" in resultados:
         return f"No classes found for student ID {student_id}."
     
     # Agrupar las clases por período
@@ -1047,6 +1047,9 @@ def get_student_academic_summary(argument: str) -> str:
     :param student_id: The ID of the student.
     :return: A formatted string with the student's courses, current semester, and grades.
     """
+
+    if not argument.isdigit():
+        return "Invalid student ID. Please provide a valid numeric ID."
 
     student_id = int(argument)
     student_courses = get_student_courses_rubik(student_id)

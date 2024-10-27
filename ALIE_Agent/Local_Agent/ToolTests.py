@@ -48,7 +48,7 @@ if __name__ == "__main__":
     write_output_file("get_prerequisites_by_course_code:\n" + result)
 
     result = get_class_schedule("528")
-    write_output_file("get_class_schedule_by_code:\n" + result)
+    write_output_file("get_class_schedule:\n" + result)
 
     result = get_teacher_by_name("Oscar")
     write_output_file("get_teacher_by_name:\n" + result)
@@ -72,3 +72,14 @@ if __name__ == "__main__":
     # Añadir al agente. Retorno directo.
     result = get_student_academic_summary("1")
     write_output_file("get_student_academic_summary:\n" + result)
+
+
+    # Cumplimiento de RFs
+    '''
+    RF 2. Permitir consultas personalizadas sobre calificaciones y clases. HECHO
+    RF 2.1. El sistema debe contestar consultas sobre las calificaciones definitivas de las clases inscritas de un usuario autenticado. HECHO
+    RF 2.2. El sistema debe poder contestar consultas sobre la base de información de las clases inscritas en el semestre actual, como los documentos de la clase, el temario del curso, entre otros. HECHO
+    ****RF 2.3. El sistema debe poder contestar consultas sobre las asignaturas pendientes por ver del plan de estudios. FALTANTE.
+    RF 2.4. El sistema debe poder sugerir asignaturas electivas, que le sirvan al estudiante para inscribir según sus condiciones de requisitos. HECHO (RAG)
+    RF 2.5. El sistema debe poder contestar consultas sobre los horarios de las clases inscritas y disponibles para inscribir. HECHO
+    '''
