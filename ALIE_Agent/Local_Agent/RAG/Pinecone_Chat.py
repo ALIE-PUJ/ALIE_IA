@@ -94,6 +94,17 @@ def general_retrieval(argument):
     # Extract and return the response content
     content = response['choices'][0]['message']['content']
 
+    # Strip references from the content
+    # Find the position of "Referencias" in the content
+    end_position = content.find("References:")
+
+    # If "Referencias" is found, return the content up to that position
+    if end_position != -1:
+        content = content[:end_position].strip()
+        print("[PINECONE RAG] Found the end position text and stripped content:", content)
+    else:
+        content = content.strip()
+
     if content is None:
         content = "No se encontró información relacionada con la consulta."
 
@@ -135,6 +146,17 @@ def course_retrieval(argument):
     
     # Extract and return the response content
     content = response['choices'][0]['message']['content']
+
+    # Strip references from the content
+    # Find the position of "Referencias" in the content
+    end_position = content.find("References:")
+
+    # If "Referencias" is found, return the content up to that position
+    if end_position != -1:
+        content = content[:end_position].strip()
+        print("[PINECONE RAG] Found the end position text and stripped content:", content)
+    else:
+        content = content.strip()
 
     if content is None:
         content = "No se encontró información relacionada con la consulta."
