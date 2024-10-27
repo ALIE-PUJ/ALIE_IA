@@ -193,6 +193,7 @@ def get_classes_by_course_code_fetch(course_code: str) -> str:
                 SELECT cl.id_clase, cl.periodo, cl.fecha_inicio, cl.fecha_final 
                 FROM Clase cl
                 WHERE cl.id_curso = %s
+                ORDER BY cl.periodo DESC
             """)
             cursor.execute(query, (course_code,))
             result = cursor.fetchall()
@@ -224,6 +225,7 @@ def get_classes_by_course_name_fetch(course_name: str) -> str:
                 FROM Clase cl
                 JOIN Curso cu ON cl.id_curso = cu.id_curso
                 WHERE LOWER(cu.nombre) LIKE LOWER(%s)
+                ORDER BY cl.periodo DESC
             """)
             cursor.execute(query, (f"%{course_name}%",))
             result = cursor.fetchall()
@@ -480,8 +482,46 @@ def get_student_classes_fetch(student_id: int) -> list:
     finally:
         conn.close()
 
+# Función auxiliar para obtener los cursos que ha visto un estudiante (Formato especifico RUBIK)
+def get_student_courses_rubik(student_id):
+    """
+    Fetches all the courses that a student has completed or enrolled in,
+    including their grades.
 
-
+    :param student_id: The ID of the student.
+    :return: A list of dictionaries containing the course ID, course name, semester,
+             course type, class ID, period, and grade.
+    """
+    try:
+        conn = create_connection()
+        with conn.cursor() as cursor:
+            query = """
+            SELECT 
+                Curso.id_curso,
+                Curso.nombre AS curso_nombre,
+                Semestre_Sugerido.semestre,
+                Semestre_Sugerido.tipo_curso,
+                Clase.id_clase,      -- Include class ID
+                Clase.periodo,       -- Include period
+                Nota.nota            -- Include grade, it will be NULL if not found
+            FROM Estudiante_Clase
+            JOIN Clase ON Estudiante_Clase.id_clase = Clase.id_clase
+            JOIN Curso ON Clase.id_curso = Curso.id_curso
+            JOIN Semestre_Sugerido ON Curso.id_curso = Semestre_Sugerido.id_curso
+            LEFT JOIN Nota ON Estudiante_Clase.id_clase = Nota.id_clase 
+                            AND Estudiante_Clase.id_estudiante = Nota.id_estudiante
+            WHERE Estudiante_Clase.id_estudiante = %s
+            ORDER BY Semestre_Sugerido.semestre ASC
+            """
+            cursor.execute(query, (student_id,))
+            result = cursor.fetchall()
+            columns = [desc[0] for desc in cursor.description]
+            result_with_columns = [dict(zip(columns, row)) for row in result]
+            return result_with_columns
+    except Error as e:
+        return f"Error: {e}"
+    finally:
+        conn.close()
 
 
 
@@ -973,18 +1013,12 @@ def get_student_classes(argument: str) -> str:
             periodo = resultado['periodo']
             curso_nombre = resultado['curso_nombre']
             clase_id = resultado['clase_id']
-            dia = resultado['dia']
-            hora_inicio = resultado['hora_inicio']
-            hora_fin = resultado['hora_fin']
             
             if periodo not in periodos:
                 periodos[periodo] = []
             periodos[periodo].append({
                 'curso_nombre': curso_nombre,
-                'clase_id': clase_id,
-                'dia': dia,
-                'hora_inicio': hora_inicio,
-                'hora_fin': hora_fin
+                'clase_id': clase_id
             })
         else:
             return f"Error: Unexpected result format for student ID {student_id}."
@@ -994,7 +1028,66 @@ def get_student_classes(argument: str) -> str:
     for periodo in sorted(periodos.keys(), reverse=True):  # Ordenar de mayor a menor
         descripcion += f"\nPeriod: {periodo}\n"
         for clase in periodos[periodo]:
-            descripcion += (f"- Class ID: {clase['clase_id']}, Course: {clase['curso_nombre']}, "
-                            f"Day: {clase['dia']}, Time: {clase['hora_inicio']} - {clase['hora_fin']}\n")
+            descripcion += (f"- Class ID: {clase['clase_id']}, Course: {clase['curso_nombre']}\n")
     
+    return descripcion
+
+
+
+
+
+# Funciones nuevas. Opcionales
+
+
+# Función auxiliar para obtener los cursos de un estudiante y su semestre actual
+def get_student_academic_summary(argument: str) -> str:
+    """
+    Fetches the courses taken by the student and determines their current semester.
+
+    :param student_id: The ID of the student.
+    :return: A formatted string with the student's courses, current semester, and grades.
+    """
+
+    student_id = int(argument)
+    student_courses = get_student_courses_rubik(student_id)
+
+    if not isinstance(student_courses, list):
+        return f"Error fetching student courses. {student_courses}"
+    
+    if not student_courses:
+        return f"\n\n[CURSOS DEL ESTUDIANTE] No se encontraron cursos para el estudiante con ID {student_id}.\n"
+    
+    # Agrupar los cursos del estudiante por semestre
+    semestres_estudiante = {}
+    for course in student_courses:
+        semestre = course['semestre']
+        if semestre not in semestres_estudiante:
+            semestres_estudiante[semestre] = []
+        semestres_estudiante[semestre].append(course)
+
+    # Formatear el resultado de los cursos del estudiante por semestre ascendente
+    descripcion = f"\n\n[CURSOS DEL ESTUDIANTE] Cursos tomados por el estudiante con ID {student_id}, ordenados por su semestre sugerido:\n"
+    for semestre in sorted(semestres_estudiante.keys()):
+        descripcion += f"\nSemestre {semestre}:\n"
+        for course in semestres_estudiante[semestre]:
+            # Convert 'None' to 'N/A' for display
+            grade = course['nota'] if course['nota'] is not None else 'N/A'
+            descripcion += (f"- ID del curso: {course['id_curso']}, Nombre: {course['curso_nombre']} "
+                            f"(ID de la clase: {course['id_clase']}, Periodo: {course['periodo']}) | "
+                            f"Nota: {grade} | "
+                            f"Semestre recomendado: {course['semestre']}, Tipo: {course['tipo_curso']}\n")
+    
+    # Determinar el semestre actual basado en la cantidad de cursos por semestre
+    semestre_actual = None
+    for semestre, cursos in semestres_estudiante.items():
+        if len(cursos) >= 3:  # Si ha tomado al menos 3 cursos en ese semestre
+            if semestre_actual is None or semestre > semestre_actual:
+                semestre_actual = semestre
+
+    # Añadir el semestre actual al resultado
+    if semestre_actual:
+        descripcion += f"\n\n[SEMESTRE ACTUAL] El estudiante se encuentra en el semestre #{semestre_actual}.\n"
+    else:
+        descripcion += "\n\n[SEMESTRE ACTUAL] El estudiante no ha completado al menos 3 cursos de un semestre en especifico.\n"
+
     return descripcion

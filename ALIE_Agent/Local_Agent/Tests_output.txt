@@ -1,0 +1,414 @@
+get_students_by_name:
+I found 3 students with the name 'Luis':
+- Luis Caicedo (ID: 80), born on 2000-04-21, enrolled in the program with ID 1, email: gabriela13@example.com, phone: 57 300 953 16 74, lives at Cl. 8K # 68-6 Sur, 259494, Cucunubá, Cundinamarca.
+- Luis Rojas (ID: 82), born on 1998-10-06, enrolled in the program with ID 1, email: merygarzon@example.org, phone: (+57)3040786260, lives at Calle 32 # 28-3 Este, Casa 98, 867811, San Francisco, Putumayo.
+- Luis Pacheco (ID: 92), born on 2004-09-27, enrolled in the program with ID 1, email: anaflorez@example.com, phone: 324 905 52 66, lives at Carrera 65 Este # 48-2 Sur, Apartamento 41, 152793, Busbanzá, Boyacá.
+
+
+get_course_by_name:
+I found the following course: 'Calculo vectorial':
+- Course: Calculo Vectorial (ID: 1299), Description: Curso de cálculo vectorial que trata sobre funciones vectoriales y sus aplicaciones en ingeniería..
+
+
+get_course_by_code:
+I found the following course: '4196':
+- Course: Estructuras de Datos (ID: 4196), Description: Curso sobre estructuras de datos fundamentales y sus aplicaciones en programación..
+
+
+get_classes_by_course_code:
+There are 12 classes for the course with code '4196':
+- Class ID: 528, period: 2025-1, from 2025-01-25 to 2025-06-05.
+- Class ID: 772, period: 2025-1, from 2025-01-25 to 2025-06-05.
+- Class ID: 571, period: 2025-1, from 2025-01-25 to 2025-06-05.
+- Class ID: 541, period: 2025-1, from 2025-01-25 to 2025-06-05.
+- Class ID: 1557, period: 2024-3, from 2024-07-15 to 2024-11-23.
+- Class ID: 1558, period: 2024-3, from 2024-07-15 to 2024-11-23.
+- Class ID: 1561, period: 2024-3, from 2024-07-15 to 2024-11-23.
+- Class ID: 1562, period: 2024-3, from 2024-07-15 to 2024-11-23.
+- Class ID: 284, period: 2022-3, from 2022-07-18 to 2022-11-26.
+- Class ID: 296, period: 2022-3, from 2022-07-18 to 2022-11-26.
+- Class ID: 279, period: 2022-3, from 2022-07-18 to 2022-11-26.
+- Class ID: 278, period: 2022-3, from 2022-07-18 to 2022-11-26.
+
+
+get_classes_by_course_name:
+I found 40 classes for the course 'Calculo diferencial':
+- Class ID: 679, period: 2025-1, from 2025-01-25 to 2025-06-05.
+- Class ID: 679, period: 2025-1, from 2025-01-25 to 2025-06-05.
+- Class ID: 677, period: 2025-1, from 2025-01-25 to 2025-06-05.
+- Class ID: 627, period: 2025-1, from 2025-01-25 to 2025-06-05.
+- Class ID: 742, period: 2025-1, from 2025-01-25 to 2025-06-05.
+- Class ID: 779, period: 2025-1, from 2025-01-25 to 2025-06-05.
+- Class ID: 520, period: 2025-1, from 2025-01-25 to 2025-06-05.
+- Class ID: 596, period: 2025-1, from 2025-01-25 to 2025-06-05.
+- Class ID: 579, period: 2025-1, from 2025-01-25 to 2025-06-05.
+- Class ID: 600, period: 2025-1, from 2025-01-25 to 2025-06-05.
+- Class ID: 658, period: 2025-1, from 2025-01-25 to 2025-06-05.
+- Class ID: 650, period: 2025-1, from 2025-01-25 to 2025-06-05.
+- Class ID: 604, period: 2025-1, from 2025-01-25 to 2025-06-05.
+- Class ID: 555, period: 2025-1, from 2025-01-25 to 2025-06-05.
+- Class ID: 5198, period: 2024-3, from 2024-07-15 to 2024-11-23.
+- Class ID: 5378, period: 2024-3, from 2024-07-15 to 2024-11-23.
+- Class ID: 5385, period: 2024-3, from 2024-07-15 to 2024-11-23.
+- Class ID: 5391, period: 2024-3, from 2024-07-15 to 2024-11-23.
+- Class ID: 5447, period: 2024-3, from 2024-07-15 to 2024-11-23.
+- Class ID: 5222, period: 2024-3, from 2024-07-15 to 2024-11-23.
+- Class ID: 5265, period: 2024-3, from 2024-07-15 to 2024-11-23.
+- Class ID: 5266, period: 2024-3, from 2024-07-15 to 2024-11-23.
+- Class ID: 5301, period: 2024-3, from 2024-07-15 to 2024-11-23.
+- Class ID: 5324, period: 2024-3, from 2024-07-15 to 2024-11-23.
+- Class ID: 5330, period: 2024-3, from 2024-07-15 to 2024-11-23.
+- Class ID: 5341, period: 2024-3, from 2024-07-15 to 2024-11-23.
+- Class ID: 5350, period: 2024-3, from 2024-07-15 to 2024-11-23.
+- Class ID: 36, period: 2021-1, from 2021-01-25 to 2021-06-05.
+- Class ID: 14, period: 2021-1, from 2021-01-25 to 2021-06-05.
+- Class ID: 102, period: 2021-1, from 2021-01-25 to 2021-06-05.
+- Class ID: 81, period: 2021-1, from 2021-01-25 to 2021-06-05.
+- Class ID: 146, period: 2021-1, from 2021-01-25 to 2021-06-05.
+- Class ID: 41, period: 2021-1, from 2021-01-25 to 2021-06-05.
+- Class ID: 149, period: 2021-1, from 2021-01-25 to 2021-06-05.
+- Class ID: 75, period: 2021-1, from 2021-01-25 to 2021-06-05.
+- Class ID: 148, period: 2021-1, from 2021-01-25 to 2021-06-05.
+- Class ID: 98, period: 2021-1, from 2021-01-25 to 2021-06-05.
+- Class ID: 103, period: 2021-1, from 2021-01-25 to 2021-06-05.
+- Class ID: 127, period: 2021-1, from 2021-01-25 to 2021-06-05.
+- Class ID: 66, period: 2021-1, from 2021-01-25 to 2021-06-05.
+
+
+get_class_by_code:
+I found a class with code '528':
+- Class ID: 528, corresponding to course ID: 4196, period: 2025-1, from 2025-01-25 to 2025-06-05.
+
+
+get_prerequisites_by_course_name:
+There are 2 prerequisites for the course 'Estructuras de datos':
+- Logica y Matematicas Discretas.
+- Programación Avanzada.
+
+
+get_prerequisites_by_course_code:
+There are 2 prerequisites for the course with code '4196':
+- Logica y Matematicas Discretas.
+- Programación Avanzada.
+
+
+get_class_schedule_by_code:
+This are the schedules for class with ID 528:
+- Day: Lunes, from 16:00:00 to 18:00:00.
+- Day: Miércoles, from 16:00:00 to 18:00:00.
+
+
+get_teacher_by_name:
+There are 1 professors with the name 'Oscar':
+- Oscar Danilo Martínez Bernal (ID: 23), Email: oscar.martinez@example.com, Phone: 345678903.
+
+
+get_student_grades_by_period:
+Grades for student ID 1:
+
+Period: 2021-1
+- Course: Calculo Diferencial, Grade: 4.50
+- Course: Logica y Matematicas Discretas, Grade: 4.50
+- Course: Introduccion a la Programación, Grade: 4.50
+- Course: Pensamiento Sistemico, Grade: 4.50
+- Course: Introduccion a la Ingenieria, Grade: 4.50
+- Course: Fundamentos de Seguridad de la Informacion, Grade: 4.50
+
+Period: 2021-3
+- Course: Calculo Integral, Grade: 3.90
+- Course: Algebra Lineal, Grade: 4.90
+- Course: Programación Avanzada, Grade: 3.50
+- Course: Gestion Financiera de Proyectos de TI, Grade: 4.50
+- Course: Proyecto de Diseño en Ingenieria, Grade: 4.20
+- Course: Arquitectura y Organizacion del Computador, Grade: 4.30
+
+Period: 2022-1
+- Course: Probabilidad y Estadistica, Grade: 3.90
+- Course: Bases de Datos, Grade: 4.90
+- Course: Analisis y Diseño de Software, Grade: 3.50
+- Course: Comunicaciones y Redes, Grade: 4.50
+- Course: Significación Teologica, Grade: 4.20
+
+Period: 2022-3
+- Course: Estructuras de Datos, Grade: 3.90
+- Course: Sistemas de Informacion, Grade: 4.90
+- Course: Gestion de Proyectos de Innovacion y Emprendimiento de TI, Grade: 3.50
+- Course: Fundamentos de Ingenieria de Software, Grade: 4.50
+- Course: Sistemas Operativos, Grade: 4.20
+
+Period: 2023-1
+- Course: Calculo Vectorial, Grade: 3.90
+- Course: Teoria de la Computacion, Grade: 4.90
+- Course: Proyecto de Innovacion y Emprendimiento, Grade: 3.50
+- Course: Introduccion a Sistemas Distribuidos, Grade: 4.50
+
+Period: 2023-3
+- Course: Fisica Mecánica, Grade: 3.90
+- Course: Ecuaciones Diferenciales, Grade: 4.90
+- Course: Optimizacion y Simulacion, Grade: 3.50
+- Course: Desarrollo Web, Grade: 4.50
+- Course: Introduccion a la Computacion Movil, Grade: 3.90
+- Course: Fe y Compromiso del Ingeniero, Grade: 4.90
+- Course: Analisis de algoritmos, Grade: 3.50
+
+Period: 2024-1
+- Course: Analisis Numerico, Grade: 4.50
+- Course: Inteligencia Artificial, Grade: 3.90
+- Course: Planeacion de Proyecto Final, Grade: 4.90
+- Course: Arquitectura de Software, Grade: 3.50
+- Course: Proyecto Social Universitario, Grade: 4.50
+- Course: Etica en la Era de la Informacion, Grade: 3.90
+
+Period: 2024-3
+- Course: Tecnologias Digitales Emergentes, Grade: 4.90
+- Course: Proyecto de Grado, Grade: 3.50
+- Course: Gerencia Estrategica de TI, Grade: 3.50
+- Course: Constitución y Derecho Civil, Grade: 4.50
+- Course: Epistemologia de la Ingenieria, Grade: 3.90
+
+
+get_student_courses:
+Courses taken by student ID 1:
+
+Period: 2021-1
+- Logica y Matematicas Discretas
+- Fundamentos de Seguridad de la Informacion
+- Introduccion a la Ingenieria
+- Pensamiento Sistemico
+- Introduccion a la Programación
+- Calculo Diferencial
+
+Period: 2021-3
+- Arquitectura y Organizacion del Computador
+- Calculo Integral
+- Algebra Lineal
+- Programación Avanzada
+- Gestion Financiera de Proyectos de TI
+- Proyecto de Diseño en Ingenieria
+
+Period: 2022-1
+- Bases de Datos
+- Analisis y Diseño de Software
+- Comunicaciones y Redes
+- Significación Teologica
+- Probabilidad y Estadistica
+
+Period: 2022-3
+- Estructuras de Datos
+- Sistemas de Informacion
+- Gestion de Proyectos de Innovacion y Emprendimiento de TI
+- Fundamentos de Ingenieria de Software
+- Sistemas Operativos
+
+Period: 2023-1
+- Proyecto de Innovacion y Emprendimiento
+- Introduccion a Sistemas Distribuidos
+- Calculo Vectorial
+- Teoria de la Computacion
+
+Period: 2023-3
+- Analisis de algoritmos
+- Fisica Mecánica
+- Optimizacion y Simulacion
+- Ecuaciones Diferenciales
+- Desarrollo Web
+- Introduccion a la Computacion Movil
+- Fe y Compromiso del Ingeniero
+
+Period: 2024-1
+- Analisis Numerico
+- Arquitectura de Software
+- Proyecto Social Universitario
+- Etica en la Era de la Informacion
+- Planeacion de Proyecto Final
+- Inteligencia Artificial
+
+Period: 2024-3
+- Proyecto de Grado
+- Epistemologia de la Ingenieria
+- Constitución y Derecho Civil
+- Gerencia Estrategica de TI
+- Tecnologias Digitales Emergentes
+
+
+get_all_courses:
+Available courses:
+- Course ID: 1295, Name: Calculo Diferencial, Description: Curso de introducción al cálculo diferencial, abordando conceptos fundamentales como límites, derivadas e integrales básicas.
+- Course ID: 33518, Name: Logica y Matematicas Discretas, Description: Curso que cubre los principios de la lógica matemática y las matemáticas discretas esenciales para la informática.
+- Course ID: 33698, Name: Introduccion a la Programación, Description: Curso básico de programación, cubriendo los fundamentos y técnicas básicas de desarrollo de software.
+- Course ID: 4075, Name: Pensamiento Sistemico, Description: Curso que promueve el pensamiento sistémico y la resolución de problemas en contextos complejos.
+- Course ID: 33763, Name: Introduccion a la Ingenieria, Description: Curso que ofrece una visión general de los principios y prácticas de la ingeniería.
+- Course ID: 16143, Name: Constitución y Derecho Civil, Description: Curso sobre los fundamentos del derecho civil y la constitución, relevantes para la práctica profesional en ingeniería.
+- Course ID: 1297, Name: Calculo Integral, Description: Curso de cálculo integral que abarca técnicas avanzadas de integración y aplicaciones prácticas.
+- Course ID: 1340, Name: Fisica Mecánica, Description: Curso de física centrado en los principios de la mecánica y su aplicación en problemas de ingeniería.
+- Course ID: 1290, Name: Algebra Lineal, Description: Curso que cubre los conceptos fundamentales del álgebra lineal, incluyendo matrices, vectores y sistemas de ecuaciones.
+- Course ID: 33699, Name: Programación Avanzada, Description: Curso de programación que profundiza en técnicas avanzadas y paradigmas de desarrollo de software.
+- Course ID: 1300, Name: Ecuaciones Diferenciales, Description: Curso que estudia métodos para resolver ecuaciones diferenciales ordinarias y sus aplicaciones.
+- Course ID: 33733, Name: Proyecto de Diseño en Ingenieria, Description: Curso que enfoca en el desarrollo de proyectos de diseño ingenieril, aplicando conocimientos adquiridos.
+- Course ID: 2544, Name: Significación Teologica, Description: Curso que explora los fundamentos de la teología y su relevancia en la formación profesional.
+- Course ID: 1299, Name: Calculo Vectorial, Description: Curso de cálculo vectorial que trata sobre funciones vectoriales y sus aplicaciones en ingeniería.
+- Course ID: 33732, Name: Probabilidad y Estadistica, Description: Curso que cubre principios de probabilidad y técnicas estadísticas aplicables en ingeniería.
+- Course ID: 34805, Name: Analisis y Diseño de Software, Description: Curso que aborda metodologías para el análisis y diseño de sistemas de software.
+- Course ID: 33700, Name: Bases de Datos, Description: Curso que enseña los fundamentos del diseño, implementación y gestión de bases de datos.
+- Course ID: 34580, Name: Arquitectura y Organizacion del Computador, Description: Curso sobre la arquitectura y organización de sistemas computacionales, incluyendo hardware y software.
+- Course ID: 5100, Name: Proyecto Social Universitario, Description: Curso que enfoca en el desarrollo y ejecución de proyectos sociales dentro de la comunidad universitaria.
+- Course ID: 4196, Name: Estructuras de Datos, Description: Curso sobre estructuras de datos fundamentales y sus aplicaciones en programación.
+- Course ID: 1291, Name: Analisis Numerico, Description: Curso que trata métodos numéricos para la resolución de problemas matemáticos en ingeniería.
+- Course ID: 34806, Name: Fundamentos de Ingenieria de Software, Description: Curso que cubre los principios y prácticas básicas de ingeniería de software.
+- Course ID: 4085, Name: Sistemas Operativos, Description: Curso sobre los principios y funcionamiento de sistemas operativos.
+- Course ID: 34807, Name: Desarrollo Web, Description: Curso de desarrollo web que cubre tecnologías y metodologías para la creación de sitios y aplicaciones web.
+- Course ID: 34809, Name: Fundamentos de Seguridad de la Informacion, Description: Curso sobre los principios básicos de seguridad de la información y técnicas de protección.
+- Course ID: 34801, Name: Teoria de la Computacion, Description: Curso que explora los fundamentos teóricos de la computación y la teoría de autómatas.
+- Course ID: 4082, Name: Sistemas de Informacion, Description: Curso que trata sobre el diseño y gestión de sistemas de información en organizaciones.
+- Course ID: 4084, Name: Inteligencia Artificial, Description: Curso sobre los principios y técnicas de inteligencia artificial, incluyendo aprendizaje automático y redes neuronales.
+- Course ID: 34803, Name: Gestion de Proyectos de Innovacion y Emprendimiento de TI, Description: Curso sobre la gestión y desarrollo de proyectos de innovación en tecnología de la información.
+- Course ID: 4185, Name: Arquitectura de Software, Description: Curso que cubre los principios de diseño y arquitectura de software a gran escala.
+- Course ID: 34802, Name: Tecnologias Digitales Emergentes, Description: Curso sobre las últimas tecnologías digitales y sus aplicaciones emergentes.
+- Course ID: 34816, Name: Gestion Financiera de Proyectos de TI, Description: Curso sobre la gestión financiera y económica de proyectos de tecnología de la información.
+- Course ID: 34804, Name: Gerencia Estrategica de TI, Description: Curso que aborda estrategias de gestión y planificación en tecnología de la información.
+- Course ID: 34866, Name: Optimizacion y Simulacion, Description: Curso sobre técnicas de optimización y simulación en problemas de ingeniería.
+- Course ID: 31339, Name: Planeacion de Proyecto Final, Description: Curso dedicado a la planificación y preparación para el proyecto final de grado.
+- Course ID: 34810, Name: Proyecto de Innovacion y Emprendimiento, Description: Curso que enfoca en el desarrollo de proyectos de innovación y emprendimiento en tecnología.
+- Course ID: 4190, Name: Comunicaciones y Redes, Description: Curso sobre comunicación en redes y tecnologías de comunicación de datos.
+- Course ID: 22586, Name: Introduccion a Sistemas Distribuidos, Description: Curso que introduce los principios y conceptos de sistemas distribuidos.
+- Course ID: 34814, Name: Proyecto de Grado, Description: Curso centrado en el desarrollo y presentación del proyecto de grado final.
+- Course ID: 34863, Name: Etica en la Era de la Informacion, Description: Curso que explora cuestiones éticas relacionadas con la tecnología y la información.
+- Course ID: 2356, Name: Epistemologia de la Ingenieria, Description: Curso sobre la filosofía y epistemología en el contexto de la ingeniería.
+- Course ID: 34808, Name: Introduccion a la Computacion Movil, Description: Curso que cubre los fundamentos de la computación móvil y el desarrollo de aplicaciones móviles.
+- Course ID: 2476, Name: Fe y Compromiso del Ingeniero, Description: Curso que examina el rol de la fe y el compromiso ético en la profesión de ingeniería.
+- Course ID: 3194, Name: Analisis de algoritmos, Description: Curso que se centra en el estudio y evaluación de la eficiencia de los algoritmos.
+
+
+get_student_classes:
+Classes taken by student ID 1:
+
+Period: 2024-3
+- Class ID: 1512, Course: Gerencia Estrategica de TI
+- Class ID: 7946, Course: Epistemologia de la Ingenieria
+- Class ID: 8082, Course: Constitución y Derecho Civil
+- Class ID: 1544, Course: Tecnologias Digitales Emergentes
+- Class ID: 1670, Course: Proyecto de Grado
+
+Period: 2024-1
+- Class ID: 411, Course: Inteligencia Artificial
+- Class ID: 461, Course: Analisis Numerico
+- Class ID: 416, Course: Planeacion de Proyecto Final
+- Class ID: 485, Course: Etica en la Era de la Informacion
+- Class ID: 440, Course: Proyecto Social Universitario
+- Class ID: 469, Course: Arquitectura de Software
+
+Period: 2023-3
+- Class ID: 371, Course: Analisis de algoritmos
+- Class ID: 368, Course: Fe y Compromiso del Ingeniero
+- Class ID: 363, Course: Introduccion a la Computacion Movil
+- Class ID: 393, Course: Desarrollo Web
+- Class ID: 351, Course: Optimizacion y Simulacion
+- Class ID: 372, Course: Ecuaciones Diferenciales
+- Class ID: 367, Course: Fisica Mecánica
+
+Period: 2023-1
+- Class ID: 321, Course: Introduccion a Sistemas Distribuidos
+- Class ID: 309, Course: Proyecto de Innovacion y Emprendimiento
+- Class ID: 316, Course: Teoria de la Computacion
+- Class ID: 346, Course: Calculo Vectorial
+
+Period: 2022-3
+- Class ID: 278, Course: Estructuras de Datos
+- Class ID: 266, Course: Sistemas de Informacion
+- Class ID: 286, Course: Gestion de Proyectos de Innovacion y Emprendimiento de TI
+- Class ID: 290, Course: Fundamentos de Ingenieria de Software
+- Class ID: 2500, Course: Sistemas Operativos
+
+Period: 2022-1
+- Class ID: 219, Course: Significación Teologica
+- Class ID: 250, Course: Comunicaciones y Redes
+- Class ID: 227, Course: Analisis y Diseño de Software
+- Class ID: 205, Course: Bases de Datos
+- Class ID: 204, Course: Probabilidad y Estadistica
+
+Period: 2021-3
+- Class ID: 167, Course: Arquitectura y Organizacion del Computador
+- Class ID: 192, Course: Proyecto de Diseño en Ingenieria
+- Class ID: 197, Course: Gestion Financiera de Proyectos de TI
+- Class ID: 170, Course: Programación Avanzada
+- Class ID: 190, Course: Algebra Lineal
+- Class ID: 151, Course: Calculo Integral
+
+Period: 2021-1
+- Class ID: 138, Course: Fundamentos de Seguridad de la Informacion
+- Class ID: 79, Course: Introduccion a la Ingenieria
+- Class ID: 97, Course: Pensamiento Sistemico
+- Class ID: 38, Course: Introduccion a la Programación
+- Class ID: 131, Course: Logica y Matematicas Discretas
+- Class ID: 66, Course: Calculo Diferencial
+
+
+get_student_academic_summary:
+
+
+[CURSOS DEL ESTUDIANTE] Cursos tomados por el estudiante con ID 1, ordenados por su semestre sugerido:
+
+Semestre 1:
+- ID del curso: 33698, Nombre: Introduccion a la Programación (ID de la clase: 38, Periodo: 2021-1) | Nota: 4.50 | Semestre recomendado: 1, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 33763, Nombre: Introduccion a la Ingenieria (ID de la clase: 79, Periodo: 2021-1) | Nota: 4.50 | Semestre recomendado: 1, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 4075, Nombre: Pensamiento Sistemico (ID de la clase: 97, Periodo: 2021-1) | Nota: 4.50 | Semestre recomendado: 1, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 33518, Nombre: Logica y Matematicas Discretas (ID de la clase: 131, Periodo: 2021-1) | Nota: 4.50 | Semestre recomendado: 1, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 34809, Nombre: Fundamentos de Seguridad de la Informacion (ID de la clase: 138, Periodo: 2021-1) | Nota: 4.50 | Semestre recomendado: 1, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 1295, Nombre: Calculo Diferencial (ID de la clase: 66, Periodo: 2021-1) | Nota: 4.50 | Semestre recomendado: 1, Tipo: Núcleo de Formación Fundamental
+
+Semestre 2:
+- ID del curso: 1297, Nombre: Calculo Integral (ID de la clase: 151, Periodo: 2021-3) | Nota: 3.90 | Semestre recomendado: 2, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 34580, Nombre: Arquitectura y Organizacion del Computador (ID de la clase: 167, Periodo: 2021-3) | Nota: 4.30 | Semestre recomendado: 2, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 33699, Nombre: Programación Avanzada (ID de la clase: 170, Periodo: 2021-3) | Nota: 3.50 | Semestre recomendado: 2, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 1290, Nombre: Algebra Lineal (ID de la clase: 190, Periodo: 2021-3) | Nota: 4.90 | Semestre recomendado: 2, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 33733, Nombre: Proyecto de Diseño en Ingenieria (ID de la clase: 192, Periodo: 2021-3) | Nota: 4.20 | Semestre recomendado: 2, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 34816, Nombre: Gestion Financiera de Proyectos de TI (ID de la clase: 197, Periodo: 2021-3) | Nota: 4.50 | Semestre recomendado: 2, Tipo: Núcleo de Formación Fundamental
+
+Semestre 3:
+- ID del curso: 33732, Nombre: Probabilidad y Estadistica (ID de la clase: 204, Periodo: 2022-1) | Nota: 3.90 | Semestre recomendado: 3, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 33700, Nombre: Bases de Datos (ID de la clase: 205, Periodo: 2022-1) | Nota: 4.90 | Semestre recomendado: 3, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 2544, Nombre: Significación Teologica (ID de la clase: 219, Periodo: 2022-1) | Nota: 4.20 | Semestre recomendado: 3, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 34805, Nombre: Analisis y Diseño de Software (ID de la clase: 227, Periodo: 2022-1) | Nota: 3.50 | Semestre recomendado: 3, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 4190, Nombre: Comunicaciones y Redes (ID de la clase: 250, Periodo: 2022-1) | Nota: 4.50 | Semestre recomendado: 3, Tipo: Núcleo de Formación Fundamental
+
+Semestre 4:
+- ID del curso: 4082, Nombre: Sistemas de Informacion (ID de la clase: 266, Periodo: 2022-3) | Nota: 4.90 | Semestre recomendado: 4, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 4196, Nombre: Estructuras de Datos (ID de la clase: 278, Periodo: 2022-3) | Nota: 3.90 | Semestre recomendado: 4, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 4085, Nombre: Sistemas Operativos (ID de la clase: 2500, Periodo: 2022-3) | Nota: 4.20 | Semestre recomendado: 4, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 34803, Nombre: Gestion de Proyectos de Innovacion y Emprendimiento de TI (ID de la clase: 286, Periodo: 2022-3) | Nota: 3.50 | Semestre recomendado: 4, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 34806, Nombre: Fundamentos de Ingenieria de Software (ID de la clase: 290, Periodo: 2022-3) | Nota: 4.50 | Semestre recomendado: 4, Tipo: Núcleo de Formación Fundamental
+
+Semestre 5:
+- ID del curso: 34801, Nombre: Teoria de la Computacion (ID de la clase: 316, Periodo: 2023-1) | Nota: 4.90 | Semestre recomendado: 5, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 34810, Nombre: Proyecto de Innovacion y Emprendimiento (ID de la clase: 309, Periodo: 2023-1) | Nota: 3.50 | Semestre recomendado: 5, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 22586, Nombre: Introduccion a Sistemas Distribuidos (ID de la clase: 321, Periodo: 2023-1) | Nota: 4.50 | Semestre recomendado: 5, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 1299, Nombre: Calculo Vectorial (ID de la clase: 346, Periodo: 2023-1) | Nota: 3.90 | Semestre recomendado: 5, Tipo: Núcleo de Formación Fundamental
+
+Semestre 6:
+- ID del curso: 2476, Nombre: Fe y Compromiso del Ingeniero (ID de la clase: 368, Periodo: 2023-3) | Nota: 4.90 | Semestre recomendado: 6, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 3194, Nombre: Analisis de algoritmos (ID de la clase: 371, Periodo: 2023-3) | Nota: 3.50 | Semestre recomendado: 6, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 34808, Nombre: Introduccion a la Computacion Movil (ID de la clase: 363, Periodo: 2023-3) | Nota: 3.90 | Semestre recomendado: 6, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 1300, Nombre: Ecuaciones Diferenciales (ID de la clase: 372, Periodo: 2023-3) | Nota: 4.90 | Semestre recomendado: 6, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 34807, Nombre: Desarrollo Web (ID de la clase: 393, Periodo: 2023-3) | Nota: 4.50 | Semestre recomendado: 6, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 34866, Nombre: Optimizacion y Simulacion (ID de la clase: 351, Periodo: 2023-3) | Nota: 3.50 | Semestre recomendado: 6, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 1340, Nombre: Fisica Mecánica (ID de la clase: 367, Periodo: 2023-3) | Nota: 3.90 | Semestre recomendado: 6, Tipo: Núcleo de Formación Fundamental
+
+Semestre 7:
+- ID del curso: 1291, Nombre: Analisis Numerico (ID de la clase: 461, Periodo: 2024-1) | Nota: 4.50 | Semestre recomendado: 7, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 4084, Nombre: Inteligencia Artificial (ID de la clase: 411, Periodo: 2024-1) | Nota: 3.90 | Semestre recomendado: 7, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 31339, Nombre: Planeacion de Proyecto Final (ID de la clase: 416, Periodo: 2024-1) | Nota: 4.90 | Semestre recomendado: 7, Tipo: Énfasis
+- ID del curso: 5100, Nombre: Proyecto Social Universitario (ID de la clase: 440, Periodo: 2024-1) | Nota: 4.50 | Semestre recomendado: 7, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 4185, Nombre: Arquitectura de Software (ID de la clase: 469, Periodo: 2024-1) | Nota: 3.50 | Semestre recomendado: 7, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 34863, Nombre: Etica en la Era de la Informacion (ID de la clase: 485, Periodo: 2024-1) | Nota: 3.90 | Semestre recomendado: 7, Tipo: Núcleo de Formación Fundamental
+
+Semestre 8:
+- ID del curso: 34802, Nombre: Tecnologias Digitales Emergentes (ID de la clase: 1544, Periodo: 2024-3) | Nota: 4.90 | Semestre recomendado: 8, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 34814, Nombre: Proyecto de Grado (ID de la clase: 1670, Periodo: 2024-3) | Nota: 3.50 | Semestre recomendado: 8, Tipo: Énfasis
+- ID del curso: 34804, Nombre: Gerencia Estrategica de TI (ID de la clase: 1512, Periodo: 2024-3) | Nota: 3.50 | Semestre recomendado: 8, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 2356, Nombre: Epistemologia de la Ingenieria (ID de la clase: 7946, Periodo: 2024-3) | Nota: 3.90 | Semestre recomendado: 8, Tipo: Núcleo de Formación Fundamental
+- ID del curso: 16143, Nombre: Constitución y Derecho Civil (ID de la clase: 8082, Periodo: 2024-3) | Nota: 4.50 | Semestre recomendado: 8, Tipo: Núcleo de Formación Fundamental
+
+
+[SEMESTRE ACTUAL] El estudiante se encuentra en el semestre #8.
+
+
