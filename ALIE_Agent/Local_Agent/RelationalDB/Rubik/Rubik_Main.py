@@ -11,7 +11,7 @@ if __name__ == "__main__":
     from Rubik_ScheduleRecommender import *
 else:
     # Imported as part of a package, relative import
-    from Rubik_ScheduleRecommender import *
+    from .Rubik_ScheduleRecommender import *
 
 
 

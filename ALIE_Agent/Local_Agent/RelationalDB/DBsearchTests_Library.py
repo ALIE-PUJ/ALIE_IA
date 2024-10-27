@@ -3,6 +3,13 @@ from psycopg2 import sql, Error
 import os
 import difflib
 
+# Local imports (Library)
+if __name__ == "__main__":
+    # Direct execution, absolute import
+    from Rubik.Rubik_Main import *
+else:
+    # Imported as part of a package, relative import
+    from .Rubik.Rubik_Main import *
 
 # Create a new connection in each function
 def create_connection():
@@ -1361,4 +1368,8 @@ def recommend_schedule(argument: str) -> str:
 
     student_id = int(argument)
 
-    return "TO-DO."
+    try:
+        respuesta = rubik(student_id)
+        return respuesta
+    except Exception as e:
+        return f"Ocurrió un error al recomendar el horario para el estudiante con ID {student_id}. Intente de nuevo más tarde."
