@@ -99,7 +99,7 @@ This are the schedules for class with ID 528:
 
 
 Tool > get_teacher_by_name:
-There are 1 professors with the name 'Oscar':
+There are 1 professors with the name 'Oscar Danilo':
 - Oscar Danilo Martínez Bernal (ID: 23), Email: oscar.martinez@example.com, Phone: 345678903.
 
 

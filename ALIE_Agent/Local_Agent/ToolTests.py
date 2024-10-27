@@ -50,7 +50,7 @@ if __name__ == "__main__":
     result = get_class_schedule("528")
     write_output_file("Tool > get_class_schedule:\n" + result)
 
-    result = get_teacher_by_name("Oscar")
+    result = get_teacher_by_name("Oscar Danilo")
     write_output_file("Tool > get_teacher_by_name:\n" + result)
 
     result = get_student_grades_by_period("1")

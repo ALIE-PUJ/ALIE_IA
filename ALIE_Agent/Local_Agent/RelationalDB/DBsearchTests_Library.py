@@ -364,8 +364,20 @@ def get_teacher_by_name_fetch(teacher_name: str) -> str:
     try:
         conn = create_connection()
         with conn.cursor() as cursor:
-            query = sql.SQL("SELECT * FROM Profesor WHERE LOWER(nombres) LIKE LOWER(%s)")
-            cursor.execute(query, (f"%{teacher_name}%",))
+            # Dividir el nombre ingresado en palabras
+            words = teacher_name.split()
+            # Construir la consulta SQL dinámicamente para que funcione con cualquier cantidad de palabras
+            conditions = []
+            params = []
+            
+            for word in words:
+                conditions.append("(LOWER(nombres) LIKE LOWER(%s) OR LOWER(apellidos) LIKE LOWER(%s))")
+                params.extend([f"%{word}%", f"%{word}%"])
+            
+            # Combinar las condiciones con AND para que todas las palabras coincidan en nombre o apellido
+            query = sql.SQL("SELECT * FROM Profesor WHERE ") + sql.SQL(" AND ").join(sql.SQL(cond) for cond in conditions)
+            cursor.execute(query, params)
+            
             result = cursor.fetchall()
             columns = [desc[0] for desc in cursor.description]
             result_with_columns = [dict(zip(columns, row)) for row in result]
