@@ -412,3 +412,80 @@ Semestre 8:
 [SEMESTRE ACTUAL] El estudiante se encuentra en el semestre #8.
 
 
+get_current_schedule:
+
+Horario del estudiante para el periodo 2024-3 (periodo último cursado):
+
+Curso: Gerencia Estrategica de TI [2 créditos]
+  - Clase ID: 1512, Día: Jueves, Hora Inicio: 15:00:00, Hora Fin: 18:00:00
+Curso: Tecnologias Digitales Emergentes [2 créditos]
+  - Clase ID: 1544, Día: Miércoles, Hora Inicio: 14:00:00, Hora Fin: 16:00:00
+Curso: Proyecto de Grado [3 créditos]
+  - Clase ID: 1670, Sin horario específico
+Curso: Epistemologia de la Ingenieria [2 créditos]
+  - Clase ID: 7946, Día: Lunes, Hora Inicio: 09:00:00, Hora Fin: 11:00:00
+Curso: Constitución y Derecho Civil [2 créditos]
+  - Clase ID: 8082, Día: Lunes, Hora Inicio: 11:00:00, Hora Fin: 13:00:00
+
+Total de créditos inscritos: 11
+
+
+get_remaining_and_recommended_courses:
+
+=== RESUMEN DE ASIGNATURAS PENDIENTES. Estudiante con ID 2 ===
+
+Total de créditos pendientes: 11
+Total de asignaturas pendientes: 5
+Semestre actual estimado: 8
+
+--- Todas las Asignaturas Pendientes por Semestre ---
+
+Semestre 8:
+Créditos del semestre: 11
+
+- Constitución y Derecho Civil (ID: 16143) [2 créditos]
+  Sin prerrequisitos
+
+- Epistemologia de la Ingenieria (ID: 2356) [2 créditos]
+  Sin prerrequisitos
+
+- Gerencia Estrategica de TI (ID: 34804) [2 créditos]
+  Prerrequisitos ✓: Proyecto de Innovacion y Emprendimiento
+
+- Proyecto de Grado (ID: 34814) [3 créditos]
+  Prerrequisitos ✓: Arquitectura de Software, Planeacion de Proyecto Final, Proyecto de Innovacion y Emprendimiento
+
+- Tecnologias Digitales Emergentes (ID: 34802) [2 créditos]
+  Sin prerrequisitos
+
+
+=== ASIGNATURAS RECOMENDADAS PARA CURSAR ===
+(Basado en prerrequisitos cumplidos y semestre sugerido)
+
+Créditos totales recomendados: 11
+
+- Constitución y Derecho Civil (ID: 16143) [2 créditos]
+  Semestre sugerido: 8
+  Sin prerrequisitos
+
+- Epistemologia de la Ingenieria (ID: 2356) [2 créditos]
+  Semestre sugerido: 8
+  Sin prerrequisitos
+
+- Gerencia Estrategica de TI (ID: 34804) [2 créditos]
+  Semestre sugerido: 8
+  Prerrequisitos cumplidos: Proyecto de Innovacion y Emprendimiento
+
+- Proyecto de Grado (ID: 34814) [3 créditos]
+  Semestre sugerido: 8
+  Prerrequisitos cumplidos: Arquitectura de Software, Planeacion de Proyecto Final, Proyecto de Innovacion y Emprendimiento
+
+- Tecnologias Digitales Emergentes (ID: 34802) [2 créditos]
+  Semestre sugerido: 8
+  Sin prerrequisitos
+
+
+
+recommend_schedule:
+TO-DO.
+

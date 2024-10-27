@@ -73,13 +73,21 @@ if __name__ == "__main__":
     result = get_student_academic_summary("1")
     write_output_file("get_student_academic_summary:\n" + result)
 
+    result = get_current_schedule("1")
+    write_output_file("get_current_schedule:\n" + result)
+
+    result = get_remaining_and_recommended_courses("2")
+    write_output_file("get_remaining_and_recommended_courses:\n" + result)
+
+    result = recommend_schedule("1")
+    write_output_file("recommend_schedule:\n" + result)
 
     # Cumplimiento de RFs
     '''
     RF 2. Permitir consultas personalizadas sobre calificaciones y clases. HECHO
     RF 2.1. El sistema debe contestar consultas sobre las calificaciones definitivas de las clases inscritas de un usuario autenticado. HECHO
     RF 2.2. El sistema debe poder contestar consultas sobre la base de información de las clases inscritas en el semestre actual, como los documentos de la clase, el temario del curso, entre otros. HECHO
-    ****RF 2.3. El sistema debe poder contestar consultas sobre las asignaturas pendientes por ver del plan de estudios. FALTANTE.
+    RF 2.3. El sistema debe poder contestar consultas sobre las asignaturas pendientes por ver del plan de estudios. HECHO.
     RF 2.4. El sistema debe poder sugerir asignaturas electivas, que le sirvan al estudiante para inscribir según sus condiciones de requisitos. HECHO (RAG)
     RF 2.5. El sistema debe poder contestar consultas sobre los horarios de las clases inscritas y disponibles para inscribir. HECHO
     '''

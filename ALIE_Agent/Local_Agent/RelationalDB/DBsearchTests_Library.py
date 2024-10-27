@@ -3,6 +3,7 @@ from psycopg2 import sql, Error
 import os
 import difflib
 
+
 # Create a new connection in each function
 def create_connection():
     """
@@ -1039,7 +1040,7 @@ def get_student_classes(argument: str) -> str:
 # Funciones nuevas. Opcionales
 
 
-# Función auxiliar para obtener los cursos de un estudiante y su semestre actual
+# Función auxiliar para obtener los cursos de un estudiante y su semestre actual, notas, etc.
 def get_student_academic_summary(argument: str) -> str:
     """
     Fetches the courses taken by the student and determines their current semester.
@@ -1094,3 +1095,270 @@ def get_student_academic_summary(argument: str) -> str:
         descripcion += "\n\n[SEMESTRE ACTUAL] El estudiante no ha completado al menos 3 cursos de un semestre en especifico.\n"
 
     return descripcion
+
+# Funcion para obtener el horario actual de un estudiante
+def get_current_schedule(argument: str) -> str:
+
+    if not argument.isdigit():
+        return "Invalid student ID. Please provide a valid numeric ID."
+
+    student_id = int(argument)
+    
+    try:
+        with create_connection() as conn:
+            with conn.cursor() as cursor:
+                # First, get the most recent period where the student has classes
+                query_period = """
+                SELECT DISTINCT Clase.periodo
+                FROM Estudiante_Clase
+                JOIN Clase ON Estudiante_Clase.id_clase = Clase.id_clase
+                WHERE Estudiante_Clase.id_estudiante = %s
+                ORDER BY Clase.periodo DESC
+                LIMIT 1
+                """
+                cursor.execute(query_period, (student_id,))
+                result = cursor.fetchone()
+                
+                if not result:
+                    return "El estudiante no tiene historial de clases."
+                
+                current_period = result[0]
+                
+                # Get current maximum period from the database
+                query_max_period = "SELECT MAX(periodo) FROM Clase"
+                cursor.execute(query_max_period)
+                max_period = cursor.fetchone()[0]
+                
+                # Get all classes for the student in the current period (including those without schedule)
+                query = """
+                SELECT DISTINCT
+                    Clase.id_clase,
+                    Curso.nombre as nombre_curso,
+                    Curso.creditos
+                FROM Estudiante_Clase
+                JOIN Clase ON Estudiante_Clase.id_clase = Clase.id_clase
+                JOIN Curso ON Clase.id_curso = Curso.id_curso
+                WHERE Estudiante_Clase.id_estudiante = %s
+                AND Clase.periodo = %s
+                """
+                cursor.execute(query, (student_id, current_period))
+                classes = cursor.fetchall()
+                
+                if not classes:
+                    return f"El estudiante no tiene clases registradas en el periodo {current_period}."
+                
+                # Get schedules for classes that have them
+                query_schedules = """
+                SELECT 
+                    Clase.id_clase,
+                    Horario_Clase.dia,
+                    Horario_Clase.hora_inicio,
+                    Horario_Clase.hora_fin
+                FROM Estudiante_Clase
+                JOIN Clase ON Estudiante_Clase.id_clase = Clase.id_clase
+                JOIN Horario_Clase ON Clase.id_clase = Horario_Clase.id_clase
+                WHERE Estudiante_Clase.id_estudiante = %s
+                AND Clase.periodo = %s
+                ORDER BY Horario_Clase.hora_inicio, Horario_Clase.dia
+                """
+                cursor.execute(query_schedules, (student_id, current_period))
+                schedules = cursor.fetchall()
+                
+                # Create a dictionary of schedules by class_id
+                schedules_by_class = {}
+                for schedule in schedules:
+                    class_id = schedule[0]
+                    if class_id not in schedules_by_class:
+                        schedules_by_class[class_id] = []
+                    schedules_by_class[class_id].append(schedule[1:])  # Store day, start_time, end_time
+                
+                # Format the output
+                period_status = "actual" if current_period == max_period else "último cursado"
+                result_text = f"\nHorario del estudiante para el periodo {current_period} (periodo {period_status}):\n\n"
+                total_credits = 0
+                
+                for class_id, course_name, credits in classes:
+                    result_text += f"Curso: {course_name} [{credits} créditos]\n"
+                    total_credits += credits
+                    
+                    if class_id in schedules_by_class:
+                        # Show all schedules for this class
+                        for day, start_time, end_time in schedules_by_class[class_id]:
+                            result_text += f"  - Clase ID: {class_id}, Día: {day}, "
+                            result_text += f"Hora Inicio: {start_time}, Hora Fin: {end_time}\n"
+                    else:
+                        result_text += f"  - Clase ID: {class_id}, Sin horario específico\n"
+                
+                result_text += f"\nTotal de créditos inscritos: {total_credits}\n"
+                
+                return result_text
+                
+    except Exception as e:
+        return f"Ocurrió un error al obtener el horario del estudiante. Error: {str(e)}"
+
+# Función para obtener las asignaturas pendientes y recomendadas de un estudiante
+def get_remaining_and_recommended_courses(argument: str) -> str:
+
+    if not argument.isdigit():
+        return "Invalid student ID. Please provide a valid numeric ID."
+    
+    student_id = int(argument)
+
+    try:
+        with create_connection() as conn:
+            with conn.cursor() as cursor:
+                # Get all courses in the curriculum
+                query_all_courses = """
+                SELECT DISTINCT 
+                    Curso.id_curso,
+                    Curso.nombre,
+                    Curso.creditos,
+                    Semestre_Sugerido.semestre
+                FROM Curso
+                JOIN Semestre_Sugerido ON Curso.id_curso = Semestre_Sugerido.id_curso
+                ORDER BY Semestre_Sugerido.semestre, Curso.nombre
+                """
+                cursor.execute(query_all_courses)
+                all_courses = cursor.fetchall()
+
+                # Get completed courses by the student
+                query_completed = """
+                SELECT DISTINCT Curso.id_curso
+                FROM Estudiante_Clase
+                JOIN Clase ON Estudiante_Clase.id_clase = Clase.id_clase
+                JOIN Curso ON Clase.id_curso = Curso.id_curso
+                WHERE Estudiante_Clase.id_estudiante = %s
+                """
+                cursor.execute(query_completed, (student_id,))
+                completed_courses = {row[0] for row in cursor.fetchall()}
+
+                # Get current student semester based on completed courses
+                current_semester = 1
+                for course in all_courses:
+                    if course[0] in completed_courses:
+                        current_semester = max(current_semester, course[3])  # course[3] is semester
+                current_semester += 1  # Next semester
+
+                # Get prerequisites for all courses
+                query_prereqs = """
+                SELECT id_curso, id_prerrequisito_curso
+                FROM Prerrequisito_Curso
+                """
+                cursor.execute(query_prereqs)
+                prerequisites = {}
+                for curso, prereq in cursor.fetchall():
+                    if curso not in prerequisites:
+                        prerequisites[curso] = []
+                    prerequisites[curso].append(prereq)
+
+                # Process remaining courses
+                remaining_courses = []
+                recommended_courses = []
+                total_remaining_credits = 0
+                remaining_by_semester = {}
+
+                for course in all_courses:
+                    course_id, course_name, credits, suggested_semester = course
+                    
+                    if course_id not in completed_courses:
+                        # Check prerequisites status
+                        prereqs = prerequisites.get(course_id, [])
+                        prereqs_completed = all(pre in completed_courses for pre in prereqs)
+                        
+                        # Get prerequisite course names
+                        prereq_names = []
+                        if prereqs:
+                            prereq_query = """
+                            SELECT nombre 
+                            FROM Curso 
+                            WHERE id_curso = ANY(%s)
+                            """
+                            cursor.execute(prereq_query, (prereqs,))
+                            prereq_names = [row[0] for row in cursor.fetchall()]
+
+                        course_info = {
+                            'id': course_id,
+                            'name': course_name,
+                            'credits': credits,
+                            'semester': suggested_semester,
+                            'prerequisites_met': prereqs_completed,
+                            'prerequisite_names': prereq_names
+                        }
+                        
+                        remaining_courses.append(course_info)
+                        total_remaining_credits += credits
+
+                        # Group by semester
+                        if suggested_semester not in remaining_by_semester:
+                            remaining_by_semester[suggested_semester] = []
+                        remaining_by_semester[suggested_semester].append(course_info)
+
+                        # Check if course should be recommended
+                        if prereqs_completed and suggested_semester <= current_semester + 1:
+                            recommended_courses.append(course_info)
+
+                # Sort recommended courses by semester and then by name
+                recommended_courses.sort(key=lambda x: (x['semester'], x['name']))
+                # Limit recommendations to top 10
+                recommended_courses = recommended_courses[:10]
+
+                # Format the output
+                if not remaining_courses:
+                    return f"¡Felicitaciones, estudiante con ID {student_id}! Has completado todas las asignaturas del plan de estudios."
+
+                result = f"\n=== RESUMEN DE ASIGNATURAS PENDIENTES. Estudiante con ID {student_id} ===\n"
+                result += f"\nTotal de créditos pendientes: {total_remaining_credits}\n"
+                result += f"Total de asignaturas pendientes: {len(remaining_courses)}\n"
+                result += f"Semestre actual estimado: {current_semester}\n\n"
+
+                # Show all remaining courses by semester
+                result += "--- Todas las Asignaturas Pendientes por Semestre ---\n"
+                for semester in sorted(remaining_by_semester.keys()):
+                    result += f"\nSemestre {semester}:\n"
+                    semester_credits = sum(course['credits'] for course in remaining_by_semester[semester])
+                    result += f"Créditos del semestre: {semester_credits}\n"
+                    
+                    for course in remaining_by_semester[semester]:
+                        result += f"\n- {course['name']} (ID: {course['id']}) [{course['credits']} créditos]\n"
+                        
+                        # Show prerequisites status
+                        if course['prerequisite_names']:
+                            status = "✓" if course['prerequisites_met'] else "✗"
+                            result += f"  Prerrequisitos {status}: {', '.join(course['prerequisite_names'])}\n"
+                        else:
+                            result += "  Sin prerrequisitos\n"
+
+                # Show recommended courses
+                result += "\n\n=== ASIGNATURAS RECOMENDADAS PARA CURSAR ===\n"
+                result += "(Basado en prerrequisitos cumplidos y semestre sugerido)\n\n"
+                
+                if recommended_courses:
+                    recommended_credits = sum(course['credits'] for course in recommended_courses)
+                    result += f"Créditos totales recomendados: {recommended_credits}\n\n"
+                    
+                    for course in recommended_courses:
+                        result += f"- {course['name']} (ID: {course['id']}) [{course['credits']} créditos]\n"
+                        result += f"  Semestre sugerido: {course['semester']}\n"
+                        if course['prerequisite_names']:
+                            result += f"  Prerrequisitos cumplidos: {', '.join(course['prerequisite_names'])}\n"
+                        else:
+                            result += "  Sin prerrequisitos\n"
+                        result += "\n"
+                else:
+                    result += "No hay asignaturas recomendadas en este momento.\n"
+                    result += "Completa los prerrequisitos pendientes para desbloquear más asignaturas.\n"
+
+                return result
+
+    except Exception as e:
+        return f"Ocurrió un error al obtener las asignaturas pendientes. Error: {str(e)}"
+
+# Funcion para hacerle un horario al estudiante
+def recommend_schedule(argument: str) -> str:
+
+    if not argument.isdigit():
+        return "Invalid student ID. Please provide a valid numeric ID."
+
+    student_id = int(argument)
+
+    return "TO-DO."
