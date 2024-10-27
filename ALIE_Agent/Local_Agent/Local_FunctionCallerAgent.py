@@ -225,6 +225,54 @@ FUNCTIONS = {
                 "argument": "Hi!"
             }
         }
+    },
+    "get_student_academic_summary": {
+        "function_name": get_student_academic_summary,
+        "description": "Fetches and formats a complete academic summary for a student, including all courses taken organized by semester, grades, and determines their current semester. Should be used when the user asks about their academic history, courses taken, or current semester.",
+        "argument": "The ID of the student as a string",
+        "example": {
+            "query": "What's my academic summary? My ID is 1234",
+            "expected": {
+                "function_name": "get_student_academic_summary",
+                "argument": "1234"
+            }
+        }
+    },
+    "get_current_schedule": {
+        "function_name": get_current_schedule,
+        "description": "Returns a student's current or most recent class schedule, including course names, credits, class IDs, and specific time slots. Should be used when the user asks about their current schedule or class times.",
+        "argument": "The ID of the student as a string",
+        "example": {
+            "query": "What's my current schedule? Student ID 5678",
+            "expected": {
+                "function_name": "get_current_schedule",
+                "argument": "5678"
+            }
+        }
+    },
+    "get_remaining_and_recommended_courses": {
+        "function_name": get_remaining_courses,
+        "description": "Provides a comprehensive analysis of remaining courses needed to graduate and recommends courses for the next semester based on prerequisites and suggested semester order. Should be used when students ask about what courses they still need or what they should take next.",
+        "argument": "The ID of the student as a string",
+        "example": {
+            "query": "What courses do I still need to take? ID: 9012",
+            "expected": {
+                "function_name": "get_remaining_and_recommended_courses",
+                "argument": "9012"
+            }
+        }
+    },
+    "recommend_schedule": {
+        "function_name": recommend_schedule,
+        "description": "Creates a recommended schedule for a student using the Rubik system. Should be used when students ask for help creating or planning their schedule.",
+        "argument": "The ID of the student as a string",
+        "example": {
+            "query": "Can you help me create a schedule? My ID is 3456",
+            "expected": {
+                "function_name": "recommend_schedule",
+                "argument": "3456"
+            }
+        }
     }
 }
 
@@ -488,9 +536,9 @@ def process_user_query(user_input, api_url, api_headers, model, support_structur
         if final_message:
 
             # DIRECT RETURNS LIST
-            direct_return_function_names = ["course_retrieval", "general_retrieval", "normal_conversation"] # List of functions that return the final message directly
+            direct_return_function_names = ["course_retrieval", "general_retrieval", "normal_conversation", "get_student_academic_summary", "get_current_schedule", "get_remaining_courses", "recommend_schedule"] # List of functions that return the final message directly
             if function_name in direct_return_function_names:
-                print("[ALIE LANGCHAIN DEBUG: Found direct return function. Returning function_result.]")
+                print("[ALIE LANGCHAIN DEBUG: Found direct return function. Returning function_result.]")      
                 return function_result
 
             # If not in direct return list, continue with final response generation

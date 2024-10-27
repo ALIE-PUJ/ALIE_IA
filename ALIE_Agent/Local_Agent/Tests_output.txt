@@ -430,7 +430,7 @@ Curso: Constitución y Derecho Civil [2 créditos]
 Total de créditos inscritos: 11
 
 
-Tool > get_remaining_and_recommended_courses:
+Tool > get_remaining_courses:
 
 === RESUMEN DE ASIGNATURAS PENDIENTES. Estudiante con ID 2 ===
 

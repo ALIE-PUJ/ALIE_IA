@@ -76,8 +76,8 @@ if __name__ == "__main__":
     result = get_current_schedule("1")
     write_output_file("Tool > get_current_schedule:\n" + result)
 
-    result = get_remaining_and_recommended_courses("2")
-    write_output_file("Tool > get_remaining_and_recommended_courses:\n" + result)
+    result = get_remaining_courses("2")
+    write_output_file("Tool > get_remaining_courses:\n" + result)
 
     result = recommend_schedule("3")
     write_output_file("Tool > recommend_schedule:\n" + result)

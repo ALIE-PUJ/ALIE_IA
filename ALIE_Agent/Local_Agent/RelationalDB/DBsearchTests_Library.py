@@ -1204,7 +1204,7 @@ def get_current_schedule(argument: str) -> str:
         return f"Ocurrió un error al obtener el horario del estudiante. Error: {str(e)}"
 
 # Función para obtener las asignaturas pendientes y recomendadas de un estudiante
-def get_remaining_and_recommended_courses(argument: str) -> str:
+def get_remaining_courses(argument: str) -> str:
 
     if not argument.isdigit():
         return "Invalid student ID. Please provide a valid numeric ID."
