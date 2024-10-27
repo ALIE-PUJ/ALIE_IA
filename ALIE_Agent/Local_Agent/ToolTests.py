@@ -24,46 +24,46 @@ if __name__ == "__main__":
     # Pruebas de las distintas herramientas
 
     result = get_students_by_name("Luis")
-    write_output_file("get_students_by_name:\n" + result)
+    write_output_file("Tool > get_students_by_name:\n" + result)
 
     result = get_course_by_name("Calculo vectorial")
-    write_output_file("get_course_by_name:\n" + result)
+    write_output_file("Tool > get_course_by_name:\n" + result)
 
     result = get_course_by_code("4196")
-    write_output_file("get_course_by_code:\n" + result)
+    write_output_file("Tool > get_course_by_code:\n" + result)
 
     result = get_classes_by_course_code("4196")
-    write_output_file("get_classes_by_course_code:\n" + result)
+    write_output_file("Tool > get_classes_by_course_code:\n" + result)
 
     result = get_classes_by_course_name("Calculo diferencial")
-    write_output_file("get_classes_by_course_name:\n" + result)
+    write_output_file("Tool > get_classes_by_course_name:\n" + result)
 
     result = get_class_by_code("528")
-    write_output_file("get_class_by_code:\n" + result)
+    write_output_file("Tool > get_class_by_code:\n" + result)
 
     result = get_prerequisites_by_course_name("Estructuras de datos")
-    write_output_file("get_prerequisites_by_course_name:\n" + result)
+    write_output_file("Tool > get_prerequisites_by_course_name:\n" + result)
 
     result = get_prerequisites_by_course_code("4196")
-    write_output_file("get_prerequisites_by_course_code:\n" + result)
+    write_output_file("Tool > get_prerequisites_by_course_code:\n" + result)
 
     result = get_class_schedule("528")
-    write_output_file("get_class_schedule:\n" + result)
+    write_output_file("Tool > get_class_schedule:\n" + result)
 
     result = get_teacher_by_name("Oscar")
-    write_output_file("get_teacher_by_name:\n" + result)
+    write_output_file("Tool > get_teacher_by_name:\n" + result)
 
     result = get_student_grades_by_period("1")
-    write_output_file("get_student_grades_by_period:\n" + result)
+    write_output_file("Tool > get_student_grades_by_period:\n" + result)
 
     result = get_student_courses("1")
-    write_output_file("get_student_courses:\n" + result)
+    write_output_file("Tool > get_student_courses:\n" + result)
 
     result = get_all_courses("")
-    write_output_file("get_all_courses:\n" + result)
+    write_output_file("Tool > get_all_courses:\n" + result)
 
     result = get_student_classes("1")
-    write_output_file("get_student_classes:\n" + result)
+    write_output_file("Tool > get_student_classes:\n" + result)
 
 
 
@@ -71,16 +71,16 @@ if __name__ == "__main__":
 
     # Añadir al agente. Retorno directo.
     result = get_student_academic_summary("1")
-    write_output_file("get_student_academic_summary:\n" + result)
+    write_output_file("Tool > get_student_academic_summary:\n" + result)
 
     result = get_current_schedule("1")
-    write_output_file("get_current_schedule:\n" + result)
+    write_output_file("Tool > get_current_schedule:\n" + result)
 
     result = get_remaining_and_recommended_courses("2")
-    write_output_file("get_remaining_and_recommended_courses:\n" + result)
+    write_output_file("Tool > get_remaining_and_recommended_courses:\n" + result)
 
-    result = recommend_schedule("1")
-    write_output_file("recommend_schedule:\n" + result)
+    result = recommend_schedule("3")
+    write_output_file("Tool > recommend_schedule:\n" + result)
 
     # Cumplimiento de RFs
     '''
