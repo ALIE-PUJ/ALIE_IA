@@ -1,8 +1,8 @@
 Tool > get_students_by_name:
 I found 3 students with the name 'Luis':
-- Luis Caicedo (ID: 80), born on 2000-04-21, enrolled in the program with ID 1, email: gabriela13@example.com, phone: 57 300 953 16 74, lives at Cl. 8K # 68-6 Sur, 259494, Cucunubá, Cundinamarca.
-- Luis Rojas (ID: 82), born on 1998-10-06, enrolled in the program with ID 1, email: merygarzon@example.org, phone: (+57)3040786260, lives at Calle 32 # 28-3 Este, Casa 98, 867811, San Francisco, Putumayo.
-- Luis Pacheco (ID: 92), born on 2004-09-27, enrolled in the program with ID 1, email: anaflorez@example.com, phone: 324 905 52 66, lives at Carrera 65 Este # 48-2 Sur, Apartamento 41, 152793, Busbanzá, Boyacá.
+- Luis Caicedo (ID: 80), born on 2000-04-21, enrolled in the program with ID 1, email: gabriela13@example.com, phone: 57 300 953 16 74.
+- Luis Rojas (ID: 82), born on 1998-10-06, enrolled in the program with ID 1, email: merygarzon@example.org, phone: (+57)3040786260.
+- Luis Pacheco (ID: 92), born on 2004-09-27, enrolled in the program with ID 1, email: anaflorez@example.com, phone: 324 905 52 66.
 
 
 Tool > get_course_by_name:

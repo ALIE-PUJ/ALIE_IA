@@ -575,8 +575,8 @@ def get_students_by_name(argument: str) -> str:
             f"born on {estudiante['fecha_nacimiento']}, "
             f"enrolled in the program with ID {estudiante['id_carrera']}, "
             f"email: {estudiante['email']}, "
-            f"phone: {estudiante['telefono']}, "
-            f"lives at {estudiante['direccion']}.\n"
+            f"phone: {estudiante['telefono']}.\n"
+            #f"lives at {estudiante['direccion']}.\n"
         )
     return descripcion
 
