@@ -1,5 +1,6 @@
 Tool > get_students_by_name:
-I found 3 students with the name 'Luis':
+I found 4 students with the name 'Luis':
+- Luis Bravo (ID: 1), born on 2002-12-23, enrolled in the program with ID 1, email: luis.bravo@javeriana.edu.com, phone: 018005716603.
 - Luis Caicedo (ID: 80), born on 2000-04-21, enrolled in the program with ID 1, email: gabriela13@example.com, phone: 57 300 953 16 74.
 - Luis Rojas (ID: 82), born on 1998-10-06, enrolled in the program with ID 1, email: merygarzon@example.org, phone: (+57)3040786260.
 - Luis Pacheco (ID: 92), born on 2004-09-27, enrolled in the program with ID 1, email: anaflorez@example.com, phone: 324 905 52 66.
@@ -346,9 +347,9 @@ Period: 2021-1
 Tool > get_student_academic_summary:
 
 
-[CURSOS DEL ESTUDIANTE] Cursos tomados por el estudiante con ID 1, ordenados por su semestre sugerido:
+**[CURSOS DEL ESTUDIANTE]** Cursos tomados por el estudiante con **ID 1**, ordenados por su semestre sugerido:
 
-Semestre 1:
+**Semestre 1**:
 - ID del curso: 33698, Nombre: Introduccion a la Programación (ID de la clase: 38, Periodo: 2021-1) | Nota: 4.50 | Semestre recomendado: 1, Tipo: Núcleo de Formación Fundamental
 - ID del curso: 33763, Nombre: Introduccion a la Ingenieria (ID de la clase: 79, Periodo: 2021-1) | Nota: 4.50 | Semestre recomendado: 1, Tipo: Núcleo de Formación Fundamental
 - ID del curso: 4075, Nombre: Pensamiento Sistemico (ID de la clase: 97, Periodo: 2021-1) | Nota: 4.50 | Semestre recomendado: 1, Tipo: Núcleo de Formación Fundamental
@@ -356,7 +357,7 @@ Semestre 1:
 - ID del curso: 34809, Nombre: Fundamentos de Seguridad de la Informacion (ID de la clase: 138, Periodo: 2021-1) | Nota: 4.50 | Semestre recomendado: 1, Tipo: Núcleo de Formación Fundamental
 - ID del curso: 1295, Nombre: Calculo Diferencial (ID de la clase: 66, Periodo: 2021-1) | Nota: 4.50 | Semestre recomendado: 1, Tipo: Núcleo de Formación Fundamental
 
-Semestre 2:
+**Semestre 2**:
 - ID del curso: 1297, Nombre: Calculo Integral (ID de la clase: 151, Periodo: 2021-3) | Nota: 3.90 | Semestre recomendado: 2, Tipo: Núcleo de Formación Fundamental
 - ID del curso: 34580, Nombre: Arquitectura y Organizacion del Computador (ID de la clase: 167, Periodo: 2021-3) | Nota: 4.30 | Semestre recomendado: 2, Tipo: Núcleo de Formación Fundamental
 - ID del curso: 33699, Nombre: Programación Avanzada (ID de la clase: 170, Periodo: 2021-3) | Nota: 3.50 | Semestre recomendado: 2, Tipo: Núcleo de Formación Fundamental
@@ -364,27 +365,27 @@ Semestre 2:
 - ID del curso: 33733, Nombre: Proyecto de Diseño en Ingenieria (ID de la clase: 192, Periodo: 2021-3) | Nota: 4.20 | Semestre recomendado: 2, Tipo: Núcleo de Formación Fundamental
 - ID del curso: 34816, Nombre: Gestion Financiera de Proyectos de TI (ID de la clase: 197, Periodo: 2021-3) | Nota: 4.50 | Semestre recomendado: 2, Tipo: Núcleo de Formación Fundamental
 
-Semestre 3:
+**Semestre 3**:
 - ID del curso: 33732, Nombre: Probabilidad y Estadistica (ID de la clase: 204, Periodo: 2022-1) | Nota: 3.90 | Semestre recomendado: 3, Tipo: Núcleo de Formación Fundamental
 - ID del curso: 33700, Nombre: Bases de Datos (ID de la clase: 205, Periodo: 2022-1) | Nota: 4.90 | Semestre recomendado: 3, Tipo: Núcleo de Formación Fundamental
 - ID del curso: 2544, Nombre: Significación Teologica (ID de la clase: 219, Periodo: 2022-1) | Nota: 4.20 | Semestre recomendado: 3, Tipo: Núcleo de Formación Fundamental
 - ID del curso: 34805, Nombre: Analisis y Diseño de Software (ID de la clase: 227, Periodo: 2022-1) | Nota: 3.50 | Semestre recomendado: 3, Tipo: Núcleo de Formación Fundamental
 - ID del curso: 4190, Nombre: Comunicaciones y Redes (ID de la clase: 250, Periodo: 2022-1) | Nota: 4.50 | Semestre recomendado: 3, Tipo: Núcleo de Formación Fundamental
 
-Semestre 4:
+**Semestre 4**:
 - ID del curso: 4082, Nombre: Sistemas de Informacion (ID de la clase: 266, Periodo: 2022-3) | Nota: 4.90 | Semestre recomendado: 4, Tipo: Núcleo de Formación Fundamental
 - ID del curso: 4196, Nombre: Estructuras de Datos (ID de la clase: 278, Periodo: 2022-3) | Nota: 3.90 | Semestre recomendado: 4, Tipo: Núcleo de Formación Fundamental
 - ID del curso: 4085, Nombre: Sistemas Operativos (ID de la clase: 2500, Periodo: 2022-3) | Nota: 4.20 | Semestre recomendado: 4, Tipo: Núcleo de Formación Fundamental
 - ID del curso: 34803, Nombre: Gestion de Proyectos de Innovacion y Emprendimiento de TI (ID de la clase: 286, Periodo: 2022-3) | Nota: 3.50 | Semestre recomendado: 4, Tipo: Núcleo de Formación Fundamental
 - ID del curso: 34806, Nombre: Fundamentos de Ingenieria de Software (ID de la clase: 290, Periodo: 2022-3) | Nota: 4.50 | Semestre recomendado: 4, Tipo: Núcleo de Formación Fundamental
 
-Semestre 5:
+**Semestre 5**:
 - ID del curso: 34801, Nombre: Teoria de la Computacion (ID de la clase: 316, Periodo: 2023-1) | Nota: 4.90 | Semestre recomendado: 5, Tipo: Núcleo de Formación Fundamental
 - ID del curso: 34810, Nombre: Proyecto de Innovacion y Emprendimiento (ID de la clase: 309, Periodo: 2023-1) | Nota: 3.50 | Semestre recomendado: 5, Tipo: Núcleo de Formación Fundamental
 - ID del curso: 22586, Nombre: Introduccion a Sistemas Distribuidos (ID de la clase: 321, Periodo: 2023-1) | Nota: 4.50 | Semestre recomendado: 5, Tipo: Núcleo de Formación Fundamental
 - ID del curso: 1299, Nombre: Calculo Vectorial (ID de la clase: 346, Periodo: 2023-1) | Nota: 3.90 | Semestre recomendado: 5, Tipo: Núcleo de Formación Fundamental
 
-Semestre 6:
+**Semestre 6**:
 - ID del curso: 2476, Nombre: Fe y Compromiso del Ingeniero (ID de la clase: 368, Periodo: 2023-3) | Nota: 4.90 | Semestre recomendado: 6, Tipo: Núcleo de Formación Fundamental
 - ID del curso: 3194, Nombre: Analisis de algoritmos (ID de la clase: 371, Periodo: 2023-3) | Nota: 3.50 | Semestre recomendado: 6, Tipo: Núcleo de Formación Fundamental
 - ID del curso: 34808, Nombre: Introduccion a la Computacion Movil (ID de la clase: 363, Periodo: 2023-3) | Nota: 3.90 | Semestre recomendado: 6, Tipo: Núcleo de Formación Fundamental
@@ -393,7 +394,7 @@ Semestre 6:
 - ID del curso: 34866, Nombre: Optimizacion y Simulacion (ID de la clase: 351, Periodo: 2023-3) | Nota: 3.50 | Semestre recomendado: 6, Tipo: Núcleo de Formación Fundamental
 - ID del curso: 1340, Nombre: Fisica Mecánica (ID de la clase: 367, Periodo: 2023-3) | Nota: 3.90 | Semestre recomendado: 6, Tipo: Núcleo de Formación Fundamental
 
-Semestre 7:
+**Semestre 7**:
 - ID del curso: 1291, Nombre: Analisis Numerico (ID de la clase: 461, Periodo: 2024-1) | Nota: 4.50 | Semestre recomendado: 7, Tipo: Núcleo de Formación Fundamental
 - ID del curso: 4084, Nombre: Inteligencia Artificial (ID de la clase: 411, Periodo: 2024-1) | Nota: 3.90 | Semestre recomendado: 7, Tipo: Núcleo de Formación Fundamental
 - ID del curso: 31339, Nombre: Planeacion de Proyecto Final (ID de la clase: 416, Periodo: 2024-1) | Nota: 4.90 | Semestre recomendado: 7, Tipo: Énfasis
@@ -401,7 +402,7 @@ Semestre 7:
 - ID del curso: 4185, Nombre: Arquitectura de Software (ID de la clase: 469, Periodo: 2024-1) | Nota: 3.50 | Semestre recomendado: 7, Tipo: Núcleo de Formación Fundamental
 - ID del curso: 34863, Nombre: Etica en la Era de la Informacion (ID de la clase: 485, Periodo: 2024-1) | Nota: 3.90 | Semestre recomendado: 7, Tipo: Núcleo de Formación Fundamental
 
-Semestre 8:
+**Semestre 8**:
 - ID del curso: 34802, Nombre: Tecnologias Digitales Emergentes (ID de la clase: 1544, Periodo: 2024-3) | Nota: 4.90 | Semestre recomendado: 8, Tipo: Núcleo de Formación Fundamental
 - ID del curso: 34814, Nombre: Proyecto de Grado (ID de la clase: 1670, Periodo: 2024-3) | Nota: 3.50 | Semestre recomendado: 8, Tipo: Énfasis
 - ID del curso: 34804, Nombre: Gerencia Estrategica de TI (ID de la clase: 1512, Periodo: 2024-3) | Nota: 3.50 | Semestre recomendado: 8, Tipo: Núcleo de Formación Fundamental
@@ -414,7 +415,7 @@ Semestre 8:
 
 Tool > get_current_schedule:
 
-Horario del estudiante para el periodo 2024-3 (periodo último cursado):
+**Horario** del estudiante para el periodo 2024-3 (periodo último cursado):
 
 Curso: Gerencia Estrategica de TI [2 créditos]
   - Clase ID: 1512, Día: Jueves, Hora Inicio: 15:00:00, Hora Fin: 18:00:00
@@ -432,13 +433,13 @@ Total de créditos inscritos: 11
 
 Tool > get_remaining_courses:
 
-=== RESUMEN DE ASIGNATURAS PENDIENTES. Estudiante con ID 2 ===
+=== **RESUMEN DE ASIGNATURAS PENDIENTES**. Estudiante con **ID 2** ===
 
 Total de créditos pendientes: 11
 Total de asignaturas pendientes: 5
 Semestre actual estimado: 8
 
---- Todas las Asignaturas Pendientes por Semestre ---
+--- **Todas las Asignaturas Pendientes por Semestre** ---
 
 Semestre 8:
 Créditos del semestre: 11
@@ -459,7 +460,7 @@ Créditos del semestre: 11
   Sin prerrequisitos
 
 
-=== ASIGNATURAS RECOMENDADAS PARA CURSAR ===
+=== **ASIGNATURAS RECOMENDADAS PARA CURSAR** ===
 (Basado en prerrequisitos cumplidos y semestre sugerido)
 
 Créditos totales recomendados: 11
@@ -488,14 +489,14 @@ Créditos totales recomendados: 11
 
 Tool > recommend_schedule:
 Datos del estudiante:
-- Nombres: Nelly
-- Apellidos: Hurtado
-- Email: christianestrada@example.com
+- Nombres: Maria
+- Apellidos: Avellaneda
+- Email: maria.avellaneda@javeriana.edu.com
 - Teléfono: +573248329102
 
-[PENSUM] Cursos y su mapeo sugerido:
+**[PENSUM] Cursos y su mapeo sugerido**:
 
-Semestre 1:
+**Semestre 1**:
 - ID del curso: 1295, Nombre: Calculo Diferencial | Semestre recomendado: 1, Tipo: Núcleo de Formación Fundamental
 - ID del curso: 33518, Nombre: Logica y Matematicas Discretas | Semestre recomendado: 1, Tipo: Núcleo de Formación Fundamental
 - ID del curso: 33698, Nombre: Introduccion a la Programación | Semestre recomendado: 1, Tipo: Núcleo de Formación Fundamental
@@ -503,7 +504,7 @@ Semestre 1:
 - ID del curso: 33763, Nombre: Introduccion a la Ingenieria | Semestre recomendado: 1, Tipo: Núcleo de Formación Fundamental
 - ID del curso: 34809, Nombre: Fundamentos de Seguridad de la Informacion | Semestre recomendado: 1, Tipo: Núcleo de Formación Fundamental
 
-Semestre 2:
+**Semestre 2**:
 - ID del curso: 1297, Nombre: Calculo Integral | Semestre recomendado: 2, Tipo: Núcleo de Formación Fundamental
 - ID del curso: 1290, Nombre: Algebra Lineal | Semestre recomendado: 2, Tipo: Núcleo de Formación Fundamental
 - ID del curso: 33699, Nombre: Programación Avanzada | Semestre recomendado: 2, Tipo: Núcleo de Formación Fundamental
@@ -511,27 +512,27 @@ Semestre 2:
 - ID del curso: 33733, Nombre: Proyecto de Diseño en Ingenieria | Semestre recomendado: 2, Tipo: Núcleo de Formación Fundamental
 - ID del curso: 34580, Nombre: Arquitectura y Organizacion del Computador | Semestre recomendado: 2, Tipo: Núcleo de Formación Fundamental
 
-Semestre 3:
+**Semestre 3**:
 - ID del curso: 33732, Nombre: Probabilidad y Estadistica | Semestre recomendado: 3, Tipo: Núcleo de Formación Fundamental
 - ID del curso: 33700, Nombre: Bases de Datos | Semestre recomendado: 3, Tipo: Núcleo de Formación Fundamental
 - ID del curso: 34805, Nombre: Analisis y Diseño de Software | Semestre recomendado: 3, Tipo: Núcleo de Formación Fundamental
 - ID del curso: 4190, Nombre: Comunicaciones y Redes | Semestre recomendado: 3, Tipo: Núcleo de Formación Fundamental
 - ID del curso: 2544, Nombre: Significación Teologica | Semestre recomendado: 3, Tipo: Núcleo de Formación Fundamental
 
-Semestre 4:
+**Semestre 4**:
 - ID del curso: 4196, Nombre: Estructuras de Datos | Semestre recomendado: 4, Tipo: Núcleo de Formación Fundamental
 - ID del curso: 4082, Nombre: Sistemas de Informacion | Semestre recomendado: 4, Tipo: Núcleo de Formación Fundamental
 - ID del curso: 34803, Nombre: Gestion de Proyectos de Innovacion y Emprendimiento de TI | Semestre recomendado: 4, Tipo: Núcleo de Formación Fundamental
 - ID del curso: 34806, Nombre: Fundamentos de Ingenieria de Software | Semestre recomendado: 4, Tipo: Núcleo de Formación Fundamental
 - ID del curso: 4085, Nombre: Sistemas Operativos | Semestre recomendado: 4, Tipo: Núcleo de Formación Fundamental
 
-Semestre 5:
+**Semestre 5**:
 - ID del curso: 1299, Nombre: Calculo Vectorial | Semestre recomendado: 5, Tipo: Núcleo de Formación Fundamental
 - ID del curso: 34801, Nombre: Teoria de la Computacion | Semestre recomendado: 5, Tipo: Núcleo de Formación Fundamental
 - ID del curso: 34810, Nombre: Proyecto de Innovacion y Emprendimiento | Semestre recomendado: 5, Tipo: Núcleo de Formación Fundamental
 - ID del curso: 22586, Nombre: Introduccion a Sistemas Distribuidos | Semestre recomendado: 5, Tipo: Núcleo de Formación Fundamental
 
-Semestre 6:
+**Semestre 6**:
 - ID del curso: 1340, Nombre: Fisica Mecánica | Semestre recomendado: 6, Tipo: Núcleo de Formación Fundamental
 - ID del curso: 1300, Nombre: Ecuaciones Diferenciales | Semestre recomendado: 6, Tipo: Núcleo de Formación Fundamental
 - ID del curso: 34866, Nombre: Optimizacion y Simulacion | Semestre recomendado: 6, Tipo: Núcleo de Formación Fundamental
@@ -540,7 +541,7 @@ Semestre 6:
 - ID del curso: 34808, Nombre: Introduccion a la Computacion Movil | Semestre recomendado: 6, Tipo: Núcleo de Formación Fundamental
 - ID del curso: 2476, Nombre: Fe y Compromiso del Ingeniero | Semestre recomendado: 6, Tipo: Núcleo de Formación Fundamental
 
-Semestre 7:
+**Semestre 7**:
 - ID del curso: 1291, Nombre: Analisis Numerico | Semestre recomendado: 7, Tipo: Núcleo de Formación Fundamental
 - ID del curso: 4084, Nombre: Inteligencia Artificial | Semestre recomendado: 7, Tipo: Núcleo de Formación Fundamental
 - ID del curso: 31339, Nombre: Planeacion de Proyecto Final | Semestre recomendado: 7, Tipo: Énfasis
@@ -548,7 +549,7 @@ Semestre 7:
 - ID del curso: 5100, Nombre: Proyecto Social Universitario | Semestre recomendado: 7, Tipo: Núcleo de Formación Fundamental
 - ID del curso: 34863, Nombre: Etica en la Era de la Informacion | Semestre recomendado: 7, Tipo: Núcleo de Formación Fundamental
 
-Semestre 8:
+**Semestre 8**:
 - ID del curso: 34802, Nombre: Tecnologias Digitales Emergentes | Semestre recomendado: 8, Tipo: Núcleo de Formación Fundamental
 - ID del curso: 34814, Nombre: Proyecto de Grado | Semestre recomendado: 8, Tipo: Énfasis
 - ID del curso: 34804, Nombre: Gerencia Estrategica de TI | Semestre recomendado: 8, Tipo: Núcleo de Formación Fundamental
@@ -556,9 +557,9 @@ Semestre 8:
 - ID del curso: 2356, Nombre: Epistemologia de la Ingenieria | Semestre recomendado: 8, Tipo: Núcleo de Formación Fundamental
 
 
-[CURSOS DEL ESTUDIANTE] Cursos tomados por el estudiante con ID 3, ordenados por su semestre sugerido:
+**[CURSOS DEL ESTUDIANTE] Cursos tomados por el estudiante con ID 3**, ordenados por su semestre sugerido:
 
-Semestre 1:
+**Semestre 1**:
 - ID del curso: 33698, Nombre: Introduccion a la Programación (ID de la clase: 38, Periodo: 2021-1) | Nota: 4.20 | Semestre recomendado: 1, Tipo: Núcleo de Formación Fundamental
 - ID del curso: 1295, Nombre: Calculo Diferencial (ID de la clase: 103, Periodo: 2021-1) | Nota: 4.20 | Semestre recomendado: 1, Tipo: Núcleo de Formación Fundamental
 - ID del curso: 33763, Nombre: Introduccion a la Ingenieria (ID de la clase: 112, Periodo: 2021-1) | Nota: 4.20 | Semestre recomendado: 1, Tipo: Núcleo de Formación Fundamental
@@ -566,7 +567,7 @@ Semestre 1:
 - ID del curso: 4075, Nombre: Pensamiento Sistemico (ID de la clase: 29, Periodo: 2021-1) | Nota: 4.20 | Semestre recomendado: 1, Tipo: Núcleo de Formación Fundamental
 - ID del curso: 33518, Nombre: Logica y Matematicas Discretas (ID de la clase: 131, Periodo: 2021-1) | Nota: 4.20 | Semestre recomendado: 1, Tipo: Núcleo de Formación Fundamental
 
-Semestre 2:
+**Semestre 2**:
 - ID del curso: 1297, Nombre: Calculo Integral (ID de la clase: 152, Periodo: 2021-3) | Nota: 3.90 | Semestre recomendado: 2, Tipo: Núcleo de Formación Fundamental
 - ID del curso: 34580, Nombre: Arquitectura y Organizacion del Computador (ID de la clase: 167, Periodo: 2021-3) | Nota: 4.30 | Semestre recomendado: 2, Tipo: Núcleo de Formación Fundamental
 - ID del curso: 33733, Nombre: Proyecto de Diseño en Ingenieria (ID de la clase: 173, Periodo: 2021-3) | Nota: 4.20 | Semestre recomendado: 2, Tipo: Núcleo de Formación Fundamental
@@ -574,27 +575,27 @@ Semestre 2:
 - ID del curso: 34816, Nombre: Gestion Financiera de Proyectos de TI (ID de la clase: 180, Periodo: 2021-3) | Nota: 4.50 | Semestre recomendado: 2, Tipo: Núcleo de Formación Fundamental
 - ID del curso: 33699, Nombre: Programación Avanzada (ID de la clase: 188, Periodo: 2021-3) | Nota: 3.50 | Semestre recomendado: 2, Tipo: Núcleo de Formación Fundamental
 
-Semestre 3:
+**Semestre 3**:
 - ID del curso: 34805, Nombre: Analisis y Diseño de Software (ID de la clase: 227, Periodo: 2022-1) | Nota: 3.50 | Semestre recomendado: 3, Tipo: Núcleo de Formación Fundamental
 - ID del curso: 33700, Nombre: Bases de Datos (ID de la clase: 205, Periodo: 2022-1) | Nota: 4.90 | Semestre recomendado: 3, Tipo: Núcleo de Formación Fundamental
 - ID del curso: 2544, Nombre: Significación Teologica (ID de la clase: 212, Periodo: 2022-1) | Nota: 4.20 | Semestre recomendado: 3, Tipo: Núcleo de Formación Fundamental
 - ID del curso: 4190, Nombre: Comunicaciones y Redes (ID de la clase: 215, Periodo: 2022-1) | Nota: 4.50 | Semestre recomendado: 3, Tipo: Núcleo de Formación Fundamental
 - ID del curso: 33732, Nombre: Probabilidad y Estadistica (ID de la clase: 216, Periodo: 2022-1) | Nota: 3.90 | Semestre recomendado: 3, Tipo: Núcleo de Formación Fundamental
 
-Semestre 4:
+**Semestre 4**:
 - ID del curso: 4082, Nombre: Sistemas de Informacion (ID de la clase: 266, Periodo: 2022-3) | Nota: 4.90 | Semestre recomendado: 4, Tipo: Núcleo de Formación Fundamental
 - ID del curso: 4196, Nombre: Estructuras de Datos (ID de la clase: 278, Periodo: 2022-3) | Nota: 3.90 | Semestre recomendado: 4, Tipo: Núcleo de Formación Fundamental
 - ID del curso: 34803, Nombre: Gestion de Proyectos de Innovacion y Emprendimiento de TI (ID de la clase: 286, Periodo: 2022-3) | Nota: 3.50 | Semestre recomendado: 4, Tipo: Núcleo de Formación Fundamental
 - ID del curso: 34806, Nombre: Fundamentos de Ingenieria de Software (ID de la clase: 290, Periodo: 2022-3) | Nota: 4.50 | Semestre recomendado: 4, Tipo: Núcleo de Formación Fundamental
 - ID del curso: 4085, Nombre: Sistemas Operativos (ID de la clase: 2500, Periodo: 2022-3) | Nota: 4.20 | Semestre recomendado: 4, Tipo: Núcleo de Formación Fundamental
 
-Semestre 5:
+**Semestre 5**:
 - ID del curso: 34801, Nombre: Teoria de la Computacion (ID de la clase: 316, Periodo: 2023-1) | Nota: 4.90 | Semestre recomendado: 5, Tipo: Núcleo de Formación Fundamental
 - ID del curso: 22586, Nombre: Introduccion a Sistemas Distribuidos (ID de la clase: 321, Periodo: 2023-1) | Nota: 4.50 | Semestre recomendado: 5, Tipo: Núcleo de Formación Fundamental
 - ID del curso: 1299, Nombre: Calculo Vectorial (ID de la clase: 346, Periodo: 2023-1) | Nota: 3.90 | Semestre recomendado: 5, Tipo: Núcleo de Formación Fundamental
 - ID del curso: 34810, Nombre: Proyecto de Innovacion y Emprendimiento (ID de la clase: 309, Periodo: 2023-1) | Nota: 3.50 | Semestre recomendado: 5, Tipo: Núcleo de Formación Fundamental
 
-Semestre 6:
+**Semestre 6**:
 - ID del curso: 34808, Nombre: Introduccion a la Computacion Movil (ID de la clase: 363, Periodo: 2023-3) | Nota: 3.90 | Semestre recomendado: 6, Tipo: Núcleo de Formación Fundamental
 - ID del curso: 1340, Nombre: Fisica Mecánica (ID de la clase: 367, Periodo: 2023-3) | Nota: 3.90 | Semestre recomendado: 6, Tipo: Núcleo de Formación Fundamental
 - ID del curso: 2476, Nombre: Fe y Compromiso del Ingeniero (ID de la clase: 368, Periodo: 2023-3) | Nota: 4.90 | Semestre recomendado: 6, Tipo: Núcleo de Formación Fundamental
@@ -604,7 +605,7 @@ Semestre 6:
 - ID del curso: 34866, Nombre: Optimizacion y Simulacion (ID de la clase: 351, Periodo: 2023-3) | Nota: 3.50 | Semestre recomendado: 6, Tipo: Núcleo de Formación Fundamental
 
 
-[SEMESTRE ACTUAL] El estudiante se encuentra en el semestre #6.
+**[SEMESTRE ACTUAL]** El estudiante se encuentra en el semestre #6.
 Generando horarios para el estudiante con ID: 3
 
 Cursos recomendados para el estudiante:
@@ -682,9 +683,9 @@ Curso: Epistemologia de la Ingenieria (ID: 2356)
   - Clase ID: 503, Día: Viernes, Hora Inicio: 07:00:00, Hora Fin: 09:00:00 (Periodo: 2025-1)
 
 
-Horarios generados para el siguiente periodo de inscripción (2025-1):
+**Horarios generados para el siguiente periodo de inscripción (2025-1)**:
 
-Horarios para carga Baja (Alrededor de 10 créditos)
+**Horarios para carga Baja (Alrededor de 10 créditos)**
 Diurno
 Curso: Planeacion de Proyecto Final (ID: 31339) [2 créditos]
   Clase ID: 738, Día: Martes, Hora Inicio: 07:00:00, Hora Fin: 09:00:00
@@ -713,7 +714,7 @@ Curso: Arquitectura de Software (ID: 4185) [3 créditos]
 Total de créditos: 11
 
 
-Horarios para carga Media (Alrededor de 18 créditos)
+**Horarios para carga Media (Alrededor de 18 créditos)**
 Diurno
 Curso: Planeacion de Proyecto Final (ID: 31339) [2 créditos]
   Clase ID: 738, Día: Martes, Hora Inicio: 07:00:00, Hora Fin: 09:00:00
@@ -750,7 +751,7 @@ Curso: Arquitectura de Software (ID: 4185) [3 créditos]
 Total de créditos: 11
 
 
-Horarios para carga Alta (Alrededor de 25 créditos)
+**Horarios para carga Alta (Alrededor de 25 créditos)**
 Diurno
 Curso: Planeacion de Proyecto Final (ID: 31339) [2 créditos]
   Clase ID: 738, Día: Martes, Hora Inicio: 07:00:00, Hora Fin: 09:00:00

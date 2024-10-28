@@ -1078,7 +1078,7 @@ def get_student_academic_summary(argument: str) -> str:
         return f"Error fetching student courses. {student_courses}"
     
     if not student_courses:
-        return f"\n\n[CURSOS DEL ESTUDIANTE] No se encontraron cursos para el estudiante con ID {student_id}.\n"
+        return f"\n\n**[CURSOS DEL ESTUDIANTE]** No se encontraron cursos para el estudiante con ID {student_id}.\n"
     
     # Agrupar los cursos del estudiante por semestre
     semestres_estudiante = {}
@@ -1089,9 +1089,9 @@ def get_student_academic_summary(argument: str) -> str:
         semestres_estudiante[semestre].append(course)
 
     # Formatear el resultado de los cursos del estudiante por semestre ascendente
-    descripcion = f"\n\n[CURSOS DEL ESTUDIANTE] Cursos tomados por el estudiante con ID {student_id}, ordenados por su semestre sugerido:\n"
+    descripcion = f"\n\n**[CURSOS DEL ESTUDIANTE]** Cursos tomados por el estudiante con **ID {student_id}**, ordenados por su semestre sugerido:\n"
     for semestre in sorted(semestres_estudiante.keys()):
-        descripcion += f"\nSemestre {semestre}:\n"
+        descripcion += f"\n**Semestre {semestre}**:\n"
         for course in semestres_estudiante[semestre]:
             # Convert 'None' to 'N/A' for display
             grade = course['nota'] if course['nota'] is not None else 'N/A'
@@ -1193,7 +1193,7 @@ def get_current_schedule(argument: str) -> str:
                 
                 # Format the output
                 period_status = "actual" if current_period == max_period else "último cursado"
-                result_text = f"\nHorario del estudiante para el periodo {current_period} (periodo {period_status}):\n\n"
+                result_text = f"\n**Horario** del estudiante para el periodo {current_period} (periodo {period_status}):\n\n"
                 total_credits = 0
                 
                 for class_id, course_name, credits in classes:
@@ -1323,15 +1323,15 @@ def get_remaining_courses(argument: str) -> str:
 
                 # Format the output
                 if not remaining_courses:
-                    return f"¡Felicitaciones, estudiante con ID {student_id}! Has completado todas las asignaturas del plan de estudios."
+                    return f"¡Felicitaciones, estudiante con **ID {student_id}**! Has completado todas las asignaturas del plan de estudios."
 
-                result = f"\n=== RESUMEN DE ASIGNATURAS PENDIENTES. Estudiante con ID {student_id} ===\n"
+                result = f"\n=== **RESUMEN DE ASIGNATURAS PENDIENTES**. Estudiante con **ID {student_id}** ===\n"
                 result += f"\nTotal de créditos pendientes: {total_remaining_credits}\n"
                 result += f"Total de asignaturas pendientes: {len(remaining_courses)}\n"
                 result += f"Semestre actual estimado: {current_semester}\n\n"
 
                 # Show all remaining courses by semester
-                result += "--- Todas las Asignaturas Pendientes por Semestre ---\n"
+                result += "--- **Todas las Asignaturas Pendientes por Semestre** ---\n"
                 for semester in sorted(remaining_by_semester.keys()):
                     result += f"\nSemestre {semester}:\n"
                     semester_credits = sum(course['credits'] for course in remaining_by_semester[semester])
@@ -1348,7 +1348,7 @@ def get_remaining_courses(argument: str) -> str:
                             result += "  Sin prerrequisitos\n"
 
                 # Show recommended courses
-                result += "\n\n=== ASIGNATURAS RECOMENDADAS PARA CURSAR ===\n"
+                result += "\n\n=== **ASIGNATURAS RECOMENDADAS PARA CURSAR** ===\n"
                 result += "(Basado en prerrequisitos cumplidos y semestre sugerido)\n\n"
                 
                 if recommended_courses:
