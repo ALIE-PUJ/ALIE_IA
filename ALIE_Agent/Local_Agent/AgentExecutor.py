@@ -115,7 +115,7 @@ def process_user_query_and_translate(user_input, api_url, api_headers, model, su
 
     if answer is not None and answer_language != 'es': # If the answer is not None and the language is different from the user language
         print(f"[POSTPROCESS - INFO] The answer is not in the user's original language. Translating answer back to original language...")
-        answer = translate(answer, user_language) # translate back to original user language
+        answer = translate(answer, 'es') # translate back to original user language
     else:
         print(f"[POSTPROCESS - INFO] The answer is in the user's original language '{user_language}'. Returning answer...")
 
