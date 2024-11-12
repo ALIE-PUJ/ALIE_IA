@@ -310,7 +310,7 @@ def print_schedules(schedules, classes_by_course, recommended_courses):
     load_names = ["Baja (Alrededor de 10 créditos)", "Media (Alrededor de 18 créditos)", "Alta (Alrededor de 25 créditos)"]
 
     max_period = get_max_period()
-    print(f"Horarios generados para el siguiente periodo de inscripcion ({max_period}):")
+    print(f"**Horarios generados para el siguiente periodo de inscripcion ({max_period})**:")
 
     for i in range(0, len(schedules), 2):
         print(f"\nHorarios para carga {load_names[i//2]}")
@@ -344,10 +344,10 @@ def get_schedules_text(schedules, classes_by_course, recommended_courses):
     load_names = ["Baja (Alrededor de 10 créditos)", "Media (Alrededor de 18 créditos)", "Alta (Alrededor de 25 créditos)"]
     
     max_period = get_max_period()  # Assuming this function is defined elsewhere
-    result = f"Horarios generados para el siguiente periodo de inscripción ({max_period}):\n"
+    result = f"**Horarios generados para el siguiente periodo de inscripción ({max_period})**:\n"
 
     for i in range(0, len(schedules), 2):
-        result += f"\nHorarios para carga {load_names[i//2]}\n"
+        result += f"\n**Horarios para carga {load_names[i//2]}**\n"
 
         for j, period in enumerate(["Diurno", "Nocturno"]):
             result += f"{period}\n"

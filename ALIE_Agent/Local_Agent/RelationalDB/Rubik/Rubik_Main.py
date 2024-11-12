@@ -11,7 +11,7 @@ if __name__ == "__main__":
     from Rubik_ScheduleRecommender import *
 else:
     # Imported as part of a package, relative import
-    from Rubik_ScheduleRecommender import *
+    from .Rubik_ScheduleRecommender import *
 
 
 
@@ -171,9 +171,9 @@ def get_course_mapping():
         semestres[semestre].append(course)
 
     # Formatear el resultado de los cursos por semestre ascendente
-    descripcion = "\n[PENSUM] Cursos y su mapeo sugerido:\n"
+    descripcion = "\n**[PENSUM] Cursos y su mapeo sugerido**:\n"
     for semestre in sorted(semestres.keys()):  # Ordenar los semestres en orden ascendente
-        descripcion += f"\nSemestre {semestre}:\n"
+        descripcion += f"\n**Semestre {semestre}**:\n"
         for course in semestres[semestre]:
             descripcion += (f"- ID del curso: {course['id_curso']}, Nombre: {course['curso_nombre']} "
                             f"| Semestre recomendado: {course['semestre']}, Tipo: {course['tipo_curso']}\n")
@@ -195,7 +195,7 @@ def get_student_info_mapping(student_id):
         return f"Error fetching student courses. {student_courses}"
     
     if not student_courses:
-        return f"\n\n[CURSOS DEL ESTUDIANTE] No se encontraron cursos para el estudiante con ID {student_id}.\n"
+        return f"\n\n**[CURSOS DEL ESTUDIANTE]** No se encontraron cursos para el estudiante con ID {student_id}.\n"
     
     # Agrupar los cursos del estudiante por semestre
     semestres_estudiante = {}
@@ -206,9 +206,9 @@ def get_student_info_mapping(student_id):
         semestres_estudiante[semestre].append(course)
 
     # Formatear el resultado de los cursos del estudiante por semestre ascendente
-    descripcion = f"\n\n[CURSOS DEL ESTUDIANTE] Cursos tomados por el estudiante con ID {student_id}, ordenados por su semestre sugerido:\n"
+    descripcion = f"\n\n**[CURSOS DEL ESTUDIANTE] Cursos tomados por el estudiante con ID {student_id}**, ordenados por su semestre sugerido:\n"
     for semestre in sorted(semestres_estudiante.keys()):
-        descripcion += f"\nSemestre {semestre}:\n"
+        descripcion += f"\n**Semestre {semestre}**:\n"
         for course in semestres_estudiante[semestre]:
             # Convert 'None' to 'N/A' for display
             grade = course['nota'] if course['nota'] is not None else 'N/A'
@@ -226,9 +226,9 @@ def get_student_info_mapping(student_id):
 
     # Añadir el semestre actual al resultado
     if semestre_actual:
-        descripcion += f"\n\n[SEMESTRE ACTUAL] El estudiante se encuentra en el semestre #{semestre_actual}.\n"
+        descripcion += f"\n\n**[SEMESTRE ACTUAL]** El estudiante se encuentra en el semestre #{semestre_actual}.\n"
     else:
-        descripcion += "\n\n[SEMESTRE ACTUAL] El estudiante no ha completado al menos 3 cursos de un semestre en especifico.\n"
+        descripcion += "\n\n**[SEMESTRE ACTUAL]** El estudiante no ha completado al menos 3 cursos de un semestre en especifico.\n"
 
     return descripcion
 

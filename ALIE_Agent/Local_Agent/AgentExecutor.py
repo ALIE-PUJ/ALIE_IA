@@ -1,4 +1,4 @@
-import time
+import time as std_time
 import threading
 from deep_translator import GoogleTranslator
 from langdetect import detect, LangDetectException
@@ -35,6 +35,7 @@ def translate_from_english_to_spanish(query: str) -> str:
     """
     Translate a given query to the specified target language, regardless of the original language.
     """
+    print(f"[POSTPROCESS - INFO] Translating from English to Spanish...")
     try:
         translator = GoogleTranslator(source='en', target='es')
         translated = translator.translate(query)
@@ -107,12 +108,14 @@ def process_user_query_and_translate(user_input, api_url, api_headers, model, su
 
     # Temporal bug fix. Always translate from english back to spanish
     answer = translate_from_english_to_spanish(answer)
+    answer_language = detect_language(answer)
+    print(f"[POSTPROCESS - INFO] Detected Answer language AFTER TRANSLATION: {answer_language}")
 
 
 
-    if answer is not None and answer_language != user_language: # If the answer is not None and the language is different from the user language
+    if answer is not None and answer_language != 'es': # If the answer is not None and the language is different from the user language
         print(f"[POSTPROCESS - INFO] The answer is not in the user's original language. Translating answer back to original language...")
-        answer = translate(answer, user_language) # translate back to original user language
+        answer = translate(answer, 'es') # translate back to original user language
     else:
         print(f"[POSTPROCESS - INFO] The answer is in the user's original language '{user_language}'. Returning answer...")
 
@@ -134,7 +137,7 @@ def call_process_user_query_with_retries(user_input, api_url, api_headers, model
     """
     retries = 0
     answer = None
-    start_time = time.time()  # Start the timer
+    start_time = std_time.time()  # Start the timer
 
     print("[LLM INFO] Posting to ", api_url)
 
@@ -145,17 +148,17 @@ def call_process_user_query_with_retries(user_input, api_url, api_headers, model
 
         if answer is not None:
 
-            end_time = time.time()  # End the timer
+            end_time = std_time.time()  # End the timer
             elapsed_time = end_time - start_time
             print(f"[POSTPROCESS - INFO] Successful on attempt {retries + 1}. Execution time: {elapsed_time:.2f} seconds.")
             return answer  # Exit loop if a valid answer is returned
         
         retries += 1
         print(f"[POSTPROCESS - INFO] Attempt {retries} returned None. Retrying in {delay} seconds...")
-        time.sleep(delay)
+        std_time.sleep(delay)
 
     # If all retries failed
-    end_time = time.time()  # End the timer after final attempt
+    end_time = std_time.time()  # End the timer after final attempt
     elapsed_time = end_time - start_time
     print(f"Max retries reached. Total execution time: {elapsed_time:.2f} seconds.")
     return None  # Return None if all retries fail

@@ -3,6 +3,14 @@ from psycopg2 import sql, Error
 import os
 import difflib
 
+# Local imports (Library)
+if __name__ == "__main__":
+    # Direct execution, absolute import
+    from Rubik.Rubik_Main import *
+else:
+    # Imported as part of a package, relative import
+    from .Rubik.Rubik_Main import *
+
 # Create a new connection in each function
 def create_connection():
     """
@@ -193,6 +201,7 @@ def get_classes_by_course_code_fetch(course_code: str) -> str:
                 SELECT cl.id_clase, cl.periodo, cl.fecha_inicio, cl.fecha_final 
                 FROM Clase cl
                 WHERE cl.id_curso = %s
+                ORDER BY cl.periodo DESC
             """)
             cursor.execute(query, (course_code,))
             result = cursor.fetchall()
@@ -224,6 +233,7 @@ def get_classes_by_course_name_fetch(course_name: str) -> str:
                 FROM Clase cl
                 JOIN Curso cu ON cl.id_curso = cu.id_curso
                 WHERE LOWER(cu.nombre) LIKE LOWER(%s)
+                ORDER BY cl.periodo DESC
             """)
             cursor.execute(query, (f"%{course_name}%",))
             result = cursor.fetchall()
@@ -354,8 +364,20 @@ def get_teacher_by_name_fetch(teacher_name: str) -> str:
     try:
         conn = create_connection()
         with conn.cursor() as cursor:
-            query = sql.SQL("SELECT * FROM Profesor WHERE LOWER(nombres) LIKE LOWER(%s)")
-            cursor.execute(query, (f"%{teacher_name}%",))
+            # Dividir el nombre ingresado en palabras
+            words = teacher_name.split()
+            # Construir la consulta SQL dinámicamente para que funcione con cualquier cantidad de palabras
+            conditions = []
+            params = []
+            
+            for word in words:
+                conditions.append("(LOWER(nombres) LIKE LOWER(%s) OR LOWER(apellidos) LIKE LOWER(%s))")
+                params.extend([f"%{word}%", f"%{word}%"])
+            
+            # Combinar las condiciones con AND para que todas las palabras coincidan en nombre o apellido
+            query = sql.SQL("SELECT * FROM Profesor WHERE ") + sql.SQL(" AND ").join(sql.SQL(cond) for cond in conditions)
+            cursor.execute(query, params)
+            
             result = cursor.fetchall()
             columns = [desc[0] for desc in cursor.description]
             result_with_columns = [dict(zip(columns, row)) for row in result]
@@ -480,8 +502,46 @@ def get_student_classes_fetch(student_id: int) -> list:
     finally:
         conn.close()
 
+# Función auxiliar para obtener los cursos que ha visto un estudiante (Formato especifico RUBIK)
+def get_student_courses_rubik(student_id):
+    """
+    Fetches all the courses that a student has completed or enrolled in,
+    including their grades.
 
-
+    :param student_id: The ID of the student.
+    :return: A list of dictionaries containing the course ID, course name, semester,
+             course type, class ID, period, and grade.
+    """
+    try:
+        conn = create_connection()
+        with conn.cursor() as cursor:
+            query = """
+            SELECT 
+                Curso.id_curso,
+                Curso.nombre AS curso_nombre,
+                Semestre_Sugerido.semestre,
+                Semestre_Sugerido.tipo_curso,
+                Clase.id_clase,      -- Include class ID
+                Clase.periodo,       -- Include period
+                Nota.nota            -- Include grade, it will be NULL if not found
+            FROM Estudiante_Clase
+            JOIN Clase ON Estudiante_Clase.id_clase = Clase.id_clase
+            JOIN Curso ON Clase.id_curso = Curso.id_curso
+            JOIN Semestre_Sugerido ON Curso.id_curso = Semestre_Sugerido.id_curso
+            LEFT JOIN Nota ON Estudiante_Clase.id_clase = Nota.id_clase 
+                            AND Estudiante_Clase.id_estudiante = Nota.id_estudiante
+            WHERE Estudiante_Clase.id_estudiante = %s
+            ORDER BY Semestre_Sugerido.semestre ASC
+            """
+            cursor.execute(query, (student_id,))
+            result = cursor.fetchall()
+            columns = [desc[0] for desc in cursor.description]
+            result_with_columns = [dict(zip(columns, row)) for row in result]
+            return result_with_columns
+    except Error as e:
+        return f"Error: {e}"
+    finally:
+        conn.close()
 
 
 
@@ -505,7 +565,7 @@ def get_students_by_name(argument: str) -> str:
     # La entrada es el nombre del estudiante, y la función devuelve
     # una lista de estudiantes cuyos nombres coinciden con la entrada.
     resultados = get_students_by_name_fetch(argument)  # Función original
-    if not resultados:
+    if not resultados or "Error" in resultados:
         return f"There are no students with the name {argument}."
     
     descripcion = f"I found {len(resultados)} students with the name '{argument}':\n"
@@ -515,8 +575,8 @@ def get_students_by_name(argument: str) -> str:
             f"born on {estudiante['fecha_nacimiento']}, "
             f"enrolled in the program with ID {estudiante['id_carrera']}, "
             f"email: {estudiante['email']}, "
-            f"phone: {estudiante['telefono']}, "
-            f"lives at {estudiante['direccion']}.\n"
+            f"phone: {estudiante['telefono']}.\n"
+            #f"lives at {estudiante['direccion']}.\n"
         )
     return descripcion
 
@@ -548,7 +608,7 @@ def get_course_by_name(argument: str) -> str:
     course_name = find_course_name(argument)
 
     resultados = get_course_by_name_fetch(course_name)  # Función original
-    if not resultados:
+    if not resultados or "Error" in resultados:
         return f"There are no courses with the name {argument}."
 
     descripcion = f"I found the following course: '{argument}':\n"
@@ -581,9 +641,9 @@ def get_course_by_code(argument: str) -> str:
 
     print(f"[DBSearch] Searching for course with code: {argument}")
     resultados = get_course_by_code_fetch(argument)  # Llamada a la función fetch
-    if not resultados:
+    if not resultados or "Error" in resultados:
         return f"There are no courses with the code {argument}."
-
+    
     descripcion = f"I found the following course: '{argument}':\n"
     for curso in resultados:
         descripcion += (
@@ -617,9 +677,9 @@ def get_classes_by_course_code(argument: str) -> str:
     # La entrada es el código del curso, y la función devuelve
     # una lista de clases asociadas con ese código de curso.
     resultados = get_classes_by_course_code_fetch(argument)  # Función original
-    if not resultados or len(resultados) < 2:
+    if not resultados or len(resultados) < 2 or "Error" in resultados:
         return f"There are no classes for the course with code '{argument}'."
-
+    
     # El primer elemento es la información del curso, así que lo omitimos
     descripcion = f"There are {len(resultados) - 1} classes for the course with code '{argument}':\n"
     for clase in resultados[1:]:  # Empezamos desde el segundo elemento
@@ -658,7 +718,7 @@ def get_classes_by_course_name(argument: str) -> str:
     course_name = find_course_name(argument)
 
     resultados = get_classes_by_course_name_fetch(course_name)  # Función original
-    if not resultados:
+    if not resultados or "Error" in resultados:
         return f"There are no classes for the course '{argument}'."
 
     descripcion = f"I found {len(resultados)} classes for the course '{argument}':\n"
@@ -688,7 +748,7 @@ def get_class_by_code(argument: str) -> str:
     # La entrada es el código de la clase, y la función devuelve
     # detalles de la clase con ese código.
     resultados = get_class_by_code_fetch(argument)  # Función original
-    if not resultados:
+    if not resultados or "Error" in resultados:
         return f"There are no classes with the code '{argument}'."
 
     descripcion = f"I found a class with code '{argument}':\n"
@@ -729,7 +789,7 @@ def get_prerequisites_by_course_name(argument: str) -> str:
     course_name = find_course_name(argument)
 
     resultados = get_prerequisites_by_course_name_fetch(course_name)  # Función original
-    if not resultados:
+    if not resultados or "Error" in resultados:
         return f"There are no prerequisites for the course '{argument}'."
 
     descripcion = f"There are {len(resultados)} prerequisites for the course '{argument}':\n"
@@ -761,7 +821,7 @@ def get_prerequisites_by_course_code(argument: str) -> str:
     # La entrada es el código del curso, y la función devuelve
     # una lista de prerrequisitos para ese curso.
     resultados = get_prerequisites_by_course_code_fetch(argument)  # Función original
-    if not resultados:
+    if not resultados or "Error" in resultados:
         return f"There are no prerequisites for the course with code '{argument}'."
 
     descripcion = f"There are {len(resultados)} prerequisites for the course with code '{argument}':\n"
@@ -785,7 +845,7 @@ def get_class_schedule(argument: str) -> str:
     """
     # Busca los horarios de una clase por su ID.
     resultado = get_class_schedule_fetch(argument)
-    if not resultado:
+    if not resultado or "Error" in resultado:
         return "I am sorry, no schedules were found for the specified class."
 
     descripcion = f"This are the schedules for class with ID {argument}:\n"
@@ -814,7 +874,7 @@ def get_teacher_by_name(argument: str) -> str:
     # La entrada es el nombre del profesor, y la función devuelve
     # una lista de profesores cuyos nombres coinciden con la entrada.
     resultados = get_teacher_by_name_fetch(argument)  # Función original
-    if not resultados:
+    if not resultados or "Error" in resultados:
         return f"There are no professors with the name {argument}."
 
     descripcion = f"There are {len(resultados)} professors with the name '{argument}':\n"
@@ -847,7 +907,7 @@ def get_student_grades_by_period(argument: str) -> str:
     # Llamada a la función que obtiene los datos
     resultados = get_student_grades_by_period_fetch(student_id)
     
-    if not resultados:
+    if not resultados or "Error" in resultados:
         return f"No grades found for student ID {student_id}."
     
     # Agrupar las notas por período
@@ -891,7 +951,7 @@ def get_student_courses(argument: str) -> str:
     # Llamada a la función fetch
     resultados = get_student_courses_fetch(student_id)
     
-    if not resultados:
+    if not resultados or "Error" in resultados:
         return f"No courses found for student ID {student_id}."
     
     # Agrupar los cursos por período
@@ -925,7 +985,7 @@ def get_all_courses(argument) -> str:
     # Llamada a la función fetch
     resultados = get_all_courses_fetch()
     
-    if not resultados:
+    if not resultados or "Error" in resultados:
         return "No courses available."
 
     # Formatear la salida
@@ -963,7 +1023,7 @@ def get_student_classes(argument: str) -> str:
     if not isinstance(resultados, list):
         return f"Error fetching classes for student ID {student_id}. {resultados}"
 
-    if not resultados:
+    if not resultados or "Error" in resultados:
         return f"No classes found for student ID {student_id}."
     
     # Agrupar las clases por período
@@ -973,18 +1033,12 @@ def get_student_classes(argument: str) -> str:
             periodo = resultado['periodo']
             curso_nombre = resultado['curso_nombre']
             clase_id = resultado['clase_id']
-            dia = resultado['dia']
-            hora_inicio = resultado['hora_inicio']
-            hora_fin = resultado['hora_fin']
             
             if periodo not in periodos:
                 periodos[periodo] = []
             periodos[periodo].append({
                 'curso_nombre': curso_nombre,
-                'clase_id': clase_id,
-                'dia': dia,
-                'hora_inicio': hora_inicio,
-                'hora_fin': hora_fin
+                'clase_id': clase_id
             })
         else:
             return f"Error: Unexpected result format for student ID {student_id}."
@@ -994,7 +1048,340 @@ def get_student_classes(argument: str) -> str:
     for periodo in sorted(periodos.keys(), reverse=True):  # Ordenar de mayor a menor
         descripcion += f"\nPeriod: {periodo}\n"
         for clase in periodos[periodo]:
-            descripcion += (f"- Class ID: {clase['clase_id']}, Course: {clase['curso_nombre']}, "
-                            f"Day: {clase['dia']}, Time: {clase['hora_inicio']} - {clase['hora_fin']}\n")
+            descripcion += (f"- Class ID: {clase['clase_id']}, Course: {clase['curso_nombre']}\n")
     
     return descripcion
+
+
+
+
+
+# Funciones nuevas. Opcionales
+
+
+# Función auxiliar para obtener los cursos de un estudiante y su semestre actual, notas, etc.
+def get_student_academic_summary(argument: str) -> str:
+    """
+    Fetches the courses taken by the student and determines their current semester.
+
+    :param student_id: The ID of the student.
+    :return: A formatted string with the student's courses, current semester, and grades.
+    """
+
+    if not argument.isdigit():
+        return "Invalid student ID. Please provide a valid numeric ID."
+
+    student_id = int(argument)
+    student_courses = get_student_courses_rubik(student_id)
+
+    if not isinstance(student_courses, list):
+        return f"Error fetching student courses. {student_courses}"
+    
+    if not student_courses:
+        return f"\n\n**[CURSOS DEL ESTUDIANTE]** No se encontraron cursos para el estudiante con ID {student_id}.\n"
+    
+    # Agrupar los cursos del estudiante por semestre
+    semestres_estudiante = {}
+    for course in student_courses:
+        semestre = course['semestre']
+        if semestre not in semestres_estudiante:
+            semestres_estudiante[semestre] = []
+        semestres_estudiante[semestre].append(course)
+
+    # Formatear el resultado de los cursos del estudiante por semestre ascendente
+    descripcion = f"\n\n**[CURSOS DEL ESTUDIANTE]** Cursos tomados por el estudiante con **ID {student_id}**, ordenados por su semestre sugerido:\n"
+    for semestre in sorted(semestres_estudiante.keys()):
+        descripcion += f"\n**Semestre {semestre}**:\n"
+        for course in semestres_estudiante[semestre]:
+            # Convert 'None' to 'N/A' for display
+            grade = course['nota'] if course['nota'] is not None else 'N/A'
+            descripcion += (f"- ID del curso: {course['id_curso']}, Nombre: {course['curso_nombre']} "
+                            f"(ID de la clase: {course['id_clase']}, Periodo: {course['periodo']}) | "
+                            f"Nota: {grade} | "
+                            f"Semestre recomendado: {course['semestre']}, Tipo: {course['tipo_curso']}\n")
+    
+    # Determinar el semestre actual basado en la cantidad de cursos por semestre
+    semestre_actual = None
+    for semestre, cursos in semestres_estudiante.items():
+        if len(cursos) >= 3:  # Si ha tomado al menos 3 cursos en ese semestre
+            if semestre_actual is None or semestre > semestre_actual:
+                semestre_actual = semestre
+
+    # Añadir el semestre actual al resultado
+    if semestre_actual:
+        descripcion += f"\n\n[SEMESTRE ACTUAL] El estudiante se encuentra en el semestre #{semestre_actual}.\n"
+    else:
+        descripcion += "\n\n[SEMESTRE ACTUAL] El estudiante no ha completado al menos 3 cursos de un semestre en especifico.\n"
+
+    return descripcion
+
+# Funcion para obtener el horario actual de un estudiante
+def get_current_schedule(argument: str) -> str:
+
+    if not argument.isdigit():
+        return "Invalid student ID. Please provide a valid numeric ID."
+
+    student_id = int(argument)
+    
+    try:
+        with create_connection() as conn:
+            with conn.cursor() as cursor:
+                # First, get the most recent period where the student has classes
+                query_period = """
+                SELECT DISTINCT Clase.periodo
+                FROM Estudiante_Clase
+                JOIN Clase ON Estudiante_Clase.id_clase = Clase.id_clase
+                WHERE Estudiante_Clase.id_estudiante = %s
+                ORDER BY Clase.periodo DESC
+                LIMIT 1
+                """
+                cursor.execute(query_period, (student_id,))
+                result = cursor.fetchone()
+                
+                if not result:
+                    return "El estudiante no tiene historial de clases."
+                
+                current_period = result[0]
+                
+                # Get current maximum period from the database
+                query_max_period = "SELECT MAX(periodo) FROM Clase"
+                cursor.execute(query_max_period)
+                max_period = cursor.fetchone()[0]
+                
+                # Get all classes for the student in the current period (including those without schedule)
+                query = """
+                SELECT DISTINCT
+                    Clase.id_clase,
+                    Curso.nombre as nombre_curso,
+                    Curso.creditos
+                FROM Estudiante_Clase
+                JOIN Clase ON Estudiante_Clase.id_clase = Clase.id_clase
+                JOIN Curso ON Clase.id_curso = Curso.id_curso
+                WHERE Estudiante_Clase.id_estudiante = %s
+                AND Clase.periodo = %s
+                """
+                cursor.execute(query, (student_id, current_period))
+                classes = cursor.fetchall()
+                
+                if not classes:
+                    return f"El estudiante no tiene clases registradas en el periodo {current_period}."
+                
+                # Get schedules for classes that have them
+                query_schedules = """
+                SELECT 
+                    Clase.id_clase,
+                    Horario_Clase.dia,
+                    Horario_Clase.hora_inicio,
+                    Horario_Clase.hora_fin
+                FROM Estudiante_Clase
+                JOIN Clase ON Estudiante_Clase.id_clase = Clase.id_clase
+                JOIN Horario_Clase ON Clase.id_clase = Horario_Clase.id_clase
+                WHERE Estudiante_Clase.id_estudiante = %s
+                AND Clase.periodo = %s
+                ORDER BY Horario_Clase.hora_inicio, Horario_Clase.dia
+                """
+                cursor.execute(query_schedules, (student_id, current_period))
+                schedules = cursor.fetchall()
+                
+                # Create a dictionary of schedules by class_id
+                schedules_by_class = {}
+                for schedule in schedules:
+                    class_id = schedule[0]
+                    if class_id not in schedules_by_class:
+                        schedules_by_class[class_id] = []
+                    schedules_by_class[class_id].append(schedule[1:])  # Store day, start_time, end_time
+                
+                # Format the output
+                period_status = "actual" if current_period == max_period else "último cursado"
+                result_text = f"\n**Horario** del estudiante para el periodo {current_period} (periodo {period_status}):\n\n"
+                total_credits = 0
+                
+                for class_id, course_name, credits in classes:
+                    result_text += f"Curso: {course_name} [{credits} créditos]\n"
+                    total_credits += credits
+                    
+                    if class_id in schedules_by_class:
+                        # Show all schedules for this class
+                        for day, start_time, end_time in schedules_by_class[class_id]:
+                            result_text += f"  - Clase ID: {class_id}, Día: {day}, "
+                            result_text += f"Hora Inicio: {start_time}, Hora Fin: {end_time}\n"
+                    else:
+                        result_text += f"  - Clase ID: {class_id}, Sin horario específico\n"
+                
+                result_text += f"\nTotal de créditos inscritos: {total_credits}\n"
+                
+                return result_text
+                
+    except Exception as e:
+        return f"Ocurrió un error al obtener el horario del estudiante. Error: {str(e)}"
+
+# Función para obtener las asignaturas pendientes y recomendadas de un estudiante
+def get_remaining_courses(argument: str) -> str:
+
+    if not argument.isdigit():
+        return "Invalid student ID. Please provide a valid numeric ID."
+    
+    student_id = int(argument)
+
+    try:
+        with create_connection() as conn:
+            with conn.cursor() as cursor:
+                # Get all courses in the curriculum
+                query_all_courses = """
+                SELECT DISTINCT 
+                    Curso.id_curso,
+                    Curso.nombre,
+                    Curso.creditos,
+                    Semestre_Sugerido.semestre
+                FROM Curso
+                JOIN Semestre_Sugerido ON Curso.id_curso = Semestre_Sugerido.id_curso
+                ORDER BY Semestre_Sugerido.semestre, Curso.nombre
+                """
+                cursor.execute(query_all_courses)
+                all_courses = cursor.fetchall()
+
+                # Get completed courses by the student
+                query_completed = """
+                SELECT DISTINCT Curso.id_curso
+                FROM Estudiante_Clase
+                JOIN Clase ON Estudiante_Clase.id_clase = Clase.id_clase
+                JOIN Curso ON Clase.id_curso = Curso.id_curso
+                WHERE Estudiante_Clase.id_estudiante = %s
+                """
+                cursor.execute(query_completed, (student_id,))
+                completed_courses = {row[0] for row in cursor.fetchall()}
+
+                # Get current student semester based on completed courses
+                current_semester = 1
+                for course in all_courses:
+                    if course[0] in completed_courses:
+                        current_semester = max(current_semester, course[3])  # course[3] is semester
+                current_semester += 1  # Next semester
+
+                # Get prerequisites for all courses
+                query_prereqs = """
+                SELECT id_curso, id_prerrequisito_curso
+                FROM Prerrequisito_Curso
+                """
+                cursor.execute(query_prereqs)
+                prerequisites = {}
+                for curso, prereq in cursor.fetchall():
+                    if curso not in prerequisites:
+                        prerequisites[curso] = []
+                    prerequisites[curso].append(prereq)
+
+                # Process remaining courses
+                remaining_courses = []
+                recommended_courses = []
+                total_remaining_credits = 0
+                remaining_by_semester = {}
+
+                for course in all_courses:
+                    course_id, course_name, credits, suggested_semester = course
+                    
+                    if course_id not in completed_courses:
+                        # Check prerequisites status
+                        prereqs = prerequisites.get(course_id, [])
+                        prereqs_completed = all(pre in completed_courses for pre in prereqs)
+                        
+                        # Get prerequisite course names
+                        prereq_names = []
+                        if prereqs:
+                            prereq_query = """
+                            SELECT nombre 
+                            FROM Curso 
+                            WHERE id_curso = ANY(%s)
+                            """
+                            cursor.execute(prereq_query, (prereqs,))
+                            prereq_names = [row[0] for row in cursor.fetchall()]
+
+                        course_info = {
+                            'id': course_id,
+                            'name': course_name,
+                            'credits': credits,
+                            'semester': suggested_semester,
+                            'prerequisites_met': prereqs_completed,
+                            'prerequisite_names': prereq_names
+                        }
+                        
+                        remaining_courses.append(course_info)
+                        total_remaining_credits += credits
+
+                        # Group by semester
+                        if suggested_semester not in remaining_by_semester:
+                            remaining_by_semester[suggested_semester] = []
+                        remaining_by_semester[suggested_semester].append(course_info)
+
+                        # Check if course should be recommended
+                        if prereqs_completed and suggested_semester <= current_semester + 1:
+                            recommended_courses.append(course_info)
+
+                # Sort recommended courses by semester and then by name
+                recommended_courses.sort(key=lambda x: (x['semester'], x['name']))
+                # Limit recommendations to top 10
+                recommended_courses = recommended_courses[:10]
+
+                # Format the output
+                if not remaining_courses:
+                    return f"¡Felicitaciones, estudiante con **ID {student_id}**! Has completado todas las asignaturas del plan de estudios."
+
+                result = f"\n=== **RESUMEN DE ASIGNATURAS PENDIENTES**. Estudiante con **ID {student_id}** ===\n"
+                result += f"\nTotal de créditos pendientes: {total_remaining_credits}\n"
+                result += f"Total de asignaturas pendientes: {len(remaining_courses)}\n"
+                result += f"Semestre actual estimado: {current_semester}\n\n"
+
+                # Show all remaining courses by semester
+                result += "--- **Todas las Asignaturas Pendientes por Semestre** ---\n"
+                for semester in sorted(remaining_by_semester.keys()):
+                    result += f"\nSemestre {semester}:\n"
+                    semester_credits = sum(course['credits'] for course in remaining_by_semester[semester])
+                    result += f"Créditos del semestre: {semester_credits}\n"
+                    
+                    for course in remaining_by_semester[semester]:
+                        result += f"\n- {course['name']} (ID: {course['id']}) [{course['credits']} créditos]\n"
+                        
+                        # Show prerequisites status
+                        if course['prerequisite_names']:
+                            status = "✓" if course['prerequisites_met'] else "✗"
+                            result += f"  Prerrequisitos {status}: {', '.join(course['prerequisite_names'])}\n"
+                        else:
+                            result += "  Sin prerrequisitos\n"
+
+                # Show recommended courses
+                result += "\n\n=== **ASIGNATURAS RECOMENDADAS PARA CURSAR** ===\n"
+                result += "(Basado en prerrequisitos cumplidos y semestre sugerido)\n\n"
+                
+                if recommended_courses:
+                    recommended_credits = sum(course['credits'] for course in recommended_courses)
+                    result += f"Créditos totales recomendados: {recommended_credits}\n\n"
+                    
+                    for course in recommended_courses:
+                        result += f"- {course['name']} (ID: {course['id']}) [{course['credits']} créditos]\n"
+                        result += f"  Semestre sugerido: {course['semester']}\n"
+                        if course['prerequisite_names']:
+                            result += f"  Prerrequisitos cumplidos: {', '.join(course['prerequisite_names'])}\n"
+                        else:
+                            result += "  Sin prerrequisitos\n"
+                        result += "\n"
+                else:
+                    result += "No hay asignaturas recomendadas en este momento.\n"
+                    result += "Completa los prerrequisitos pendientes para desbloquear más asignaturas.\n"
+
+                return result
+
+    except Exception as e:
+        return f"Ocurrió un error al obtener las asignaturas pendientes. Error: {str(e)}"
+
+# Funcion para hacerle un horario al estudiante
+def recommend_schedule(argument: str) -> str:
+
+    if not argument.isdigit():
+        return "Invalid student ID. Please provide a valid numeric ID."
+
+    student_id = int(argument)
+
+    try:
+        respuesta = rubik(student_id)
+        return respuesta
+    except Exception as e:
+        return f"Ocurrió un error al recomendar el horario para el estudiante con ID {student_id}. Intente de nuevo más tarde."
