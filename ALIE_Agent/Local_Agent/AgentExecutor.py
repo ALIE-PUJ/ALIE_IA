@@ -30,7 +30,7 @@ def translate(query: str, target_language: str) -> str:
         print(f"Error translating query: {e}")
         return query # Return the original query if translation fails
 
-# Función para traducir una consulta
+# Función para traducir una consulta. EL LENGUAJE SE PUEDE AJUSTAR DEPENDIENDO DE LA PREFERENCIA O IMPLEMENTAR UNA API EXTERNA PARA LA DETECCION PRECISA DEL MISMO.
 def translate_from_english_to_spanish(query: str) -> str:
     """
     Translate a given query to the specified target language, regardless of the original language.
